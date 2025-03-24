@@ -1,0 +1,9 @@
+cr\ac\una\tournamentmanager\Controller\SecondaryController.class
+cr\ac\una\tournamentmanager\App.class
+cr\ac\una\tournamentmanager\util\AppContext.class
+cr\ac\una\tournamentmanager\Controller\Controller.class
+cr\ac\una\tournamentmanager\util\Mensaje.class
+cr\ac\una\tournamentmanager\util\BindingUtils.class
+cr\ac\una\tournamentmanager\Controller\PrimaryController.class
+cr\ac\una\tournamentmanager\util\FlowController.class
+cr\ac\una\tournamentmanager\util\Formato.class
