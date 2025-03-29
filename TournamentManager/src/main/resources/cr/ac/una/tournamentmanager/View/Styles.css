@@ -1,0 +1,83 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 28 mar 2025, 11:36:48
+    Author     : juand
+*/
+
+*{ -fx-base-color-theme: #009999;
+   -fx-base-color-titles: #ffffff;
+   -fx-base-color-information: #454549;
+   -fx-base-color-focused: #999999;
+}
+
+.mfx-text-field {
+    -mfx-main: -fx-base-color-theme;
+    -fx-prompt-text-fill: -fx-base-color-theme;
+    -mfx-float-mode: BORDER;
+    -fx-font-size: 12px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-max-height: 40px;
+    -fx-text-fill: -fx-base-color-information;
+}
+
+
+.mfx-button{
+    -fx-background-color: -fx-base-color-theme;
+    -mfx-button-type: RAISED;
+    -fx-border-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-width: 5px;
+    -fx-border-radius: 5px;
+    -fx-opcity: 0.8;
+    -fx-content-display: left;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-allignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.mfx-button:focused {
+    /*-fx-background-color: -fx-base-color-theme;*/
+    -fx-border-color: grey;
+}
+
+.jfx-button-equipos-menu{
+    -fx-background-color: #C60000;
+    -fx-background-radius: 25px;
+    -fx-font-size: 30px;
+    -fx-border-width: 5px;
+    -fx-border-radius: 20px;
+}
+
+.jfx-button-torneo-menu{
+    -fx-background-color: #ea9b00;
+    -fx-background-radius: 25px;
+    -fx-font-size: 30px;
+    -fx-border-width: 5px;
+    -fx-border-radius: 20px;
+}
+
+/*aca TODO lo que tenga que ver con cambios de color en los BOTONES*/
+
+.mfx-button:hover, .mfx-button:focus-visible {
+    /*-fx-background-color: #4f4f4f; /*color para cuando se pasa por encima del boton*/
+    -fx-border-color: grey;
+}
+
+.jfx-panel-fondo{
+    -fx-background-color: -fx-base-color-information;
+    -fx-opacity: 1;
+}
+
+.jfx-panel-fondo > VBox, .jfx-panel-fondo > HBox {
+    -fx-background-color: -fx-base-color-information;
+    -fx-border-color: -fx-base-color-theme;
+    -fx-border-width: 10px;
+    -fx-padding: 10 10 10 10;
+    -fx-spacing: 40;    
+   }
