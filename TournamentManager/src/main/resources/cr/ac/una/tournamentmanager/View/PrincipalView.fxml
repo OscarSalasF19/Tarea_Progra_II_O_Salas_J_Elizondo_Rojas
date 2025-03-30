@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="330.0" minWidth="450.0" prefHeight="400.0" prefWidth="600.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.PrincipalController">
+   <left>
+      <VBox maxHeight="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <MFXButton fx:id="btnTorneo" maxWidth="1.7976931348623157E308" onAction="#onActionBtnTorneo" styleClass="jfx-btn-torneo" text="Torneo" VBox.vgrow="ALWAYS">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="btnInformacion" maxWidth="1.7976931348623157E308" onAction="#onActionBtnInformacion" styleClass="jfx-btn-info" text="Info." VBox.vgrow="ALWAYS">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MFXButton>
+            <Label maxHeight="1.7976931348623157E308" styleClass="fx-label" text="AÑADIR" VBox.vgrow="ALWAYS" />
+            <MFXButton fx:id="btnAnadirEquipo" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAnadirEquipo" styleClass="jfx-btn-anadir" text="Equipo" VBox.vgrow="ALWAYS">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="btnAnadirDeporte" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAnadirDeporte" styleClass="jfx-btn-anadir" text="Deporte" VBox.vgrow="ALWAYS">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MFXButton>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+         </padding>
+      </VBox>
+   </left>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

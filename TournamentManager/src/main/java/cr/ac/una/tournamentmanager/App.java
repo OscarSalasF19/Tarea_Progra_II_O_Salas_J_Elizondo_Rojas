@@ -1,5 +1,8 @@
 package cr.ac.una.tournamentmanager;
 
+import cr.ac.una.tournamentmanager.Util.FlowController;
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,16 +11,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        FlowController.getInstance().InitializeFlow(stage, null);
+        scene = new Scene(loadFXML("PrincipalView"), 640, 480);
+        MFXThemeManager.addOn(scene,Themes.DEFAULT,Themes.LEGACY);
         stage.setScene(scene);
         stage.show();
     }
