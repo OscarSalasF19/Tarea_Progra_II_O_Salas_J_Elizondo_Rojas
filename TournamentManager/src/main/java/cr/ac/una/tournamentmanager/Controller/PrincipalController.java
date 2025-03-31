@@ -28,12 +28,12 @@ public class PrincipalController extends Controller implements Initializable{
 
     @FXML
     void onActionBtnAnadirDeporte(ActionEvent event) {
-
+        
     }
 
     @FXML
     void onActionBtnAnadirEquipo(ActionEvent event) {
-
+        FlowController.getInstance().goView("AddTeamsView");
     }
 
     @FXML

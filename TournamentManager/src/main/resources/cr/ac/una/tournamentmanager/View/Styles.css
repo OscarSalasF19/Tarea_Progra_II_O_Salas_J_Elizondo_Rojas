@@ -9,6 +9,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
    -fx-base-color-focused: #999999;
 }
 
+.root{
+    -fx-background-color: -fx-base-color-theme;
+    -fx-opacity: 1;   
+}
+
 .mfx-text-field {
     -mfx-main: -fx-base-color-theme;
     -fx-prompt-text-fill: -fx-base-color-theme;
@@ -84,4 +89,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .jfx-panel-fondo > HBox {
     -fx-background-color: -fx-base-color-theme;
     -fx-padding: 10 10 10 10;
+}
+
+.fx-image-View-Teams-Sport{
+    -fx-border-with:40px;
+    -fx-border-color:-fx-base-color-focused;
+    
 }
