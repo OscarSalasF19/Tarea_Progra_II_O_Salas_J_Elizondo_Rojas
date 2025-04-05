@@ -2,6 +2,7 @@ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.util.AppContext;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +21,9 @@ public class TorneoDto {
         this.cantEquipos = new SimpleStringProperty("");
         this.matchTimeSeconds = 10;
         this.competingTeams = new ArrayList<>();
+        ArrayList<EquipoDto> FullTeamList = new ArrayList<>();
+        FullTeamList.add(new EquipoDto());
+        AppContext.getInstance().set("FullTeamArrayList", FullTeamList );
     }
 
     public DeporteDto getDeporte() {
@@ -57,26 +61,46 @@ public class TorneoDto {
     public StringProperty getCantEquiposProperty() {
         return cantEquipos;
     }
-//hace falta crear una instancia de AppContext con un Array/HashMap con TODOS los equipos
+//hace falta crear una instancia de AppContext con un Array con TODOS los equipos
     private boolean checkForHowManyTeams() {//hace falta que compruebe que son del mismo deporte
-        return AppContext.getInstance().get("FullTeamArrayList").size() > getCantEquipos();
+        return AppContext.getInstance().get("FullTeamArrayList").size > getCantEquipos();
     }
 
-    private void createTeamList() { //lamar en un onAction de un botton 
-        if(checkForHowManyTeams()) {
-            int index = 0;
-            while(competingTeams.size() < getCantEquipos()){
-                index = 0; //numero random de la cantidad global de equipos (de preferencia que no se repitan)
-                if (AppContext.getInstance().get("FullTeamArrayList").get(index).getSport().equals(getDeporte())) {
-                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(index));
+    public void createTeamList() { //lamar en un onAction de un botton 
+        if(checkForHowManyTeams() && getCantEquipos() >= 2) {
+            ArrayList<Integer> indexList;
+            indexList = randomNumberList(AppContext.getInstance().get("FullTeamArrayList").size() - 1);
+            
+            for (int i = 0; competingTeams.size() < getCantEquipos(); i++){
+                if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
+                    
+                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList));
+                    
                 }
             }
+            startTorney();
         } else {
-            //no existen suficientes equipos registrados en "deporte"
+            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
         }
     }
     
+    private void startTorney() {
+        PartidoDto match = new PartidoDto(matchTimeSeconds);
+        while (competingTeams.size() > 1){
+            for (int i = 0; i < competingTeams.size(); i++) {
+                match.startGame(competingTeams,i);
+            }
+        }
+    }
     
+    private ArrayList<Integer> randomNumberList(int x){
+        ArrayList<Integer> lista = new ArrayList<>();
+        for (int i = 0; i <= x; i++) {
+            lista.add(i);// lista: 0 1 2 3 ... x
+        }
+        Collections.shuffle(lista);// revuelve la lista
+        return lista;
+    }
     
 }
 

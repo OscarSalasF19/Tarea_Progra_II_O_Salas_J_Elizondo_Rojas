@@ -1,10 +1,8 @@
-cr\ac\una\tournamentmanager\Controller\SecondaryController.class
-cr\ac\una\tournamentmanager\App.class
+cr\ac\una\tournamentmanager\model\PartidoDto$1.class
+cr\ac\una\tournamentmanager\Util\FlowController.class
 cr\ac\una\tournamentmanager\Controller\Controller.class
-cr\ac\una\tournamentmanager\util\BindingUtils.class
-cr\ac\una\tournamentmanager\util\FlowController.class
-cr\ac\una\tournamentmanager\Controller\AddTeamsViewController.class
-cr\ac\una\tournamentmanager\util\AppContext.class
-cr\ac\una\tournamentmanager\Controller\PrincipalController.class
-cr\ac\una\tournamentmanager\util\Mensaje.class
-cr\ac\una\tournamentmanager\util\Formato.class
+cr\ac\una\tournamentmanager\Util\Mensaje.class
+cr\ac\una\tournamentmanager\model\DeporteDto.class
+cr\ac\una\tournamentmanager\model\PartidoDto.class
+cr\ac\una\tournamentmanager\Util\AppContext.class
+cr\ac\una\tournamentmanager\model\EquipoDto.class
