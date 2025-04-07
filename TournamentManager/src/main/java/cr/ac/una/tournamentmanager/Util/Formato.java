@@ -8,10 +8,7 @@ import java.util.regex.Pattern;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
 
-/**
- *
- * @author ccarranza
- */
+
 public class Formato {
 
     private static Formato INSTANCE = null;
