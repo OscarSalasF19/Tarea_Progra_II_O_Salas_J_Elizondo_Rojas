@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -60,11 +59,13 @@ public class AddTeamsViewController extends Controller implements Initializable 
             teamProperty.addListener((obs, oldVal, newVal) -> {
             if (oldVal != null){
                 txfTeamName.textProperty().unbindBidirectional(oldVal.getNombreProperty());
-                imageTeamPhoto.getImage().getUrl()//hay que hacerlo string property y unbind a oV.getImageProperty();
-                        
+                //desbindeo del url de la imagen
+                txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportProperty());
             }
             if (newVal != null){
                 txfTeamName.textProperty().bindBidirectional(newVal.getNombreProperty());
+                //bindeo de la url de la imagen
+                txfTeamSport.textProperty().bindBidirectional(newVal.getSportProperty());
             }
         });    
             

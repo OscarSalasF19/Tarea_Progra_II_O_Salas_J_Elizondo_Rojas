@@ -61,10 +61,9 @@ public class DeporteDto {
         return Objects.equals(this.nombre.get(), other.nombre.get());
     }
 
-    
-
     @Override
     public String toString() {
         return "DeporteDto{" + "nombre=" + nombre.get() + ", bola=" + bola.get() + '}';
     }
+    
 }

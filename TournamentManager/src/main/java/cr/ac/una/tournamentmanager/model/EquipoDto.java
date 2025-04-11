@@ -1,7 +1,6 @@
 package cr.ac.una.tournamentmanager.model;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import cr.ac.una.tournamentmanager.util.AppContext;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,7 +9,7 @@ public class EquipoDto {
     
     private StringProperty name;
     private StringProperty photo;
-    private ObjectProperty<DeporteDto> sport;
+    private StringProperty sport;
     private int points; //de la clasificacion general
     private int anotaciones; //"goles" pero no son goles porque son varios deportes
     private int desempenno; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
@@ -18,10 +17,10 @@ public class EquipoDto {
     public EquipoDto() {
         this.name = new SimpleStringProperty("");
         this.photo = new SimpleStringProperty("");
-        this.sport = new SimpleObjectProperty<>();
+        this.sport = new SimpleStringProperty("");
         this.points = 0;
         this.anotaciones = 0;
-        this.desempenno = 1;//del 1 al 100, entre m[as alto m[as probabilidades de ganar
+        this.desempenno = (int) (Math.random() * 100) + 1; 
     }
 
     public String getNombre() {
@@ -40,11 +39,11 @@ public class EquipoDto {
         this.photo.set(foto);
     }
 
-    public DeporteDto getSport() {
+    public String getSport() {
         return sport.get();
     }
     
-    public void setSport(DeporteDto sport){
+    public void setSport(String sport){
         this.sport.set(sport);
     }
     
@@ -80,7 +79,7 @@ public class EquipoDto {
         return photo;
     }
     
-    public ObjectProperty<DeporteDto> getSportProperty() {
+    public StringProperty getSportProperty() {
         return sport;
     }
     

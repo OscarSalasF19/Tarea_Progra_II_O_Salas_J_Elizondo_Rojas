@@ -77,7 +77,7 @@ public class TorneoDto {
             for (int i = 0; competingTeams.size() < getCantEquipos(); i++){
                 if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
                     
-                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList));
+                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)));
                 }
             }
             startTorney();
