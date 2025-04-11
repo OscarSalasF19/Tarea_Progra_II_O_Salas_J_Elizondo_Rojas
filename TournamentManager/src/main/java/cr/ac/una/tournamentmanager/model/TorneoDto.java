@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 public class TorneoDto {
     
     private ObjectProperty<DeporteDto> Deporte;
@@ -62,27 +61,27 @@ public class TorneoDto {
         return cantEquipos;
     }
 //hace falta crear una instancia de AppContext con un Array con TODOS los equipos
-    private boolean checkForHowManyTeams() {//hace falta que compruebe que son del mismo deporte
-        return AppContext.getInstance().get("FullTeamArrayList").size > getCantEquipos();
-    }
-
-    public void createTeamList() { //lamar en un onAction de un botton 
-        if(checkForHowManyTeams() && getCantEquipos() >= 2) {
-            ArrayList<Integer> indexList;
-            indexList = randomNumberList(AppContext.getInstance().get("FullTeamArrayList").size() - 1);
-            
-            for (int i = 0; competingTeams.size() < getCantEquipos(); i++){
-                if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
-                    
-                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList));
-                    
-                }
-            }
-            startTorney();
-        } else {
-            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
-        }
-    }
+//    private boolean checkForHowManyTeams() {//hace falta que compruebe que son del mismo deporte
+//        return AppContext.getInstance().get("FullTeamArrayList").size > getCantEquipos();
+//    }
+//
+//    public void createTeamList() { //lamar en un onAction de un botton 
+//        if(checkForHowManyTeams() && getCantEquipos() >= 2) {
+//            ArrayList<Integer> indexList;
+//            indexList = randomNumberList(AppContext.getInstance().get("FullTeamArrayList").size() - 1);
+//            
+//            for (int i = 0; competingTeams.size() < getCantEquipos(); i++){
+//                if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
+//                    
+//                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList));
+//                    
+//                }
+//            }
+//            startTorney();
+//        } else {
+//            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
+//        }
+//    }
     
     private void startTorney() {
         PartidoDto match = new PartidoDto(matchTimeSeconds);

@@ -29,8 +29,16 @@
     -fx-text-fill: -fx-base-color-titles;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-alignment: TOP_LEFT;
+    -fx-alignment: CENTER;
     -fx-cursor: hand;
+}
+.mfx-text-field-Search {
+    
+    -fx-font-size: 12px;
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+
 }
 
 .fx-label {
@@ -91,5 +99,11 @@
 
 .jfx-image-View-Teams-Sport > ImageView{
     -fx-image: url("../Resources/Grupo-300.png")
+}
+
+.jfx-panel-black-fondo{
+     -fx-background-color: -fx-base-color-information;
+    -fx-opacity: 1;
+    
 }
 

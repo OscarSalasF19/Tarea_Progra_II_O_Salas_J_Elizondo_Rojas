@@ -17,12 +17,7 @@
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </MFXButton>
-            <MFXButton fx:id="btnInformacion" maxWidth="1.7976931348623157E308" onAction="#onActionBtnInformacion" styleClass="jfx-btn-info" text="Info." VBox.vgrow="ALWAYS">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </MFXButton>
-            <Label maxHeight="1.7976931348623157E308" styleClass="fx-label" text="AÑADIR" VBox.vgrow="ALWAYS" />
+            <Label maxHeight="1.7976931348623157E308" styleClass="fx-label" text="Info." VBox.vgrow="ALWAYS" />
             <MFXButton fx:id="btnAnadirEquipo" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAnadirEquipo" styleClass="jfx-btn-anadir" text="Equipo" VBox.vgrow="ALWAYS">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
