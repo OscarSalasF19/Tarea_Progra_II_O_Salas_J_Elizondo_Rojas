@@ -20,9 +20,12 @@ public class TorneoDto {
         this.cantEquipos = new SimpleStringProperty("");
         this.matchTimeSeconds = 10;
         this.competingTeams = new ArrayList<>();
+        
+        //eliminar estas 3 lineas
         ArrayList<EquipoDto> FullTeamList = new ArrayList<>();
         FullTeamList.add(new EquipoDto());
         AppContext.getInstance().set("FullTeamArrayList", FullTeamList );
+        
     }
 
     public DeporteDto getDeporte() {
@@ -61,6 +64,7 @@ public class TorneoDto {
         return cantEquipos;
     }
 //hace falta crear una instancia de AppContext con un Array con TODOS los equipos
+<<<<<<< HEAD
 //    private boolean checkForHowManyTeams() {//hace falta que compruebe que son del mismo deporte
 //        return AppContext.getInstance().get("FullTeamArrayList").size > getCantEquipos();
 //    }
@@ -82,6 +86,28 @@ public class TorneoDto {
 //            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
 //        }
 //    }
+=======
+    private boolean checkForHowManyTeams() {//hace falta que compruebe que son del mismo deporte
+        return AppContext.getInstance().get("FullTeamArrayList").size > getCantEquipos();
+    }
+
+    public void createTeamList() { //lamar en un onAction de un botton 
+        if(checkForHowManyTeams() && getCantEquipos() >= 2) {
+            ArrayList<Integer> indexList;
+            indexList = randomNumberList(AppContext.getInstance().get("FullTeamArrayList").size() - 1);
+            
+            for (int i = 0; competingTeams.size() < getCantEquipos(); i++){
+                if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
+                    
+                    competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)));
+                }
+            }
+            startTorney();
+        } else {
+            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
+        }
+    }
+>>>>>>> cfa6ab13aa62e0037c49d1b6bcd90fdc88b59c82
     
     private void startTorney() {
         PartidoDto match = new PartidoDto(matchTimeSeconds);

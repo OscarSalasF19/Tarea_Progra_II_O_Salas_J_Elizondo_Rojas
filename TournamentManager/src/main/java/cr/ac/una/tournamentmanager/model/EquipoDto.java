@@ -1,59 +1,58 @@
 package cr.ac.una.tournamentmanager.model;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import cr.ac.una.tournamentmanager.util.AppContext;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
 public class EquipoDto {
     
-    private StringProperty nombre;
-    private StringProperty foto;
-    private ObjectProperty<DeporteDto> sport;
-    private int puntos; //de la clasificacion general
+    private StringProperty name;
+    private StringProperty photo;
+    private StringProperty sport;
+    private int points; //de la clasificacion general
     private int anotaciones; //"goles" pero no son goles porque son varios deportes
     private int desempenno; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     
     public EquipoDto() {
-        this.nombre = new SimpleStringProperty("");
-        this.foto = new SimpleStringProperty("");
-        this.sport = new SimpleObjectProperty<>();
-        this.puntos = 0;
+        this.name = new SimpleStringProperty("");
+        this.photo = new SimpleStringProperty("");
+        this.sport = new SimpleStringProperty("");
+        this.points = 0;
         this.anotaciones = 0;
-        this.desempenno = 1;
+        this.desempenno = (int) (Math.random() * 100) + 1; 
     }
 
     public String getNombre() {
-        return nombre.get();
+        return name.get();
     }
 
     public void setNombre(String nombre) {
-        this.nombre.set(nombre);
+        this.name.set(nombre);
     }
 
     public String getFoto() {
-        return foto.get();
+        return photo.get();
     }
 
     public void setFoto(String foto) {
-        this.foto.set(foto);
+        this.photo.set(foto);
     }
 
-    public DeporteDto getSport() {
+    public String getSport() {
         return sport.get();
     }
     
-    public void setSport(DeporteDto sport){
+    public void setSport(String sport){
         this.sport.set(sport);
     }
     
     public int getPuntos() {
-        return puntos;
+        return points;
     }
 
     public void setPuntos(int puntos) {
-        this.puntos = puntos;
+        this.points = puntos;
     }
 
     public int getAnotaciones() {
@@ -73,14 +72,14 @@ public class EquipoDto {
     }
 
     public StringProperty getNombreProperty() {
-        return nombre;
+        return name;
     }
 
     public StringProperty getFotoProperty() {
-        return foto;
+        return photo;
     }
     
-    public ObjectProperty<DeporteDto> getSportProperty() {
+    public StringProperty getSportProperty() {
         return sport;
     }
     
