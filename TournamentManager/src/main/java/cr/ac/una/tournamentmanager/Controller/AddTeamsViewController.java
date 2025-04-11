@@ -4,19 +4,72 @@
  */
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.Util.Mensaje;
+import cr.ac.una.tournamentmanager.model.EquipoDto;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 
-public class AddTeamsViewController implements Initializable {
+public class AddTeamsViewController extends Controller implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private MFXTextField txfTeamName;
+    @FXML
+    private MFXTextField txfTeamSport;
+    @FXML
+    private ImageView imageTeamPhoto;
+    
+    private EquipoDto team;
+    
+    private ObjectProperty<EquipoDto> teamProperty = new SimpleObjectProperty<>();
+    
+    @FXML
+    void onActionArchiveBtn(ActionEvent event) {
+        //abrir explorador de archivos para escoger una foto y setear la ruta de
+    }
+
+    @FXML
+    void onActionCamBtn(ActionEvent event) {
+        //abre la camara, guarda una foto como archivo y setea la ruta de la foto al equipo
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        bindTeam();
     }    
+
+    @Override
+    public void initialize() {
+
+    }
     
+    void bindTeam() {
+        try{
+            teamProperty.addListener((obs, oldVal, newVal) -> {
+            if (oldVal != null){
+                txfTeamName.textProperty().unbindBidirectional(oldVal.getNombreProperty());
+                imageTeamPhoto.getImage().getUrl()//hay que hacerlo string property y unbind a oV.getImageProperty();
+                        
+            }
+            if (newVal != null){
+                txfTeamName.textProperty().bindBidirectional(newVal.getNombreProperty());
+            }
+        });    
+            
+        }catch (Exception ex){
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el biendeo", getStage(),"Ocurrio un error al realizar el bindeo");
+        }
+    }
 }

@@ -8,36 +8,36 @@ import javafx.beans.property.StringProperty;
 
 public class EquipoDto {
     
-    private StringProperty nombre;
-    private StringProperty foto;
+    private StringProperty name;
+    private StringProperty photo;
     private ObjectProperty<DeporteDto> sport;
-    private int puntos; //de la clasificacion general
+    private int points; //de la clasificacion general
     private int anotaciones; //"goles" pero no son goles porque son varios deportes
     private int desempenno; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     
     public EquipoDto() {
-        this.nombre = new SimpleStringProperty("");
-        this.foto = new SimpleStringProperty("");
+        this.name = new SimpleStringProperty("");
+        this.photo = new SimpleStringProperty("");
         this.sport = new SimpleObjectProperty<>();
-        this.puntos = 0;
+        this.points = 0;
         this.anotaciones = 0;
-        this.desempenno = 1;
+        this.desempenno = 1;//del 1 al 100, entre m[as alto m[as probabilidades de ganar
     }
 
     public String getNombre() {
-        return nombre.get();
+        return name.get();
     }
 
     public void setNombre(String nombre) {
-        this.nombre.set(nombre);
+        this.name.set(nombre);
     }
 
     public String getFoto() {
-        return foto.get();
+        return photo.get();
     }
 
     public void setFoto(String foto) {
-        this.foto.set(foto);
+        this.photo.set(foto);
     }
 
     public DeporteDto getSport() {
@@ -49,11 +49,11 @@ public class EquipoDto {
     }
     
     public int getPuntos() {
-        return puntos;
+        return points;
     }
 
     public void setPuntos(int puntos) {
-        this.puntos = puntos;
+        this.points = puntos;
     }
 
     public int getAnotaciones() {
@@ -73,11 +73,11 @@ public class EquipoDto {
     }
 
     public StringProperty getNombreProperty() {
-        return nombre;
+        return name;
     }
 
     public StringProperty getFotoProperty() {
-        return foto;
+        return photo;
     }
     
     public ObjectProperty<DeporteDto> getSportProperty() {

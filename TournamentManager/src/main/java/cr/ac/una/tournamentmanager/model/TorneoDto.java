@@ -21,9 +21,12 @@ public class TorneoDto {
         this.cantEquipos = new SimpleStringProperty("");
         this.matchTimeSeconds = 10;
         this.competingTeams = new ArrayList<>();
+        
+        //eliminar estas 3 lineas
         ArrayList<EquipoDto> FullTeamList = new ArrayList<>();
         FullTeamList.add(new EquipoDto());
         AppContext.getInstance().set("FullTeamArrayList", FullTeamList );
+        
     }
 
     public DeporteDto getDeporte() {
@@ -75,7 +78,6 @@ public class TorneoDto {
                 if (AppContext.getInstance().get("FullTeamArrayList").get(indexList.get(i)).getSport().equals(getDeporte())) {
                     
                     competingTeams.add(AppContext.getInstance().get("FullTeamArrayList").get(indexList));
-                    
                 }
             }
             startTorney();

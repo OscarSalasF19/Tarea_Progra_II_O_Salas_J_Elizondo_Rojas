@@ -8,25 +8,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="550.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="550.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.AddTeamsViewController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <MFXTextField floatMode="BORDER" floatingText="Nombre Equipo" maxHeight="-Infinity" maxWidth="1.7976931348623157E308">
+            <MFXTextField fx:id="txfTeamName" floatMode="BORDER" floatingText="Nombre Equipo" maxHeight="-Infinity" maxWidth="1.7976931348623157E308">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </MFXTextField>
-            <MFXTextField floatMode="BORDER" floatingText="Deporte" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" />
+            <MFXTextField fx:id="txfTeamSport" floatMode="BORDER" floatingText="Deporte" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" />
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
                <children>
                   <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0" styleClass="jfx-image-View-Teams-Sport" HBox.hgrow="NEVER">
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imageTeamPhoto" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
-                  <MFXButton prefWidth="150.0" styleClass="fx-label" text="Cámara" />
-                  <MFXButton prefWidth="150.0" styleClass="fx-label" text="Archivo" />
+                  <MFXButton onAction="#onActionCamBtn" prefWidth="150.0" styleClass="fx-label" text="Cámara" />
+                  <MFXButton onAction="#onActionArchiveBtn" prefWidth="150.0" styleClass="fx-label" text="Archivo" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
