@@ -7,8 +7,8 @@ cr\ac\una\tournamentmanager\model\TorneoDto.class
 cr\ac\una\tournamentmanager\Util\Mensaje.class
 cr\ac\una\tournamentmanager\model\DeporteDto.class
 cr\ac\una\tournamentmanager\model\PartidoDto.class
-cr\ac\una\tournamentmanager\Controller\AddTeamsViewController.class
 cr\ac\una\tournamentmanager\Controller\PrincipalController.class
 cr\ac\una\tournamentmanager\Util\AppContext.class
+cr\ac\una\tournamentmanager\Controller\TeamsManagerController.class
 cr\ac\una\tournamentmanager\Util\BindingUtils.class
 cr\ac\una\tournamentmanager\model\EquipoDto.class

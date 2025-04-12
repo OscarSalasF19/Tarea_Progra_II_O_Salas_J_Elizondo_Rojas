@@ -32,14 +32,6 @@
     -fx-alignment: CENTER;
     -fx-cursor: hand;
 }
-.mfx-text-field-Search {
-    
-    -fx-font-size: 12px;
-    -fx-min-height: 30px;
-    -fx-pref-height: 30px;
-    -fx-max-height: 30px;
-
-}
 
 .fx-label {
     -fx-text-fill: -fx-base-color-titles;
@@ -102,8 +94,15 @@
 }
 
 .jfx-panel-black-fondo{
-     -fx-background-color: -fx-base-color-information;
+    -fx-background-color: -fx-base-color-information;
     -fx-opacity: 1;
-    
 }
+
+.jfx-text-field-smaller {
+    -fx-font-size: 12px;
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+}
+
 

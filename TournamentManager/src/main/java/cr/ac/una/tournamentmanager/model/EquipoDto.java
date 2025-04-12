@@ -1,6 +1,6 @@
 package cr.ac.una.tournamentmanager.model;
 
-import cr.ac.una.tournamentmanager.util.AppContext;
+import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,7 +11,7 @@ public class EquipoDto {
     private StringProperty photo;
     private StringProperty sport;
     private int points; //de la clasificacion general
-    private int anotaciones; //"goles" pero no son goles porque son varios deportes
+    private int anotaciones; //"goles" pero no son goles porque son varios deportes //maybe borrar
     private int desempenno; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     
     public EquipoDto() {
@@ -87,4 +87,27 @@ public class EquipoDto {
         valor += getPuntos();
         setPuntos(valor);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EquipoDto other = (EquipoDto) obj;
+        return Objects.equals(this.getNombre(), other.getNombre());
+    }
+    
+        
 }
