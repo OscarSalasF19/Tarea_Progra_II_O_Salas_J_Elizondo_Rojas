@@ -84,13 +84,22 @@
     -fx-alignment: CENTER;
 }
 
-.jfx-image-View-Teams-Sport{
+.jfx-image-View-Teams{
     -fx-background-color: -fx-base-color-information;
     -fx-background-radius: 30px;
 }
 
-.jfx-image-View-Teams-Sport > ImageView{
+.jfx-image-View-Teams > ImageView{
     -fx-image: url("../Resources/Grupo-300.png")
+}
+
+.jfx-image-View-Sport{
+    -fx-background-color: -fx-base-color-information;
+    -fx-background-radius: 30px;
+}
+
+.jfx-image-View-Sport > ImageView{
+    -fx-image: url("../Resources/Bola-300.png")
 }
 
 .jfx-panel-black-fondo{

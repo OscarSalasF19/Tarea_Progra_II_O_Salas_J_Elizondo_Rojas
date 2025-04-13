@@ -1,5 +1,6 @@
 cr\ac\una\tournamentmanager\model\PartidoDto$1.class
 cr\ac\una\tournamentmanager\Util\Formato.class
+cr\ac\una\tournamentmanager\Controller\SportsManagerController.class
 cr\ac\una\tournamentmanager\Util\FlowController.class
 cr\ac\una\tournamentmanager\App.class
 cr\ac\una\tournamentmanager\Controller\Controller.class

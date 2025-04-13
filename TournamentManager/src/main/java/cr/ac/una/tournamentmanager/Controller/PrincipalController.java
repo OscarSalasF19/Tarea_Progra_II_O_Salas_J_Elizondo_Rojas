@@ -15,7 +15,7 @@ public class PrincipalController extends Controller implements Initializable{
 
     @FXML
     void onActionBtnInfoSport(ActionEvent event) {
-        
+        FlowController.getInstance().goView("SportsManagerView");
     }
 
     @FXML
@@ -25,7 +25,7 @@ public class PrincipalController extends Controller implements Initializable{
 
     @FXML
     void onActionBtnTourney(ActionEvent event) {
-        FlowController.getInstance().goView("secondary");
+
     }
 
     @Override

@@ -146,7 +146,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         changeValues(null);
     }
     
-    void bindShowTeam() {
+    private void bindShowTeam() {
         try {
         showTeamProperty.addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
@@ -165,7 +165,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         }
     }
 
-    public void changeValues(EquipoDto value) {
+    private void changeValues(EquipoDto value) {
         if (value != null) {
             System.out.println("Cambiando datos a [" + value.getNombre() + "].");
             showTeamProperty.set(value);
@@ -177,7 +177,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         selectedTeam = value;
     }
 
-    public void setDefaultImage() {
+    private void setDefaultImage() {
         String imagePath = "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png";
         showTeamPhotoURL.set(imagePath);
         Image image = new Image(getClass().getResourceAsStream(imagePath));
