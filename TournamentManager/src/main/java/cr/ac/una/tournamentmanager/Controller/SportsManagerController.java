@@ -114,22 +114,22 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private boolean areFieldsValid() {
-        return !showSportProperty.get().getNombre().isBlank() &&
-               !showSportProperty.get().getBola().isBlank();
+        return !showSportProperty.get().getName().isBlank() &&
+               !showSportProperty.get().getBallImageURL().isBlank();
     }
 
     private void addNewSport() {
         ArrayList<DeporteDto> fullSportArrayList = (ArrayList<DeporteDto>) AppContext.getInstance().get("FullSportArrayList");
         DeporteDto sportCopy = new DeporteDto();
-        sportCopy.setNombre(showSportProperty.get().getNombre());
-        sportCopy.setBola(showSportProperty.get().getBola());
+        sportCopy.setName(showSportProperty.get().getName());
+        sportCopy.setBallImageURL(showSportProperty.get().getBallImageURL());
         fullSportArrayList.add(sportCopy);
         AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
     }
 
     private void updateExistingSport() {
-        selectedSport.setNombre(showSportProperty.get().getNombre());
-        selectedSport.setBola(showSportProperty.get().getBola());
+        selectedSport.setName(showSportProperty.get().getName());
+        selectedSport.setBallImageURL(showSportProperty.get().getBallImageURL());
     }    
     
     @Override
@@ -147,12 +147,12 @@ public class SportsManagerController extends Controller implements Initializable
         try {
         showSportProperty.addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
-                txfSportName.textProperty().unbindBidirectional(oldVal.getNombreProperty());
-                showSportPhotoURL.unbindBidirectional(oldVal.getBolaProperty());
+                txfSportName.textProperty().unbindBidirectional(oldVal.getNameProperty());
+                showSportPhotoURL.unbindBidirectional(oldVal.getBallImageURLProperty());
             }
             if (newVal != null) {
-                txfSportName.textProperty().bindBidirectional(newVal.getNombreProperty());
-                showSportPhotoURL.bindBidirectional(newVal.getBolaProperty());
+                txfSportName.textProperty().bindBidirectional(newVal.getNameProperty());
+                showSportPhotoURL.bindBidirectional(newVal.getBallImageURLProperty());
             } 
         });
         } catch (Exception ex) {
@@ -162,7 +162,7 @@ public class SportsManagerController extends Controller implements Initializable
     
        private void changeValues(DeporteDto value) {
         if (value != null) {
-            System.out.println("Cambiando datos a [" + value.getNombre() + "].");
+            System.out.println("Cambiando datos a [" + value.getName() + "].");
             showSportProperty.set(value);
         } else {
             System.out.println("Valores por defecto.");

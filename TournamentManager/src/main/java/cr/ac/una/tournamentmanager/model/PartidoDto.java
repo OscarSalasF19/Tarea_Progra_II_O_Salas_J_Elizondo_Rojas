@@ -26,10 +26,10 @@ public class PartidoDto {
         marcador.add(0,0); marcador.add(1,0);
         
         while (!timesUp) {
-            if(true) {//equipo 0 marca
+            if(false) {//equipo 0 marca
                 marcador.set(0, marcador.get(0) + 1);
             }
-            if(true) {//equipo 1 marca
+            if(false) {//equipo 1 marca
                 marcador.set(1, marcador.get(1) + 1);
             }
             
@@ -50,10 +50,10 @@ public class PartidoDto {
                 if (marcador.get(0) == marcador.get(1)){
                     //metodo de desempate //ganador +2 pts
                 } else if (marcador.get(0) > marcador.get(1)) {
-                   competingTeams.get(teams).sumPuntos(3); 
+                   competingTeams.get(teams).sumPoints(3); 
                    competingTeams.remove(teams + 1); 
                 } else {
-                   competingTeams.get(teams + 1).sumPuntos(3); 
+                   competingTeams.get(teams + 1).sumPoints(3); 
                    competingTeams.remove(teams);
                 }
             }

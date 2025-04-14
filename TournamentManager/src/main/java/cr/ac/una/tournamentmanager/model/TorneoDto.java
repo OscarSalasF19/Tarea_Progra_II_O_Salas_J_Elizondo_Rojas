@@ -1,4 +1,4 @@
-package cr.ac.una.tournamentmanager.model;
+ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.util.AppContext;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class TorneoDto {
         ArrayList<EquipoDto> fullTeamArrayList = (ArrayList<EquipoDto>) AppContext.getInstance().get("FullTeamArrayList");
         
         for(int i = 0; i < fullTeamArrayList.size(); i++){
-            if(!fullTeamArrayList.get(i).getSport().equals(getDeporte())){
+            if(!fullTeamArrayList.get(i).getSportName().equals(getDeporte())){
                 fullTeamArrayList.remove(i);
             }
         }
@@ -70,16 +70,11 @@ public class TorneoDto {
     public void createTeamList() { //llamar en un onAction de un botton 
         competingTeams = justSuitableTeams();
         
-        if(competingTeams.size() >= getCantEquipos()) {
-            
-            while(competingTeams.size() > getCantEquipos()){
-                competingTeams.remove((int) (Math.random() * competingTeams.size()));//elimina equipos en un orden aleatorio
-            }
-            
-            startTorney();
-        } else {
-            //no existen suficientes equipos registrados en "deporte" o no deben ser más para iniciar el torneo
+        while(competingTeams.size() > getCantEquipos()){
+            competingTeams.remove((int) (Math.random() * competingTeams.size()));//elimina equipos en un orden aleatorio
         }
+
+        startTorney();
     }
     
     private void startTorney() {

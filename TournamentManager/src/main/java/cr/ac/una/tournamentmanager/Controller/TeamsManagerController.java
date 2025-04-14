@@ -115,25 +115,25 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private boolean areFieldsValid() {
-        return !showTeamProperty.get().getNombre().isBlank() &&
-               !showTeamProperty.get().getSport().isBlank() &&
-               !showTeamProperty.get().getFoto().isBlank();
+        return !showTeamProperty.get().getName().isBlank() &&
+               !showTeamProperty.get().getSportName().isBlank() &&
+               !showTeamProperty.get().getTeamImageURL().isBlank();
     }
 
     private void addNewTeam() {
         ArrayList<EquipoDto> fullTeamArrayList = (ArrayList<EquipoDto>) AppContext.getInstance().get("FullTeamArrayList");
         EquipoDto teamCopy = new EquipoDto();
-        teamCopy.setNombre(showTeamProperty.get().getNombre());
-        teamCopy.setFoto(showTeamProperty.get().getFoto());
-        teamCopy.setSport(showTeamProperty.get().getSport());
+        teamCopy.setName(showTeamProperty.get().getName());
+        teamCopy.setTeamImageURL(showTeamProperty.get().getTeamImageURL());
+        teamCopy.setSportName(showTeamProperty.get().getSportName());
         fullTeamArrayList.add(teamCopy);
         AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
     }
 
     private void updateExistingTeam() {
-        selectedTeam.setNombre(showTeamProperty.get().getNombre());
-        selectedTeam.setFoto(showTeamProperty.get().getFoto());
-        selectedTeam.setSport(showTeamProperty.get().getSport());
+        selectedTeam.setName(showTeamProperty.get().getName());
+        selectedTeam.setTeamImageURL(showTeamProperty.get().getTeamImageURL());
+        selectedTeam.setSportName(showTeamProperty.get().getSportName());
     }
 
     @Override
@@ -150,14 +150,14 @@ public class TeamsManagerController extends Controller implements Initializable 
         try {
         showTeamProperty.addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
-                txfTeamName.textProperty().unbindBidirectional(oldVal.getNombreProperty());
-                showTeamPhotoURL.unbindBidirectional(oldVal.getFotoProperty());
-                txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportProperty());
+                txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
+                showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
+                txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
             }
             if (newVal != null) {
-                txfTeamName.textProperty().bindBidirectional(newVal.getNombreProperty());
-                showTeamPhotoURL.bindBidirectional(newVal.getFotoProperty());
-                txfTeamSport.textProperty().bindBidirectional(newVal.getSportProperty());
+                txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());
+                showTeamPhotoURL.bindBidirectional(newVal.getTeamImageURLProperty());
+                txfTeamSport.textProperty().bindBidirectional(newVal.getSportNameProperty());
             } 
         });
         } catch (Exception ex) {
@@ -167,10 +167,10 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private void changeValues(EquipoDto value) {
         if (value != null) {
-            System.out.println("Cambiando datos a [" + value.getNombre() + "].");
+            System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             showTeamProperty.set(value);
         } else {
-            System.out.println("Valores por defecto.");
+            System.out.println("Volviendo a valores por defecto.");
             showTeamProperty.set(new EquipoDto());
             setDefaultImage();
         }

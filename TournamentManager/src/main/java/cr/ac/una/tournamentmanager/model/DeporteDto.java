@@ -7,37 +7,37 @@ import javafx.beans.property.StringProperty;
 
 public class DeporteDto {
     
-    private StringProperty nombre;
-    private StringProperty bola;
+    private StringProperty Name;
+    private StringProperty ballImageURL;
     
     
     public DeporteDto () {
-        this.nombre = new SimpleStringProperty("");
-        this.bola = new SimpleStringProperty("");
+        this.Name = new SimpleStringProperty("");
+        this.ballImageURL = new SimpleStringProperty("");
     }
 
-    public String getNombre() {
-        return nombre.get();
+    public String getName() {
+        return Name.get();
     }
 
-    public void setNombre(String nombre) {
-        this.nombre.set(nombre);
+    public void setName(String nombre) {
+        this.Name.set(nombre);
     }
 
-    public String getBola() {
-        return bola.get();
+    public String getBallImageURL() {
+        return ballImageURL.get();
     }
 
-    public void setBola(String bola) {
-        this.bola.set(bola);
+    public void setBallImageURL(String bola) {
+        this.ballImageURL.set(bola);
     }
 
-    public StringProperty getNombreProperty() {
-        return nombre;
+    public StringProperty getNameProperty() {
+        return Name;
     }
 
-    public StringProperty getBolaProperty() {
-        return bola;
+    public StringProperty getBallImageURLProperty() {
+        return ballImageURL;
     }
 
     @Override //ni idea
@@ -58,12 +58,12 @@ public class DeporteDto {
             return false;
         }
         final DeporteDto other = (DeporteDto) obj;
-        return Objects.equals(this.nombre.get(), other.nombre.get());
+        return Objects.equals(this.Name.get(), other.Name.get());
     }
 
     @Override
     public String toString() {
-        return "DeporteDto{" + "nombre=" + nombre.get() + ", bola=" + bola.get() + '}';
+        return "DeporteDto{" + "nombre=" + Name.get() + ", bola=" + ballImageURL.get() + '}';
     }
     
 }

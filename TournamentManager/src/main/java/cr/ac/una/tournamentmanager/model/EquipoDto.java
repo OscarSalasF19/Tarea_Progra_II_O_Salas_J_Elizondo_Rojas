@@ -8,84 +8,74 @@ import javafx.beans.property.StringProperty;
 public class EquipoDto {
     
     private StringProperty name;
-    private StringProperty photo;
-    private StringProperty sport;
-    private int points; //de la clasificacion general
-    private int anotaciones; //"goles" pero no son goles porque son varios deportes //maybe borrar
-    private int desempenno; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
+    private StringProperty teamImageURL;
+    private StringProperty sportName;
+    private int globalPoins; //de la clasificacion general
+    private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     
     public EquipoDto() {
         this.name = new SimpleStringProperty("");
-        this.photo = new SimpleStringProperty("");
-        this.sport = new SimpleStringProperty("");
-        this.points = 0;
-        this.anotaciones = 0;
-        this.desempenno = (int) (Math.random() * 100) + 1; 
+        this.teamImageURL = new SimpleStringProperty("");
+        this.sportName = new SimpleStringProperty("");
+        this.globalPoins = 0;
+        this.performance = (int) (Math.random() * 100) + 1; 
     }
 
-    public String getNombre() {
+    public String getName() {
         return name.get();
     }
 
-    public void setNombre(String nombre) {
+    public void setName(String nombre) {
         this.name.set(nombre);
     }
 
-    public String getFoto() {
-        return photo.get();
+    public String getTeamImageURL() {
+        return teamImageURL.get();
     }
 
-    public void setFoto(String foto) {
-        this.photo.set(foto);
+    public void setTeamImageURL(String foto) {
+        this.teamImageURL.set(foto);
     }
 
-    public String getSport() {
-        return sport.get();
+    public String getSportName() {
+        return sportName.get();
     }
     
-    public void setSport(String sport){
-        this.sport.set(sport);
+    public void setSportName(String sport){
+        this.sportName.set(sport);
     }
     
-    public int getPuntos() {
-        return points;
+    public int getPoints() {
+        return globalPoins;
     }
 
-    public void setPuntos(int puntos) {
-        this.points = puntos;
+    public void setPoints(int puntos) {
+        this.globalPoins = puntos;
     }
 
-    public int getAnotaciones() {
-       return anotaciones;
-    }
-
-    public void setAnotaciones(int anotaciones) {
-        this.anotaciones = anotaciones;
+    public int getPerformance() {
+        return this.performance;
     }
     
-    public int getDesempenno() {
-        return this.desempenno;
-    }
-    
-    public void setDesempenno(int desempenno) {
-        this.desempenno = desempenno;
+    public void setPerformance(int performance) {
+        this.performance = performance;
     }
 
-    public StringProperty getNombreProperty() {
+    public StringProperty getNameProperty() {
         return name;
     }
 
-    public StringProperty getFotoProperty() {
-        return photo;
+    public StringProperty getTeamImageURLProperty() {
+        return teamImageURL;
     }
     
-    public StringProperty getSportProperty() {
-        return sport;
+    public StringProperty getSportNameProperty() {
+        return sportName;
     }
     
-    public void sumPuntos(int valor) {
-        valor += getPuntos();
-        setPuntos(valor);
+    public void sumPoints(int valor) {
+        valor += getPoints();
+        setPoints(valor);
     }
 
     @Override
@@ -106,7 +96,7 @@ public class EquipoDto {
             return false;
         }
         final EquipoDto other = (EquipoDto) obj;
-        return Objects.equals(this.getNombre(), other.getNombre());
+        return Objects.equals(this.getName(), other.getName());
     }
     
         
