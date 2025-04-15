@@ -1,90 +1,112 @@
- package cr.ac.una.tournamentmanager.model;
+package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.util.AppContext;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class TourneyDto {
-    
-    private StringProperty sport;
-    private StringProperty totalOfTeams;
-    private int matchTimeSeconds;// se ocupan cambios mayores aca, el tiempo se elige en un reloj improvisado, hay que hacerlo en segundos para este
-    private ArrayList<TeamDto> competingTeams;
-    
-    public TourneyDto() {
-        this.sport = new SimpleStringProperty("");
-        this.totalOfTeams = new SimpleStringProperty("");
-        this.matchTimeSeconds = 10;
-        this.competingTeams = new ArrayList<>();
-    }
+
+    private StringProperty sport = new SimpleStringProperty("");
+    private StringProperty totalOfTeams = new SimpleStringProperty("");
+    private int matchTimeMilliseconds = 10 * 1000; // Match duration in milliseconds
+    private ArrayList<ArrayList<TeamDto>> tournamentStages = new ArrayList<>();
+    private boolean timesUp = false;
 
     public String getSport() {
         return sport.get();
     }
 
-    public void setSport(String Deporte) {
-        this.sport.set(Deporte);
+    public void setSport(String sport) {
+        this.sport.set(sport);
     }
 
     public int getTotalOfTeams() {
-        if (totalOfTeams.get() != null && !totalOfTeams.get().isEmpty()) {
-            return Integer.valueOf(totalOfTeams.get());
-        } else {
-            return 0;
-        }
+        String totalTeams = totalOfTeams.get();
+        return (totalTeams != null && !totalTeams.isEmpty()) ? Integer.parseInt(totalTeams) : 0;
     }
 
     public void setTotalOfTeams(int totalOfTeams) {
         this.totalOfTeams.set(String.valueOf(totalOfTeams));
     }
 
-    public int getMatchTimeSeconds() {
-        return matchTimeSeconds;
+    public int getMatchTimeMilliseconds() {
+        return matchTimeMilliseconds;
     }
 
-    public void setMatchTimeSeconds(int matchTimeSeconds) {
-        this.matchTimeSeconds = matchTimeSeconds;
+    public void setMatchTimeMilliseconds(int matchTimeMilliseconds) {
+        this.matchTimeMilliseconds = matchTimeMilliseconds;
     }
 
-    public StringProperty getDeporteProperty() {
+    public StringProperty getSportProperty() {
         return sport;
     }
 
-    public StringProperty getCantEquiposProperty() {
+    public StringProperty getTotalTeamsProperty() {
         return totalOfTeams;
     }
 
-    private ArrayList<TeamDto> justSuitableTeams() {
-        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
-
-        for(int i = 0; i < fullTeamArrayList.size(); i++){
-            if(!fullTeamArrayList.get(i).getSportName().equals(getSport())){
-                fullTeamArrayList.remove(i);
-            }
-        }
-        
-        return fullTeamArrayList;//array de equipos que tienen un deporte en especifico
+    // Filters teams by the selected sport
+    private ArrayList<TeamDto> filterTeamsBySport() {
+        ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        teams.removeIf(team -> !team.getSportName().equals(getSport()));
+        return teams;
     }
 
-    public void createTeamList() { //llamar en un onAction de un botton 
-        competingTeams = justSuitableTeams();
-        
-        while(competingTeams.size() > getTotalOfTeams()){
-            competingTeams.remove((int) (Math.random() * competingTeams.size()));//elimina equipos en un orden aleatorio
+    // Creates the initial list of teams for the tournament
+    public void createTeamList() {
+        tournamentStages.add(filterTeamsBySport());
+        while (tournamentStages.get(0).size() > getTotalOfTeams()) {
+            tournamentStages.get(0).remove((int) (Math.random() * tournamentStages.get(0).size()));
         }
-
-        startTorney();
+        startTournament();
     }
-    
-    private void startTorney() {
-        GameDto match = new GameDto(matchTimeSeconds);
-        while (competingTeams.size() > 1){
-            for (int i = 0; i < competingTeams.size(); i++) {
-                match.startGame(competingTeams,i);
+
+    // Starts the tournament and organizes matches by stages
+    private void startTournament() {
+        for (int stage = 0; tournamentStages.get(stage).size() > 1; stage++) {
+            while (tournamentStages.get(stage).size() > tournamentStages.get(stage + 1).size() * 2) {
+                startMatch(stage, 0);
             }
         }
     }
-        
+
+    // Starts a match between two teams
+    public void startMatch(int stage, int team) {
+        if (tournamentStages.get(stage).size() <= team + 1) {
+            tournamentStages.get(stage + 1).add(tournamentStages.get(stage).get(team));
+            return;
+        }
+
+        Timer timer = new Timer();
+        ArrayList<Integer> score = new ArrayList<>();
+        score.add(0); // Score for team 1
+        score.add(0); // Score for team 2
+
+        // Task to finish the match after the timer ends
+        TimerTask taskFinishMatch = new TimerTask() {
+            @Override
+            public void run() {
+                timesUp = true;
+                if (score.get(0).equals(score.get(1))) {
+                    // Handle tie-breaker logic
+                } else if (score.get(0) > score.get(1)) {
+                    tournamentStages.get(stage).get(team).sumPoints(3);
+                    tournamentStages.get(stage + 1).add(tournamentStages.get(stage).get(team));
+                } else {
+                    tournamentStages.get(stage).get(team + 1).sumPoints(3);
+                    tournamentStages.get(stage + 1).add(tournamentStages.get(stage).get(team + 1));
+                }
+            }
+        };
+
+        timer.schedule(taskFinishMatch, matchTimeMilliseconds);
+
+        // Simulates the match until the timer ends
+        while (!timesUp) {
+            // Logic to update scores
+        }
+    }
 }
-

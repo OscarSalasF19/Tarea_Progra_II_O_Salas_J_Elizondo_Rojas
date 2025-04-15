@@ -84,6 +84,18 @@
     -fx-alignment: CENTER;
 }
 
+.jfx-panel-fondo-tourney {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-opacity: 1;
+}
+
+.jfx-panel-fondo-tourney > HBox {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-padding: 10 10 10 10;
+    -fx-spacing: 40;
+    -fx-alignment: CENTER-LEFT;
+}
+
 .jfx-image-View-Teams{
     -fx-background-color: -fx-base-color-information;
     -fx-background-radius: 30px;

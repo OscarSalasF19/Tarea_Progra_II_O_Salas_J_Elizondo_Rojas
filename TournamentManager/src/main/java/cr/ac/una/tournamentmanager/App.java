@@ -21,8 +21,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("PrincipalView"), 640, 480);
         MFXThemeManager.addOn(scene,Themes.DEFAULT,Themes.LEGACY);
         stage.setScene(scene);
-        stage.setMinHeight(500.0);//experimento
-        stage.setMinWidth(720.0);//experimento
+        stage.setMinHeight(500.0);
+        stage.setMinWidth(720.0);
         stage.show();
     }
 
