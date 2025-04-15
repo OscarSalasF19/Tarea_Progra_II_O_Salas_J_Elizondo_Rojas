@@ -4,46 +4,39 @@ import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 public class SportDto {
     
-    private StringProperty Name;
+    private StringProperty name;
     private StringProperty ballImageURL;
-    
-    
+
     public SportDto() {
-        this.Name = new SimpleStringProperty("");
+        this.name = new SimpleStringProperty("");
         this.ballImageURL = new SimpleStringProperty("");
     }
 
-    public String getName() {
-        return Name.get();
+    public SportDto(String name, String ballImageURL) {
+        this.name = new SimpleStringProperty(name);
+        this.ballImageURL = new SimpleStringProperty(ballImageURL);
     }
 
-    public void setName(String nombre) {
-        this.Name.set(nombre);
+    public String getName() {
+        return name.get();
     }
+
+    public void setName(String name) { this.name.set(name); }
 
     public String getBallImageURL() {
         return ballImageURL.get();
     }
 
-    public void setBallImageURL(String bola) {
-        this.ballImageURL.set(bola);
-    }
+    public void setBallImageURL(String ballImageURL) { this.ballImageURL.set(ballImageURL); }
 
     public StringProperty getNameProperty() {
-        return Name;
+        return name;
     }
 
     public StringProperty getBallImageURLProperty() {
         return ballImageURL;
-    }
-
-    @Override //ni idea
-    public int hashCode() { 
-        int hash = 7;
-        return hash;
     }
 
     @Override
@@ -58,12 +51,12 @@ public class SportDto {
             return false;
         }
         final SportDto other = (SportDto) obj;
-        return Objects.equals(this.Name.get(), other.Name.get());
+        return Objects.equals(this.name.get(), other.name.get());
     }
 
     @Override
     public String toString() {
-        return "DeporteDto{" + "nombre=" + Name.get() + ", bola=" + ballImageURL.get() + '}';
+        return "SportDto{" + "name=" + name.get() + ", ballImageURL=" + ballImageURL.get() + '}';
     }
     
 }
