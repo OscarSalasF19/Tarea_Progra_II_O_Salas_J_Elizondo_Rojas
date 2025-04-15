@@ -16,26 +16,38 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 
 public class TeamsManagerController extends Controller implements Initializable {
 
     @FXML
     private AnchorPane root;
-    
+
     @FXML
     private ImageView imageViewTeamPhoto;
     private StringProperty showTeamPhotoURL = new SimpleStringProperty("");
-    
+
     @FXML
-    private TableView<?> tableViewTeams;
+    private TableView<TeamDto> tableViewTeams;
+
+    @FXML
+    private TableColumn<TeamDto, String> infoTableColumn;
 
     @FXML
     private MFXTextField txfSearch;
@@ -48,13 +60,14 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     private MFXTextField txfTeamSport;
-    
+
     private TeamDto selectedTeam;
     private ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
-    
-    
+
+
     @FXML
     void onActionAddTeam(ActionEvent event) {
+        updateTableView();
         changeValues(null);//limpia el campo de la derecha para que se pueda añadir un equipo nuevo
     }
 
@@ -83,7 +96,7 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     void onActionCamera(ActionEvent event) {
-        //abre camara para crear una imagen y despue sla setea 
+        //abre camara para crear una imagen y despue sla setea
     }
 
     @FXML
@@ -91,7 +104,8 @@ public class TeamsManagerController extends Controller implements Initializable 
         if(selectedTeam != null){
             ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
             fullTeamArrayList.remove(selectedTeam);
-            AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);                
+            AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
+            updateTableView();
         }
         changeValues(null);
     }
@@ -105,12 +119,23 @@ public class TeamsManagerController extends Controller implements Initializable 
                 } else {
                     updateExistingTeam();
                 }
+                updateTableView();
                 changeValues(null);
             } else {
                 System.out.println("Presenta Datos Incompletos.");
             }
         } catch (Exception ex) {
             System.out.println("Error al guardar el equipo: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    void onMouseClickedTeamsTable(MouseEvent event) {
+        TeamDto selectedItem = tableViewTeams.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            changeValues(selectedItem);
+        } else {
+            System.out.println("No se seleccionó ningún elemento en la tabla.");
         }
     }
 
@@ -144,31 +169,73 @@ public class TeamsManagerController extends Controller implements Initializable 
     public void initialize(URL url, ResourceBundle rb) {
         bindShowTeam();
         changeValues(null);
+
+        //eliminar
+        AppContext.getInstance().set("FullTeamArrayList", new ArrayList<TeamDto>());
+
+        ObservableList<TeamDto> observableTeamList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+        tableViewTeams.setItems(observableTeamList);
+
+        infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+
+        infoTableColumn.setCellFactory(column -> {
+            return new TableCell<TeamDto, String>() {
+                private final ImageView imageView = new ImageView();
+
+                @Override
+                protected void updateItem(String name, boolean empty) {
+                    super.updateItem(name, empty);
+                    if (empty || name == null) {
+                        setGraphic(null);
+                    } else {
+                        TeamDto team = getTableView().getItems().get(getIndex());
+                        try {
+                            imageView.setImage(new Image(team.getTeamImageURL()));
+                        } catch (Exception e) {
+                            System.out.println("Error al cargar la imagen: " + team.getName() + " | " + team.getTeamImageURL());
+                            team.getTeamImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
+                            imageView.setImage(new Image(team.getTeamImageURL()));
+                        }
+                        imageView.setFitHeight(30);
+                        imageView.setFitWidth(30);
+
+                        HBox hbox = new HBox(imageView, new Label(name));
+                        hbox.setAlignment(Pos.CENTER_LEFT);
+                        hbox.setSpacing(10);
+                        setGraphic(hbox);
+                    }
+                }
+            };
+        });
     }
-    
-    private void bindShowTeam() {
-        try {
+
+private void bindShowTeam() {
+    try {
         showTeamProperty.addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
                 txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
                 showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
                 txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
+                txfTeamPoints.textProperty().unbind(); // Desvincular correctamente
+                //txfTeamPoints.clear();
             }
             if (newVal != null) {
                 txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());
                 showTeamPhotoURL.bindBidirectional(newVal.getTeamImageURLProperty());
                 txfTeamSport.textProperty().bindBidirectional(newVal.getSportNameProperty());
+                txfTeamPoints.textProperty().bind(new SimpleStringProperty("Puntuación: " + newVal.getPoints() + " pts.")); // Vincular correctamente
             } 
         });
-        } catch (Exception ex) {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
-        }
+    } catch (Exception ex) {
+        new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
     }
+}
 
     private void changeValues(TeamDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             showTeamProperty.set(value);
+            imageViewTeamPhoto.setImage(new Image(value.getTeamImageURL()));
         } else {
             System.out.println("Volviendo a valores por defecto.");
             showTeamProperty.set(new TeamDto());
@@ -183,4 +250,12 @@ public class TeamsManagerController extends Controller implements Initializable 
         Image image = new Image(getClass().getResourceAsStream(imagePath));
         imageViewTeamPhoto.setImage(image);
     }
+
+    private void updateTableView() {
+        ObservableList<TeamDto> observableTeamList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+        tableViewTeams.setItems(observableTeamList);
+        tableViewTeams.refresh();
+        tableViewTeams.getSelectionModel().clearSelection();
+    }
+
 }

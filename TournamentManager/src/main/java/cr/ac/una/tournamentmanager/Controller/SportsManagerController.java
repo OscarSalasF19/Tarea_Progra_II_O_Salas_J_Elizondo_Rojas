@@ -161,13 +161,8 @@ public class SportsManagerController extends Controller implements Initializable
         bindShowSport();
         changeValues(null);
 
-        ArrayList<SportDto> fullSportArrayList = new ArrayList<>();
-
-        //eliminar estas dos lineas
-        fullSportArrayList.add(new SportDto("PPPio","/cr/ac/una/tournamentmanager/Resources/Bola-300.png"));
-        fullSportArrayList.add(new SportDto("PuroPincheP","/una direccion de mrd.pg"));
-        AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
-
+        //eliminar
+        AppContext.getInstance().set("FullSportArrayList", new ArrayList<SportDto>());
 
         ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>)AppContext.getInstance().get("FullSportArrayList"));
         tableViewSports.setItems(observableSportList);
@@ -186,11 +181,11 @@ public class SportsManagerController extends Controller implements Initializable
                     } else {
                         SportDto sport = getTableView().getItems().get(getIndex());
                         try {
-                            imageView.setImage(new Image(sport.getBallImageURLProperty().get()));
+                            imageView.setImage(new Image(sport.getBallImageURL()));
                         }catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + sport.getName() + " | " + sport.getBallImageURL());
                             sport.getBallImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
-                            imageView.setImage(new Image(sport.getBallImageURLProperty().get()));
+                            imageView.setImage(new Image(sport.getBallImageURL()));
                         }
                         imageView.setFitHeight(30);
                         imageView.setFitWidth(30);
