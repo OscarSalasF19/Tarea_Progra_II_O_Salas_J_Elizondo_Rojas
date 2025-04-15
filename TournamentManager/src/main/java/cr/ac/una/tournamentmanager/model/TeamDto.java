@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
-public class EquipoDto {
+public class TeamDto {
     
     private StringProperty name;
     private StringProperty teamImageURL;
@@ -13,7 +13,7 @@ public class EquipoDto {
     private int globalPoins; //de la clasificacion general
     private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     
-    public EquipoDto() {
+    public TeamDto() {
         this.name = new SimpleStringProperty("");
         this.teamImageURL = new SimpleStringProperty("");
         this.sportName = new SimpleStringProperty("");
@@ -95,7 +95,7 @@ public class EquipoDto {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final EquipoDto other = (EquipoDto) obj;
+        final TeamDto other = (TeamDto) obj;
         return Objects.equals(this.getName(), other.getName());
     }
     

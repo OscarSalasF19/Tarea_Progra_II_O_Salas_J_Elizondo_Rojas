@@ -6,13 +6,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class PartidoDto {
+public class GameDto {
     
     private Timer timer;
     private int delay;
     private boolean timesUp;
     
-    public PartidoDto(int timeInSeconds) {
+    public GameDto(int timeInSeconds) {
         this.timer = new Timer();
         this.delay = timeInSeconds * 1000;
         this.timesUp = false;
@@ -20,7 +20,7 @@ public class PartidoDto {
     
     
     
-    public void startGame(ArrayList<EquipoDto> competingTeams, int teams) {
+    public void startGame(ArrayList<TeamDto> competingTeams, int teams) {
         ArrayList<Integer> marcador;
         marcador = new ArrayList<>();
         marcador.add(0,0); marcador.add(1,0);

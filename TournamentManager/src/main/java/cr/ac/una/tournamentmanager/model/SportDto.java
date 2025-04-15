@@ -5,13 +5,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
-public class DeporteDto {
+public class SportDto {
     
     private StringProperty Name;
     private StringProperty ballImageURL;
     
     
-    public DeporteDto () {
+    public SportDto() {
         this.Name = new SimpleStringProperty("");
         this.ballImageURL = new SimpleStringProperty("");
     }
@@ -57,7 +57,7 @@ public class DeporteDto {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DeporteDto other = (DeporteDto) obj;
+        final SportDto other = (SportDto) obj;
         return Objects.equals(this.Name.get(), other.Name.get());
     }
 

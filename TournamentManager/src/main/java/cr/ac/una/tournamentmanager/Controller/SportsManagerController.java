@@ -1,7 +1,7 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.Mensaje;
-import cr.ac.una.tournamentmanager.model.DeporteDto;
+import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.io.File;
@@ -49,8 +49,8 @@ public class SportsManagerController extends Controller implements Initializable
     private MFXTextField txfSportName;
     
     
-    private DeporteDto selectedSport;
-    private ObjectProperty<DeporteDto> showSportProperty = new SimpleObjectProperty<>();
+    private SportDto selectedSport;
+    private ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
     
 
     @FXML
@@ -88,7 +88,7 @@ public class SportsManagerController extends Controller implements Initializable
     @FXML
     void onActionDelete(ActionEvent event) {
         if(selectedSport != null){
-            ArrayList<DeporteDto> fullSportArrayList = (ArrayList<DeporteDto>) AppContext.getInstance().get("FullSportArrayList");
+            ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
             fullSportArrayList.remove(selectedSport);
             AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);                
         }
@@ -119,8 +119,8 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private void addNewSport() {
-        ArrayList<DeporteDto> fullSportArrayList = (ArrayList<DeporteDto>) AppContext.getInstance().get("FullSportArrayList");
-        DeporteDto sportCopy = new DeporteDto();
+        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        SportDto sportCopy = new SportDto();
         sportCopy.setName(showSportProperty.get().getName());
         sportCopy.setBallImageURL(showSportProperty.get().getBallImageURL());
         fullSportArrayList.add(sportCopy);
@@ -160,13 +160,13 @@ public class SportsManagerController extends Controller implements Initializable
         }
     }
     
-       private void changeValues(DeporteDto value) {
+       private void changeValues(SportDto value) {
         if (value != null) {
             System.out.println("Cambiando datos a [" + value.getName() + "].");
             showSportProperty.set(value);
         } else {
             System.out.println("Valores por defecto.");
-            showSportProperty.set(new DeporteDto());
+            showSportProperty.set(new SportDto());
             setDefaultImage();
         }
         selectedSport = value;

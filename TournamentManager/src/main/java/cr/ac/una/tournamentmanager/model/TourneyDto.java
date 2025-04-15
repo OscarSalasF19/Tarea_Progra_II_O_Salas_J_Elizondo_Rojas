@@ -5,38 +5,38 @@ import java.util.ArrayList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class TorneoDto {
+public class TourneyDto {
     
-    private StringProperty Deporte;
-    private StringProperty cantEquipos;
+    private StringProperty sport;
+    private StringProperty totalOfTeams;
     private int matchTimeSeconds;// se ocupan cambios mayores aca, el tiempo se elige en un reloj improvisado, hay que hacerlo en segundos para este
-    private ArrayList<EquipoDto> competingTeams;
+    private ArrayList<TeamDto> competingTeams;
     
-    public TorneoDto() {
-        this.Deporte = new SimpleStringProperty("");
-        this.cantEquipos = new SimpleStringProperty("");
+    public TourneyDto() {
+        this.sport = new SimpleStringProperty("");
+        this.totalOfTeams = new SimpleStringProperty("");
         this.matchTimeSeconds = 10;
         this.competingTeams = new ArrayList<>();
     }
 
-    public String getDeporte() {
-        return Deporte.get();
+    public String getSport() {
+        return sport.get();
     }
 
-    public void setDeporte(String Deporte) {
-        this.Deporte.set(Deporte);
+    public void setSport(String Deporte) {
+        this.sport.set(Deporte);
     }
 
-    public int getCantEquipos() {
-        if (cantEquipos.get() != null && !cantEquipos.get().isEmpty()) {
-            return Integer.valueOf(cantEquipos.get());
+    public int getTotalOfTeams() {
+        if (totalOfTeams.get() != null && !totalOfTeams.get().isEmpty()) {
+            return Integer.valueOf(totalOfTeams.get());
         } else {
             return 0;
         }
     }
 
-    public void setCantEquipos(int cantEquipos) {
-        this.cantEquipos.set(String.valueOf(cantEquipos));
+    public void setTotalOfTeams(int totalOfTeams) {
+        this.totalOfTeams.set(String.valueOf(totalOfTeams));
     }
 
     public int getMatchTimeSeconds() {
@@ -48,18 +48,18 @@ public class TorneoDto {
     }
 
     public StringProperty getDeporteProperty() {
-        return Deporte;
+        return sport;
     }
 
     public StringProperty getCantEquiposProperty() {
-        return cantEquipos;
+        return totalOfTeams;
     }
 
-    private ArrayList<EquipoDto> justSuitableTeams() {
-        ArrayList<EquipoDto> fullTeamArrayList = (ArrayList<EquipoDto>) AppContext.getInstance().get("FullTeamArrayList");
-        
+    private ArrayList<TeamDto> justSuitableTeams() {
+        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+
         for(int i = 0; i < fullTeamArrayList.size(); i++){
-            if(!fullTeamArrayList.get(i).getSportName().equals(getDeporte())){
+            if(!fullTeamArrayList.get(i).getSportName().equals(getSport())){
                 fullTeamArrayList.remove(i);
             }
         }
@@ -70,7 +70,7 @@ public class TorneoDto {
     public void createTeamList() { //llamar en un onAction de un botton 
         competingTeams = justSuitableTeams();
         
-        while(competingTeams.size() > getCantEquipos()){
+        while(competingTeams.size() > getTotalOfTeams()){
             competingTeams.remove((int) (Math.random() * competingTeams.size()));//elimina equipos en un orden aleatorio
         }
 
@@ -78,7 +78,7 @@ public class TorneoDto {
     }
     
     private void startTorney() {
-        PartidoDto match = new PartidoDto(matchTimeSeconds);
+        GameDto match = new GameDto(matchTimeSeconds);
         while (competingTeams.size() > 1){
             for (int i = 0; i < competingTeams.size(); i++) {
                 match.startGame(competingTeams,i);

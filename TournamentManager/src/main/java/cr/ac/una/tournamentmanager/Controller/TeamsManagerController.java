@@ -1,7 +1,7 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.Mensaje;
-import cr.ac.una.tournamentmanager.model.EquipoDto;
+import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,8 +49,8 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     private MFXTextField txfTeamSport;
     
-    private EquipoDto selectedTeam;
-    private ObjectProperty<EquipoDto> showTeamProperty = new SimpleObjectProperty<>();
+    private TeamDto selectedTeam;
+    private ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
     
     
     @FXML
@@ -89,7 +89,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     void onActionDelete(ActionEvent event) {//borra de el array de equipos segun seleccion
         if(selectedTeam != null){
-            ArrayList<EquipoDto> fullTeamArrayList = (ArrayList<EquipoDto>) AppContext.getInstance().get("FullTeamArrayList");
+            ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
             fullTeamArrayList.remove(selectedTeam);
             AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);                
         }
@@ -121,8 +121,8 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void addNewTeam() {
-        ArrayList<EquipoDto> fullTeamArrayList = (ArrayList<EquipoDto>) AppContext.getInstance().get("FullTeamArrayList");
-        EquipoDto teamCopy = new EquipoDto();
+        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        TeamDto teamCopy = new TeamDto();
         teamCopy.setName(showTeamProperty.get().getName());
         teamCopy.setTeamImageURL(showTeamProperty.get().getTeamImageURL());
         teamCopy.setSportName(showTeamProperty.get().getSportName());
@@ -165,13 +165,13 @@ public class TeamsManagerController extends Controller implements Initializable 
         }
     }
 
-    private void changeValues(EquipoDto value) {
+    private void changeValues(TeamDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             showTeamProperty.set(value);
         } else {
             System.out.println("Volviendo a valores por defecto.");
-            showTeamProperty.set(new EquipoDto());
+            showTeamProperty.set(new TeamDto());
             setDefaultImage();
         }
         selectedTeam = value;
