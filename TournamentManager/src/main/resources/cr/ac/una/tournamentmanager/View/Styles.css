@@ -126,4 +126,30 @@
     -fx-max-height: 30px;
 }
 
+.jfx-table-view-format {
+    -fx-background-color: -fx-base-color-titles;
+    -fx-background-radius: 7px;
+    -fx-border-color: -fx-base-color-theme;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
 
+.jfx-table-view-format:focused {
+    -fx-border-color: -fx-base-color-theme;
+    -fx-border-width: 2px;
+}
+
+#infoTableColumn {
+    -fx-text-fill: -fx-base-color-information;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+#infoTableColumn:hover {
+    -fx-background-color: -fx-base-color-focused;
+    -fx-cursor: hand;
+}
+
+#infoTableColumn:cell-selection {
+    -fx-background-color: -fx-base-color-theme;
+}

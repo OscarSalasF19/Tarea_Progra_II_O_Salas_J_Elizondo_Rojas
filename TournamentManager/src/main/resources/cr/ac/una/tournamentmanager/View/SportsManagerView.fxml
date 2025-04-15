@@ -17,9 +17,9 @@
                 <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
                         <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxWidth="1.7976931348623157E308" promptText="Buscar" styleClass="jfx-text-field-smaller" />
-                        <TableView fx:id="tableViewSports" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableViewSports" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedSportsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="tColumnSports" prefWidth="75.0" text="Nombre Deporte" />
+                                <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Deportes" />
                             </columns>
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
