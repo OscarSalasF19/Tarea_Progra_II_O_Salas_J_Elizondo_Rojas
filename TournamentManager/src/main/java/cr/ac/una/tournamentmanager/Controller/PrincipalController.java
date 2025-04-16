@@ -28,6 +28,11 @@ public class PrincipalController extends Controller implements Initializable{
         FlowController.getInstance().goView("TournamentView");
     }
 
+    @FXML
+    void onActionBtnExit(ActionEvent event) {
+        FlowController.getInstance().salir();
+    }
+
     @Override
     public void initialize() {
     }

@@ -17,14 +17,14 @@
     -fx-font-weight: bold;
 }
 
-.mfx-button {
+.mfx-button, .mfx-button:focused {
     -fx-background-color: -fx-base-color-theme;
     -mfx-button-type: RAISED;
     -fx-border-color: -fx-base-color-titles;
     -fx-background-radius: 10px;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-    -fx-opacity: 1; 
+    -fx-opacity: 1;
     -fx-content-display: left;
     -fx-text-fill: -fx-base-color-titles;
     -fx-font-weight: bold;
@@ -33,16 +33,22 @@
     -fx-cursor: hand;
 }
 
-.mfx-button:hover {
-    -fx-border-color: -fx-base-color-focused;
+.mfx-button:armed {
+    -fx-border-color: -fx-base-color-information;
 }
 
 .mfx-button:focused {
     -fx-border-color: -fx-base-color-focused;
 }
 
-.mfx-button:armed {
-    -fx-border-color: -fx-base-color-titles;
+.mfx-button:hover {
+    -fx-border-color: -fx-base-color-focused;
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 10px;
+}
+
+.jfx-btn-exit, .jfx-btn-exit:focused, .jfx-btn-exit:hover {
+    -fx-background-color: #C60000;
 }
 
 .fx-label {
@@ -62,6 +68,10 @@
 
 .jfx-btn-anadir > ImageView {
     -fx-image: url("../Resources/Agregar-48.png");
+}
+
+.jfx-btn-exit > ImageView {
+    -fx-image: url("../Resources/Salida-48.png");
 }
 
 .jfx-panel-fondo{
@@ -132,14 +142,10 @@
 .jfx-table-view-format {
     -fx-background-color: -fx-base-color-titles;
     -fx-background-radius: 7px;
+    -fx-cursor: hand;
     -fx-border-color: -fx-base-color-theme;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-}
-
-.jfx-table-view-format:focused {
-    -fx-border-color: -fx-base-color-theme;
-    -fx-border-width: 2px;
 }
 
 #infoTableColumn {

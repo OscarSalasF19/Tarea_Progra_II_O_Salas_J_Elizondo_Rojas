@@ -17,14 +17,14 @@
     -fx-font-weight: bold;
 }
 
-.mfx-button {
+.mfx-button, .mfx-button:focused {
     -fx-background-color: -fx-base-color-theme;
     -mfx-button-type: RAISED;
-    -fx-border-color: white;
+    -fx-border-color: -fx-base-color-titles;
     -fx-background-radius: 10px;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-    -fx-opacity: 1; 
+    -fx-opacity: 1;
     -fx-content-display: left;
     -fx-text-fill: -fx-base-color-titles;
     -fx-font-weight: bold;
@@ -33,25 +33,29 @@
     -fx-cursor: hand;
 }
 
+.mfx-button:armed {
+    -fx-border-color: -fx-base-color-information;
+}
+
+.mfx-button:focused {
+    -fx-border-color: -fx-base-color-focused;
+}
+
+.mfx-button:hover {
+    -fx-border-color: -fx-base-color-focused;
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 10px;
+}
+
+.jfx-btn-exit, .jfx-btn-exit:focused, .jfx-btn-exit:hover {
+    -fx-background-color: #C60000;
+}
+
 .fx-label {
     -fx-text-fill: -fx-base-color-titles;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-alignment: BOTTOM_CENTER;
-}
-
-.mfx-button:hover {
-    -fx-border-color: -fx-base-color-focused;
-}
-
-.mfx-button:focused {
-    -fx-background-color: -fx-base-color-theme;
-    -fx-background-radius: 10px;
-    -fx-border-color: -fx-base-color-focused;
-}
-
-.mfx-button:armed {
-    -fx-border-color: white;
 }
 
 .jfx-btn-torneo > ImageView {
@@ -66,8 +70,13 @@
     -fx-image: url("../Resources/Agregar-48.png");
 }
 
+.jfx-btn-exit > ImageView {
+    -fx-image: url("../Resources/Salida-48.png");
+}
+
 .jfx-panel-fondo{
-    -fx-background-color: -fx-color-base-focused;
+    -fx-background-color: -fx-color-base-information;/*si ve error
+    cambiar a -fx-base-color-titles*/
     -fx-opacity: 1;
 }
 
@@ -133,14 +142,10 @@
 .jfx-table-view-format {
     -fx-background-color: -fx-base-color-titles;
     -fx-background-radius: 7px;
+    -fx-cursor: hand;
     -fx-border-color: -fx-base-color-theme;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-}
-
-.jfx-table-view-format:focused {
-    -fx-border-color: -fx-base-color-theme;
-    -fx-border-width: 2px;
 }
 
 #infoTableColumn {
@@ -213,4 +218,39 @@
     -fx-pref-height: 7px;
     -fx-max-width: 11px;
     -fx-max-height: 7px;
+}
+
+.jfx-match-display {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-padding: 10 10 10 10;
+}
+
+.jfx-match-display > HBox, .jfx-match-display > VBox {
+    -fx-background-color: -fx-base-color-information;
+    -fx-background-radius: 5px;
+    -fx-padding: 30 30 30 30;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
+    -fx-opacity: 1;
+}
+
+.jfx-match-team-vbox-format {
+    -fx-spacing: 20;
+}
+
+.jfx-match-team-vbox-format > ImageView {
+    -fx-image: url("../Resources/Grupo-300.png");
+}
+
+.jfx-text-field-match-score{
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+    -fx-text-fill: -fx-base-color-titles;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+    -fx-min-width: 200px;
+    -fx-max-width: 200px;
 }
