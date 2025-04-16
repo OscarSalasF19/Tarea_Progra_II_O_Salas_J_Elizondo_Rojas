@@ -184,3 +184,33 @@
 #infoTableColumn:cell-selection {
     -fx-background-color: -fx-base-color-theme;
 }
+
+/* Etiqueta de : entre los campos */
+.jfx-time-separator {
+    -fx-text-fill: -fx-base-color-titles;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.mfx-slider-time {
+    -fx-pref-width: 250px;
+    -fx-padding: 10px;
+}
+
+.mfx-slider-time .mfx-slider-bar {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+}
+
+.mfx-slider-time .mfx-slider-track {
+    -fx-background-color: -fx-base-color-focused;
+    -fx-background-radius: 5px;
+}
+
+.mfx-slider-time .mfx-slider-thumb {
+    -fx-background-color: -fx-base-color-titles;
+    -fx-border-color: -fx-base-color-information;
+    -fx-border-width: 2px;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+}
