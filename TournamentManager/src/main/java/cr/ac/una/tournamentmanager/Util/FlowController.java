@@ -135,7 +135,6 @@ public class FlowController {
         controller.setStage(stage);
         stage.getScene().setRoot(loader.getRoot());
         MFXThemeManager.addOn(stage.getScene(), Themes.DEFAULT, Themes.LEGACY);
-        
     }
 
     public void goViewInWindow(String viewName) {
@@ -163,7 +162,7 @@ public class FlowController {
         Controller controller = loader.getController();
         controller.initialize();
         Stage stage = new Stage();
-        stage.getIcons().add(new Image("cr/ac/una/unaplantilla/Resources/LogoUNArojo.png"));
+        //stage.getIcons().add(new Image("cr/ac/una/unaplantilla/Resources/LogoUNArojo.png"));
         stage.setTitle(controller.getNombreVista());
         stage.setResizable(resizable);
         stage.setOnHidden((WindowEvent event) -> {
@@ -176,7 +175,15 @@ public class FlowController {
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(parentStage);
+
+        //experimento
+        if (parentStage != null) {
+            stage.initOwner(parentStage);
+        }else {
+            stage.initOwner(this.mainStage);
+        }
+
+        //stage.initOwner(parentStage); esta linea no forma parte del experimento
         stage.centerOnScreen();
         stage.showAndWait();
 
