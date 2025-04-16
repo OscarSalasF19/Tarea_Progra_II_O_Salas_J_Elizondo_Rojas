@@ -113,5 +113,63 @@
     -fx-pref-height: 30px;
     -fx-max-height: 30px;
 }
+.jfx-image-View-Search{
+     -fx-image: url("../Resources/Lupa.png")
+}
 
+/* Contenedor HBox para mm:ss */
+.jfx-time-input {
+    -fx-spacing: 5;
+    -fx-alignment: center;
+}
 
+/* Campos de texto pequeños y estilizados */
+.jfx-text-field-time {
+    -mfx-main: -fx-base-color-theme;
+    -fx-prompt-text-fill: -fx-base-color-theme;
+    -mfx-float-mode: INLINE;
+    -fx-font-size: 12px;
+    
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 40px;
+    -fx-pref-width: 70px;
+    -fx-max-width: 70px;
+    
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-base-color-theme;
+    -fx-border-radius: 5px;
+    -fx-text-fill: -fx-base-color-information;
+    -fx-font-weight: bold;
+}
+
+/* Etiqueta de : entre los campos */
+.jfx-time-separator {
+    -fx-text-fill: -fx-base-color-titles;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.mfx-slider-time {
+    -fx-pref-width: 250px;
+    -fx-padding: 10px;
+}
+
+.mfx-slider-time .mfx-slider-bar {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+}
+
+.mfx-slider-time .mfx-slider-track {
+    -fx-background-color: -fx-base-color-focused;
+    -fx-background-radius: 5px;
+}
+
+.mfx-slider-time .mfx-slider-thumb {
+    -fx-background-color: -fx-base-color-titles;
+    -fx-border-color: -fx-base-color-information;
+    -fx-border-width: 2px;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+}
