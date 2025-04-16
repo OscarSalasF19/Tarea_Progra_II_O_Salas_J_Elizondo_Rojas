@@ -29,7 +29,7 @@
                         </ImageView>
                      </children>
                   </StackPane>
-                  <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                  <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn prefWidth="75.0" text="Nombre Equipo" />
                     </columns>
@@ -57,18 +57,27 @@
                      </children>
                   </HBox>
                   <MFXTextField fx:id="txfTeamName" maxWidth="1.7976931348623157E308" promptText="Nombre" styleClass="jfx-text-field-smaller" />
-                  <MFXTextField fx:id="txfTeamPoints" editable="false" maxWidth="1.7976931348623157E308" prefWidth="148.0" promptText="Cantidad Equipos" styleClass="jfx-text-field-smaller" />
-                  <HBox alignment="CENTER" prefHeight="38.0" prefWidth="204.0" styleClass="jfx-time-input">
+                  <VBox prefHeight="70.0" prefWidth="196.0" spacing="5.0">
                      <children>
-                        <MFXTextField fx:id="txfTeamSport1" alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="58.0" promptText="mm" styleClass="jfx-text-field-time" />
-                        <Label alignment="TOP_CENTER" styleClass="jfx-time-separator" text=":" />
-                        <MFXTextField fx:id="txfTeamSport11" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefWidth="59.0" promptText="ss" styleClass="jfx-text-field-time" />
+                        <MFXTextField alignment="CENTER" editable="false" maxWidth="1.7976931348623157E308" prefWidth="148.0" promptText="Cantidad de Equipos" styleClass="jfx-text-field-smaller" />
+                        <MFXSlider max="64.0" min="2.0" minorTicksCount="64" prefHeight="37.0" prefWidth="196.0" showTicksAtEdges="false" styleClass="mfx-slider-time" />
                      </children>
-                  </HBox>
-                  <MFXSlider min="2.0" minorTicksCount="64" showTicksAtEdges="false" styleClass="mfx-slider-time" />
-                  <HBox alignment="BOTTOM_CENTER" layoutX="20.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" VBox.vgrow="ALWAYS">
+                  </VBox>
+                  <VBox prefHeight="75.0" prefWidth="196.0" spacing="5.0">
                      <children>
-                        <MFXButton layoutX="62.0" layoutY="37.0" onAction="#onActionDelete" prefHeight="34.0" prefWidth="125.0" text="Iniciar Torneo" />
+                        <MFXTextField alignment="CENTER" editable="false" maxWidth="1.7976931348623157E308" prefWidth="170.0" promptText="Duración(mm:ss)" styleClass="jfx-text-field-smaller" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="204.0" styleClass="jfx-time-input">
+                           <children>
+                              <MFXTextField alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="58.0" promptText="mm" styleClass="jfx-text-field-time" />
+                              <Label alignment="TOP_CENTER" styleClass="jfx-time-separator" text=":" />
+                              <MFXTextField alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefWidth="59.0" promptText="ss" styleClass="jfx-text-field-time" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox alignment="BOTTOM_CENTER" layoutX="20.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="711.0" prefWidth="196.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <MFXButton layoutX="62.0" layoutY="37.0" prefHeight="34.0" prefWidth="125.0" text="Iniciar Torneo" />
                      </children>
                   </HBox>
                </children>

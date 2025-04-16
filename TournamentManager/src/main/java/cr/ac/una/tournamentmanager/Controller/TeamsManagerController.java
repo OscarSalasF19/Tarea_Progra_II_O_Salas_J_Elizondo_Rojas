@@ -216,8 +216,7 @@ private void bindShowTeam() {
                 txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
                 showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
                 txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
-                txfTeamPoints.textProperty().unbind(); // Desvincular correctamente
-                //txfTeamPoints.clear();
+                txfTeamPoints.textProperty().unbind();
             }
             if (newVal != null) {
                 txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());

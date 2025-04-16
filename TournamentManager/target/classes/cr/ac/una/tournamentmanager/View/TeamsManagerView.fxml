@@ -29,7 +29,7 @@
                   </StackPane>
                   <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="infoTableColumn" prefWidth="75.0" text="Equipos" />
+                      <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
