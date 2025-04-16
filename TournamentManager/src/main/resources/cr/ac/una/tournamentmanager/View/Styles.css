@@ -73,6 +73,7 @@
 
 .jfx-panel-fondo > VBox {
     -fx-background-color: -fx-base-color-information;
+    -fx-background-radius: 5px;
     -fx-padding: 10 10 10 10;
     -fx-spacing: 20;    
 }

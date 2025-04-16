@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -19,7 +19,7 @@
                   <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxWidth="1.7976931348623157E308" minHeight="38.0" prefHeight="38.0" prefWidth="235.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
                   <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="infoTableColumn" prefWidth="75.0" text="Equipos" />
+                      <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
