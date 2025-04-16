@@ -4,32 +4,32 @@ import cr.ac.una.tournamentmanager.Util.Mensaje;
 import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-
-import java.io.File;
-import java.io.IOException;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 
 public class SportsManagerController extends Controller implements Initializable {
 
@@ -41,7 +41,7 @@ public class SportsManagerController extends Controller implements Initializable
 
     @FXML
     private ImageView imageViewSportPhoto;
-    private StringProperty showSportPhotoURL = new SimpleStringProperty();
+    private final StringProperty showSportPhotoURL = new SimpleStringProperty();
 
     @FXML
     private TableView<SportDto> tableViewSports;
@@ -56,7 +56,7 @@ public class SportsManagerController extends Controller implements Initializable
     private MFXTextField txfSportName;
 
     private SportDto selectedSport;
-    private ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
 
     @FXML
     void onActionAddSport(ActionEvent event) {
@@ -68,7 +68,7 @@ public class SportsManagerController extends Controller implements Initializable
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Imagen");
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
         );
         File chosenImage = fileChooser.showOpenDialog(imageViewSportPhoto.getScene().getWindow());
         if (chosenImage != null) {
@@ -135,7 +135,7 @@ public class SportsManagerController extends Controller implements Initializable
 
     private boolean areFieldsValid() {
         return !showSportProperty.get().getName().isBlank() &&
-               !showSportProperty.get().getBallImageURL().isBlank();
+                !showSportProperty.get().getBallImageURL().isBlank();
     }
 
     private void addNewSport() {
@@ -164,7 +164,7 @@ public class SportsManagerController extends Controller implements Initializable
         //eliminar
         AppContext.getInstance().set("FullSportArrayList", new ArrayList<SportDto>());
 
-        ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>)AppContext.getInstance().get("FullSportArrayList"));
+        ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList"));
         tableViewSports.setItems(observableSportList);
 
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -182,7 +182,7 @@ public class SportsManagerController extends Controller implements Initializable
                         SportDto sport = getTableView().getItems().get(getIndex());
                         try {
                             imageView.setImage(new Image(sport.getBallImageURL()));
-                        }catch (Exception e) {
+                        } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + sport.getName() + " | " + sport.getBallImageURL());
                             sport.getBallImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
                             imageView.setImage(new Image(sport.getBallImageURL()));

@@ -3,15 +3,7 @@ package cr.ac.una.tournamentmanager.Controller;
 import cr.ac.una.tournamentmanager.Util.Mensaje;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,19 +12,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TableCell;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
-import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class TeamsManagerController extends Controller implements Initializable {
 
@@ -41,7 +37,7 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     private ImageView imageViewTeamPhoto;
-    private StringProperty showTeamPhotoURL = new SimpleStringProperty("");
+    private final StringProperty showTeamPhotoURL = new SimpleStringProperty("");
 
     @FXML
     private TableView<TeamDto> tableViewTeams;
@@ -62,7 +58,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     private MFXTextField txfTeamSport;
 
     private TeamDto selectedTeam;
-    private ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
 
 
     @FXML
@@ -76,7 +72,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Imagen");
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
         );
         File chossedImage = fileChooser.showOpenDialog(imageViewTeamPhoto.getScene().getWindow());
         if (chossedImage != null) {
@@ -101,7 +97,7 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     void onActionDelete(ActionEvent event) {//borra de el array de equipos segun seleccion
-        if(selectedTeam != null){
+        if (selectedTeam != null) {
             ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
             fullTeamArrayList.remove(selectedTeam);
             AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
@@ -141,8 +137,8 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private boolean areFieldsValid() {
         return !showTeamProperty.get().getName().isBlank() &&
-               !showTeamProperty.get().getSportName().isBlank() &&
-               !showTeamProperty.get().getTeamImageURL().isBlank();
+                !showTeamProperty.get().getSportName().isBlank() &&
+                !showTeamProperty.get().getTeamImageURL().isBlank();
     }
 
     private void addNewTeam() {
@@ -209,26 +205,26 @@ public class TeamsManagerController extends Controller implements Initializable 
         });
     }
 
-private void bindShowTeam() {
-    try {
-        showTeamProperty.addListener((obs, oldVal, newVal) -> {
-            if (oldVal != null) {
-                txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
-                showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
-                txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
-                txfTeamPoints.textProperty().unbind();
-            }
-            if (newVal != null) {
-                txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());
-                showTeamPhotoURL.bindBidirectional(newVal.getTeamImageURLProperty());
-                txfTeamSport.textProperty().bindBidirectional(newVal.getSportNameProperty());
-                txfTeamPoints.textProperty().bind(new SimpleStringProperty("Puntuación: " + newVal.getPoints() + " pts.")); // Vincular correctamente
-            } 
-        });
-    } catch (Exception ex) {
-        new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
+    private void bindShowTeam() {
+        try {
+            showTeamProperty.addListener((obs, oldVal, newVal) -> {
+                if (oldVal != null) {
+                    txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
+                    showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
+                    txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
+                    txfTeamPoints.textProperty().unbind();
+                }
+                if (newVal != null) {
+                    txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());
+                    showTeamPhotoURL.bindBidirectional(newVal.getTeamImageURLProperty());
+                    txfTeamSport.textProperty().bindBidirectional(newVal.getSportNameProperty());
+                    txfTeamPoints.textProperty().bind(new SimpleStringProperty("Puntuación: " + newVal.getPoints() + " pts.")); // Vincular correctamente
+                }
+            });
+        } catch (Exception ex) {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
+        }
     }
-}
 
     private void changeValues(TeamDto value) {
         if (value != null) {
