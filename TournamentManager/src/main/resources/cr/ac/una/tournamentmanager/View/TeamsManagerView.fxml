@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
@@ -16,7 +17,16 @@
          <children>
             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxWidth="1.7976931348623157E308" minHeight="38.0" prefHeight="38.0" prefWidth="235.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
+                  <StackPane prefHeight="17.0" prefWidth="1660.0">
+                     <children>
+                        <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
+                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Search" StackPane.alignment="CENTER_RIGHT">
+                           <StackPane.margin>
+                              <Insets right="5.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                  </StackPane>
                   <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos" />

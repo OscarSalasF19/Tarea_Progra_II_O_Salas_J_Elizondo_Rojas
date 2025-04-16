@@ -126,6 +126,36 @@
     -fx-pref-height: 30px;
     -fx-max-height: 30px;
 }
+.jfx-image-View-Search{
+     -fx-image: url("../Resources/Lupa.png")
+}
+
+/* Contenedor HBox para mm:ss */
+.jfx-time-input {
+    -fx-spacing: 5;
+    -fx-alignment: center;
+}
+
+/* Campos de texto pequeños y estilizados */
+.jfx-text-field-time {
+    -mfx-main: -fx-base-color-theme;
+    -fx-prompt-text-fill: -fx-base-color-theme;
+    -mfx-float-mode: INLINE;
+    -fx-font-size: 12px;
+
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 40px;
+    -fx-pref-width: 70px;
+    -fx-max-width: 70px;
+
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-base-color-theme;
+    -fx-border-radius: 5px;
+    -fx-text-fill: -fx-base-color-information;
+    -fx-font-weight: bold;
+}
 
 .jfx-table-view-format {
     -fx-background-color: -fx-base-color-titles;
