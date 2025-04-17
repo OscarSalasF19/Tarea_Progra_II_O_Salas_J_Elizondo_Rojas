@@ -2,20 +2,20 @@ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.util.AppContext;
-import java.util.ArrayList;
-
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
+
 public class TourneyDto {
 
-    private StringProperty sport = new SimpleStringProperty("");
-    private StringProperty totalOfTeams = new SimpleStringProperty("");
-    private IntegerProperty matchTimeMilliseconds = new SimpleIntegerProperty(10000); // Match duration in milliseconds
-    private ArrayList<ArrayList<TeamDto>> tournamentStages = new ArrayList<>();
-    private boolean timesUp = false;
+    private final StringProperty sport = new SimpleStringProperty("");
+    private final StringProperty totalOfTeams = new SimpleStringProperty("");
+    private final IntegerProperty matchTimeMilliseconds = new SimpleIntegerProperty(10000); // Match duration in milliseconds
+    private final ArrayList<ArrayList<TeamDto>> tournamentStages = new ArrayList<>();
+    private final boolean timesUp = false;
 
     public String getSport() {
         return sport.get();
@@ -56,8 +56,6 @@ public class TourneyDto {
     }
 
 
-
-
     // Filters teams by the selected sport
     private ArrayList<TeamDto> filterTeamsBySport() {
         ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
@@ -82,11 +80,11 @@ public class TourneyDto {
     // Starts the tournament and organizes matches by stages
     private void startTournament() {
         for (int round = 0; tournamentStages.get(round).size() > 1; round++) {
-            tournamentStages.set(round + 1,new ArrayList<TeamDto>());// Create a new round
+            tournamentStages.set(round + 1, new ArrayList<TeamDto>());// Create a new round
 
             for (int team = 0; team < tournamentStages.get(round).size(); team += 2) {
                 MatchDto match = new MatchDto(tournamentStages.get(round).get(team), tournamentStages.get(round).get(team + 1));
-                FlowController.getInstance().goViewInWindowModal("MatchView",null ,true);
+                FlowController.getInstance().goViewInWindowModal("MatchView", null, true);
 
                 tournamentStages.get(round + 1).add((TeamDto) AppContext.getInstance().get("LastMatchWinner"));
                 AppContext.getInstance().set("LastMatchWinner", null);

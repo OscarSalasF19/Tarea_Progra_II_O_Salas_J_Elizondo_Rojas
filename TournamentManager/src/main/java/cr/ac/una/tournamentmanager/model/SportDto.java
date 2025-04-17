@@ -1,13 +1,14 @@
 package cr.ac.una.tournamentmanager.model;
 
-import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Objects;
+
 public class SportDto {
-    
-    private StringProperty name;
-    private StringProperty ballImageURL;
+
+    private final StringProperty name;
+    private final StringProperty ballImageURL;
 
     public SportDto() {
         this.name = new SimpleStringProperty("");
@@ -23,13 +24,17 @@ public class SportDto {
         return name.get();
     }
 
-    public void setName(String name) { this.name.set(name); }
+    public void setName(String name) {
+        this.name.set(name);
+    }
 
     public String getBallImageURL() {
         return ballImageURL.get();
     }
 
-    public void setBallImageURL(String ballImageURL) { this.ballImageURL.set(ballImageURL); }
+    public void setBallImageURL(String ballImageURL) {
+        this.ballImageURL.set(ballImageURL);
+    }
 
     public StringProperty getNameProperty() {
         return name;
@@ -58,5 +63,5 @@ public class SportDto {
     public String toString() {
         return "SportDto{" + "name=" + name.get() + ", ballImageURL=" + ballImageURL.get() + '}';
     }
-    
+
 }

@@ -1,24 +1,25 @@
 package cr.ac.una.tournamentmanager.model;
 
-import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Objects;
+
 
 public class TeamDto {
-    
-    private StringProperty name;
-    private StringProperty teamImageURL;
-    private StringProperty sportName;
+
+    private final StringProperty name;
+    private final StringProperty teamImageURL;
+    private final StringProperty sportName;
     private int globalPoins; //de la clasificacion general
     private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
-    
+
     public TeamDto() {
         this.name = new SimpleStringProperty("");
         this.teamImageURL = new SimpleStringProperty("");
         this.sportName = new SimpleStringProperty("");
         this.globalPoins = 0;
-        this.performance = (int) (Math.random() * 100) + 1; 
+        this.performance = (int) (Math.random() * 100) + 1;
     }
 
     public String getName() {
@@ -40,11 +41,11 @@ public class TeamDto {
     public String getSportName() {
         return sportName.get();
     }
-    
-    public void setSportName(String sport){
+
+    public void setSportName(String sport) {
         this.sportName.set(sport);
     }
-    
+
     public int getPoints() {
         return globalPoins;
     }
@@ -56,7 +57,7 @@ public class TeamDto {
     public int getPerformance() {
         return this.performance;
     }
-    
+
     public void setPerformance(int performance) {
         this.performance = performance;
     }
@@ -68,11 +69,11 @@ public class TeamDto {
     public StringProperty getTeamImageURLProperty() {
         return teamImageURL;
     }
-    
+
     public StringProperty getSportNameProperty() {
         return sportName;
     }
-    
+
     public void sumPoints(int valor) {
         valor += getPoints();
         setPoints(valor);
@@ -92,6 +93,6 @@ public class TeamDto {
         final TeamDto other = (TeamDto) obj;
         return Objects.equals(this.getName(), other.getName());
     }
-    
-        
+
+
 }

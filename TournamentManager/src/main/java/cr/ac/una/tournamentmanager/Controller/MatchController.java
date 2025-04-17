@@ -1,7 +1,6 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.model.MatchDto;
-import cr.ac.una.tournamentmanager.model.TeamDto;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +17,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MatchController extends  Controller implements Initializable {
+public class MatchController extends Controller implements Initializable {
     @FXML
     private MFXButton btnFinishMatch;
 
@@ -70,11 +69,11 @@ public class MatchController extends  Controller implements Initializable {
 
         if (ballBounds.intersects(fstTeamBounds)) {
             System.out.println("Ball dropped on Team 1");
-            txfFstTeamScore.setText( String.valueOf(getScore(txfFstTeamScore) + 1));
+            txfFstTeamScore.setText(String.valueOf(getScore(txfFstTeamScore) + 1));
 
         } else if (ballBounds.intersects(sndTeamBounds)) {
             System.out.println("Ball dropped on Team 2");
-            txfSndTeamScore.setText( String.valueOf(getScore(txfSndTeamScore) + 1));
+            txfSndTeamScore.setText(String.valueOf(getScore(txfSndTeamScore) + 1));
 
         } else {
             System.out.println("Ball not dropped on any team");

@@ -17,7 +17,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -33,34 +32,25 @@ import java.util.ResourceBundle;
 
 public class TeamsManagerController extends Controller implements Initializable {
 
+    private StringProperty showTeamPhotoURL = new SimpleStringProperty("");
+    private ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
     @FXML
     private AnchorPane root;
-
     @FXML
     private ImageView imageViewTeamPhoto;
-    private final StringProperty showTeamPhotoURL = new SimpleStringProperty("");
-
     @FXML
     private TableView<TeamDto> tableViewTeams;
-
     @FXML
     private TableColumn<TeamDto, String> infoTableColumn;
-
     @FXML
     private MFXTextField txfSearch;
-
     @FXML
     private MFXTextField txfTeamName;
-
     @FXML
     private MFXTextField txfTeamPoints;
-
     @FXML
     private MFXTextField txfTeamSport;
-
     private TeamDto selectedTeam;
-    private final ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
-
 
     @FXML
     void onActionAddTeam(ActionEvent event) {
@@ -129,8 +119,8 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private boolean areFieldsValid() {
         return !txfTeamName.getText().isBlank() &&
-               !txfTeamSport.getText().isBlank() &&
-               !showTeamPhotoURL.get().isBlank();
+                !txfTeamSport.getText().isBlank() &&
+                !showTeamPhotoURL.get().isBlank();
     }
 
     private void addNewTeam() {

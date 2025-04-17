@@ -33,30 +33,23 @@ import java.util.ResourceBundle;
 
 public class SportsManagerController extends Controller implements Initializable {
 
+    private StringProperty showSportPhotoURL = new SimpleStringProperty();
+    private ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
     @FXML
     private AnchorPane root;
-
     @FXML
     private VBox imageBox;
-
     @FXML
     private ImageView imageViewSportPhoto;
-    private final StringProperty showSportPhotoURL = new SimpleStringProperty();
-
     @FXML
     private TableView<SportDto> tableViewSports;
-
     @FXML
     private TableColumn<SportDto, String> infoTableColumn;
-
     @FXML
     private MFXTextField txfSearch;
-
     @FXML
     private MFXTextField txfSportName;
-
     private SportDto selectedSport;
-    private final ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
 
     @FXML
     void onActionAddSport(ActionEvent event) {
@@ -136,7 +129,7 @@ public class SportsManagerController extends Controller implements Initializable
 
     private boolean areFieldsValid() {
         return !txfSportName.getText().isBlank() &&
-               !showSportPhotoURL.get().isBlank();
+                !showSportPhotoURL.get().isBlank();
     }
 
     private void addNewSport() {
@@ -216,7 +209,7 @@ public class SportsManagerController extends Controller implements Initializable
             };
         });
 
-        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> { //to make the search work
             updateTableView();
             System.out.println("Texto cambiado de: " + oldValue + " a: " + newValue);
         });
