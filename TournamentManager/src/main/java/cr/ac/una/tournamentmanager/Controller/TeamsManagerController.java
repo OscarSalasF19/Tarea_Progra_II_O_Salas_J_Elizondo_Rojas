@@ -35,6 +35,7 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private final StringProperty showTeamPhotoURL = new SimpleStringProperty("");
     private final ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
+    private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
     @FXML
@@ -179,18 +180,9 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private void updateTableView() {
         System.out.println("Actualizando tabla de equipos.");
-        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
-        ObservableList<TeamDto> filteredList = FXCollections.observableArrayList();
-
-        String searchText = txfSearch.getText().toLowerCase().trim();
-        for (TeamDto team : fullTeamArrayList) {
-            if (team.getName().toLowerCase().contains(searchText)) {
-                filteredList.add(team);
-            }
-        }
-
-        tableViewTeams.setItems(filteredList);
-        tableViewTeams.refresh();
+        String searchValue = txfSearch.getText();
+        txfSearch.setText(searchValue + " ");
+        txfSearch.setText(searchValue);
         tableViewTeams.getSelectionModel().clearSelection();
     }
 
@@ -203,15 +195,16 @@ public class TeamsManagerController extends Controller implements Initializable 
         bindShowTeam();
         changeValues(null);
 
-
-        ArrayList<TeamDto> tempArrayList = new ArrayList<TeamDto>();
+        //eliminar
+        ArrayList<TeamDto> tempArrayList = new ArrayList<>();
         TeamDto tempTeam = new TeamDto();
         tempTeam.setName("Grupo 300");
         tempArrayList.add(tempTeam);
         AppContext.getInstance().set("FullTeamArrayList", tempArrayList);
+        //eliminar
 
-        ObservableList<TeamDto> observableTeamList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
-        tableViewTeams.setItems(observableTeamList);
+        ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+        tableViewTeams.setItems(fullTeamArrayList);
 
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
@@ -244,6 +237,8 @@ public class TeamsManagerController extends Controller implements Initializable 
                 }
             };
         });
+
+        setupSearchListener();
     }
 
     private void bindShowTeam() {
@@ -265,10 +260,26 @@ public class TeamsManagerController extends Controller implements Initializable 
         } catch (Exception ex) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
         }
+    }
 
+    private void setupSearchListener() {
         txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateTableView();
-            System.out.println("Texto cambiado de: " + oldValue + " a: " + newValue);
+
+            filteredTeamsList.clear();
+            String searchText = newValue.toLowerCase().trim();
+
+            if (searchText.isEmpty()) {
+                filteredTeamsList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+            } else {
+                ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+                for (TeamDto team : fullTeamArrayList) {
+                    if (team.getName().trim().toLowerCase().contains(searchText)) {
+                        filteredTeamsList.add(team);
+                    }
+                }
+            }
+            tableViewTeams.setItems(filteredTeamsList);
+            tableViewTeams.refresh();
         });
     }
 

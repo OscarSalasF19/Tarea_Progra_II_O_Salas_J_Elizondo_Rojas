@@ -21,7 +21,7 @@
                     <children>
                         <StackPane prefHeight="17.0" prefWidth="1660.0">
                             <children>
-                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" onInputMethodTextChanged="#textChangedSearch" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
+                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
                                 <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Search" StackPane.alignment="CENTER_RIGHT">
                                     <StackPane.margin>
                                         <Insets right="5.0" />
@@ -32,9 +32,9 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                         </StackPane>
-                        <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipo" />
+                                <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos" />
                             </columns>
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -65,11 +65,11 @@
                      </children>
                   </HBox>
                   <Label styleClass="fx-label" text="Tiempo" />
-                          <HBox alignment="CENTER" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="jfx-time-input" VBox.vgrow="NEVER">
+                          <HBox alignment="CENTER" styleClass="jfx-text-field-time-container">
                               <children>
-                                  <MFXTextField fx:id="txfMinutes" alignment="CENTER" floatMode="DISABLED" maxWidth="1.7976931348623157E308" prefWidth="58.0" promptText="min." styleClass="jfx-text-field-time" />
-                                  <Label alignment="TOP_CENTER" styleClass="fx-label" text=":" />
-                                  <MFXTextField fx:id="txfSeconds" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefWidth="59.0" promptText="sec." styleClass="jfx-text-field-time" />
+                                  <MFXTextField fx:id="txfMinutes" alignment="CENTER_RIGHT" animated="false" floatMode="DISABLED" measureUnitGap="0.0" prefWidth="0.0" promptText="Min." textLimit="2" HBox.hgrow="NEVER" />
+                                  <Label alignment="TOP_CENTER" styleClass="fx-label" text=":" translateY="-3.0" />
+                                  <MFXTextField fx:id="txfSeconds" animated="false" floatMode="DISABLED" measureUnitGap="0.0" prefWidth="0.0" promptText="Seg." textLimit="2" HBox.hgrow="NEVER" />
                               </children>
                      <VBox.margin>
                         <Insets bottom="10.0" />

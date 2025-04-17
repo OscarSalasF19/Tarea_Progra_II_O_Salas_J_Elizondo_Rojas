@@ -47,7 +47,7 @@
 }
 
 .jfx-btn-exit, .jfx-btn-exit:focused, .jfx-btn-exit:hover {
-    -fx-background-color: #C60000;
+    -fx-background-color: #EA2222;
 }
 
 .fx-label {
@@ -158,7 +158,7 @@
     -fx-cursor: hand;
 }
 
-#infoTableColumn:cell-selection {
+#infoTableColumn:cell-selection, #infoTableColumn:selected {
     -fx-background-color: -fx-base-color-theme;
 }
 
@@ -167,23 +167,26 @@
     -fx-alignment: center;
 }
 
-.jfx-text-field-time {
-    -mfx-main: -fx-base-color-theme;
-    -mfx-float-mode: disabled;
-    -fx-font-size: 12px;
-    
+.jfx-text-field-time-container {
     -fx-min-height: 30px;
     -fx-max-height: 30px;
-    -fx-min-width: 40px;
-    -fx-max-width: 80px;
-    
-    -fx-background-color: -fx-base-color-titles;
-    -fx-background-radius: 10px;
-    -fx-border-color: -fx-base-color-theme;
-    -fx-border-width: 4px;
-    -fx-border-radius: 5px;
-    -fx-text-fill: -fx-base-color-information;
+    -fx-min-width: 110px;
+    -fx-max-width: 110px;
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+    -fx-border-color: transparent;
+}
+
+.jfx-text-field-time-container > .mfx-text-field {
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 50px;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -fx-base-color-titles;
+    -fx-prompt-text-fill: #ffffff;
     -fx-font-weight: bold;
+    -fx-font-size: 14px;
 }
 
 .mfx-slider-bar {
@@ -197,21 +200,14 @@
     -fx-max-width: 130px;
 }
 
-.mfx-slider-track {
-    -mfx-main: #009999;
+.mfx-slider .track {
     -fx-background-color: #009999;
-    -fx-background-radius: 5px;
 }
 
-.mfx-slider-thumb {
-    -mfx-main: #009999;
+.mfx-slider .thumb {
     -fx-background-color: #009999;
+    -fx-border-color: #006666;
     -fx-border-width: 2px;
-    -fx-background-radius: 50%;
-    -fx-pref-width: 11px;
-    -fx-pref-height: 7px;
-    -fx-max-width: 11px;
-    -fx-max-height: 7px;
 }
 
 .jfx-match-display {
@@ -248,4 +244,7 @@
     -fx-min-width: 200px;
     -fx-max-width: 200px;
 }
+
+
+
 
