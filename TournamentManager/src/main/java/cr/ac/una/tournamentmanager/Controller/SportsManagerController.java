@@ -33,8 +33,8 @@ import java.util.ResourceBundle;
 
 public class SportsManagerController extends Controller implements Initializable {
 
-    private StringProperty showSportPhotoURL = new SimpleStringProperty();
-    private ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
+    private final StringProperty showSportPhotoURL = new SimpleStringProperty();
+    private final ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
     @FXML
     private AnchorPane root;
     @FXML
@@ -109,8 +109,6 @@ public class SportsManagerController extends Controller implements Initializable
                 updateTableView();
                 changeValues(null);
                 System.out.println("Deporte guardado exitosamente.");
-            } else {
-                new Mensaje().showModal(Alert.AlertType.WARNING, "Datos incompletos", getStage(), "Por favor, complete todos los campos obligatorios.");
             }
         } catch (Exception ex) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error al guardar", getStage(), "Ocurrió un error al guardar el deporte: " + ex.getMessage());
@@ -128,8 +126,22 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private boolean areFieldsValid() {
-        return !txfSportName.getText().isBlank() &&
+        return isSportNameValid(txfSportName.getText().trim()) &&
                 !showSportPhotoURL.get().isBlank();
+    }
+
+    private boolean isSportNameValid(String sportName) {
+        if (sportName == null || sportName.isBlank()) {
+            return false; // Invalid name
+        }
+        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        for (SportDto sport : fullSportArrayList) {
+            if (sport.getName().equalsIgnoreCase(sportName) && !sport.equals(selectedSport)) {
+                new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, escoja otro nombre que sea único.");
+                return false; // Sport's name already exists
+            }
+        }
+        return true; // Valid name for a new sport
     }
 
     private void addNewSport() {
@@ -171,8 +183,11 @@ public class SportsManagerController extends Controller implements Initializable
         bindShowSport();
         changeValues(null);
 
-        //eliminar
-        AppContext.getInstance().set("FullSportArrayList", new ArrayList<SportDto>());
+        ArrayList<SportDto> tempArrayList = new ArrayList<SportDto>();
+        SportDto tempTeam = new SportDto();
+        tempTeam.setName("VolleyBall");
+        tempArrayList.add(tempTeam);
+        AppContext.getInstance().set("FullSportArrayList", tempArrayList);
 
         ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList"));
         tableViewSports.setItems(observableSportList);

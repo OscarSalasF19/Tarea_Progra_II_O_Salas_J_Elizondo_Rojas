@@ -1,5 +1,6 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.model.TeamDto;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
@@ -17,16 +18,16 @@ import java.util.ResourceBundle;
 public class TournamentFormController extends Controller implements Initializable {
 
     @FXML
-    private TableColumn<?, ?> infoTableColumn;
-
-    @FXML
     private AnchorPane root;
 
     @FXML
     private MFXSlider sliderTeamsAmount;
 
     @FXML
-    private TableView<?> tableViewTeams;
+    private TableView<TeamDto> tableViewTeams;
+
+    @FXML
+    private TableColumn<TeamDto, String> infoTableColumn;
 
     @FXML
     private MFXTextField txfMinutes;

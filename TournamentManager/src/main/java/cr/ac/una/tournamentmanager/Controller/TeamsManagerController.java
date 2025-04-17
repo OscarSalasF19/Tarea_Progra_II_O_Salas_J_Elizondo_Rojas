@@ -1,6 +1,7 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.Mensaje;
+import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -32,8 +33,8 @@ import java.util.ResourceBundle;
 
 public class TeamsManagerController extends Controller implements Initializable {
 
-    private StringProperty showTeamPhotoURL = new SimpleStringProperty("");
-    private ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
+    private final StringProperty showTeamPhotoURL = new SimpleStringProperty("");
+    private final ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
     @FXML
     private AnchorPane root;
     @FXML
@@ -109,8 +110,6 @@ public class TeamsManagerController extends Controller implements Initializable 
                 updateTableView();
                 changeValues(null);
                 System.out.println("Equipo guardado exitosamente.");
-            } else {
-                new Mensaje().showModal(Alert.AlertType.WARNING, "Datos incompletos", getStage(), "Por favor, complete todos los campos obligatorios.");
             }
         } catch (Exception ex) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error al guardar", getStage(), "Ocurrió un error al guardar el equipo: " + ex.getMessage());
@@ -118,9 +117,38 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private boolean areFieldsValid() {
-        return !txfTeamName.getText().isBlank() &&
-                !txfTeamSport.getText().isBlank() &&
+        return isTeamNameValid(txfTeamName.getText().trim()) &&
+                isTeamSportValid(txfTeamSport.getText().trim()) &&
                 !showTeamPhotoURL.get().isBlank();
+    }
+
+    private boolean isTeamNameValid(String teamName) {
+        if (teamName == null || teamName.isBlank()) {
+            return false; // Invalid team name
+        }
+        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        for (TeamDto team : fullTeamArrayList) {
+            if (team.getName().equalsIgnoreCase(teamName) && !team.equals(selectedTeam)) {
+                new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, Por favor, escoja otro nombre que sea único.");
+                return false; // Team's name already exists
+            }
+        }
+        return true;
+    }
+
+    private boolean isTeamSportValid(String teamSport) {
+        if (teamSport == null || teamSport.isBlank()) {
+            new Mensaje().showModal(Alert.AlertType.WARNING, "Deporte Invalido", getStage(), "Por favor, coloque un deporte.");
+            return false; // Invalid team sport
+        }
+        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        for (SportDto sport : fullSportArrayList) {
+            if (sport.getName().equalsIgnoreCase(teamSport)) {
+                return true; // Team's sport is valid
+            }
+        }
+        new Mensaje().showModal(Alert.AlertType.WARNING, "Deporte Invalido", getStage(), "Por favor, coloque un deporte que exista.");
+        return false;
     }
 
     private void addNewTeam() {
@@ -150,6 +178,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void updateTableView() {
+        System.out.println("Actualizando tabla de equipos.");
         ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
         ObservableList<TeamDto> filteredList = FXCollections.observableArrayList();
 
@@ -174,8 +203,12 @@ public class TeamsManagerController extends Controller implements Initializable 
         bindShowTeam();
         changeValues(null);
 
-        //eliminar
-        AppContext.getInstance().set("FullTeamArrayList", new ArrayList<TeamDto>());
+
+        ArrayList<TeamDto> tempArrayList = new ArrayList<TeamDto>();
+        TeamDto tempTeam = new TeamDto();
+        tempTeam.setName("Grupo 300");
+        tempArrayList.add(tempTeam);
+        AppContext.getInstance().set("FullTeamArrayList", tempArrayList);
 
         ObservableList<TeamDto> observableTeamList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
         tableViewTeams.setItems(observableTeamList);
