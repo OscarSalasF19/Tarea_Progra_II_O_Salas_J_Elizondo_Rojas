@@ -60,7 +60,8 @@ public class SportsManagerController extends Controller implements Initializable
 
     @FXML
     void onActionAddSport(ActionEvent event) {
-        changeValues(null);
+        updateTableView();
+        changeValues(null); // Limpia los campos para añadir un nuevo deporte
     }
 
     @FXML
@@ -114,14 +115,14 @@ public class SportsManagerController extends Controller implements Initializable
                 }
                 updateTableView();
                 changeValues(null);
+                System.out.println("Deporte guardado exitosamente.");
             } else {
-                System.out.println("Presenta Datos Incompletos.");
+                new Mensaje().showModal(Alert.AlertType.WARNING, "Datos incompletos", getStage(), "Por favor, complete todos los campos obligatorios.");
             }
         } catch (Exception ex) {
-            System.out.println("Error al guardar el deporte: " + ex.getMessage());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al guardar", getStage(), "Ocurrió un error al guardar el deporte: " + ex.getMessage());
         }
     }
-
 
     @FXML
     void onMouseClickedSportsTable(MouseEvent event) {
@@ -134,22 +135,38 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private boolean areFieldsValid() {
-        return !showSportProperty.get().getName().isBlank() &&
-                !showSportProperty.get().getBallImageURL().isBlank();
+        return !txfSportName.getText().isBlank() &&
+               !showSportPhotoURL.get().isBlank();
     }
 
     private void addNewSport() {
         ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
-        SportDto sportCopy = new SportDto();
-        sportCopy.setName(showSportProperty.get().getName());
-        sportCopy.setBallImageURL(showSportProperty.get().getBallImageURL());
-        fullSportArrayList.add(sportCopy);
+        SportDto newSport = new SportDto();
+        newSport.setName(txfSportName.getText().trim());
+        newSport.setBallImageURL(showSportPhotoURL.get());
+        fullSportArrayList.add(newSport);
         AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
     }
 
     private void updateExistingSport() {
-        selectedSport.setName(showSportProperty.get().getName());
-        selectedSport.setBallImageURL(showSportProperty.get().getBallImageURL());
+        selectedSport.setName(txfSportName.getText().trim());
+        selectedSport.setBallImageURL(showSportPhotoURL.get());
+    }
+
+    private void updateTableView() {
+        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        ObservableList<SportDto> filteredList = FXCollections.observableArrayList();
+
+        String searchText = txfSearch.getText().toLowerCase().trim();
+        for (SportDto sport : fullSportArrayList) {
+            if (sport.getName().toLowerCase().contains(searchText)) {
+                filteredList.add(sport);
+            }
+        }
+
+        tableViewSports.setItems(filteredList);
+        tableViewSports.refresh();
+        tableViewSports.getSelectionModel().clearSelection();
     }
 
     @Override
@@ -198,6 +215,11 @@ public class SportsManagerController extends Controller implements Initializable
                 }
             };
         });
+
+        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateTableView();
+            System.out.println("Texto cambiado de: " + oldValue + " a: " + newValue);
+        });
     }
 
     private void bindShowSport() {
@@ -218,14 +240,14 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private void changeValues(SportDto value) {
-        if (value == null) {
-            System.out.println("Valores por defecto.");
-            showSportProperty.set(new SportDto());
-            setDefaultImage();
-        } else {
-            System.out.println("Cambiando datos a [" + value.getName() + "].");
+        if (value != null) {
+            System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             showSportProperty.set(value);
             imageViewSportPhoto.setImage(new Image(value.getBallImageURL()));
+        } else {
+            System.out.println("Volviendo a valores por defecto.");
+            showSportProperty.set(new SportDto());
+            setDefaultImage();
         }
         selectedSport = value;
     }
@@ -235,12 +257,5 @@ public class SportsManagerController extends Controller implements Initializable
         showSportPhotoURL.set(imagePath);
         Image image = new Image(getClass().getResourceAsStream(imagePath));
         imageViewSportPhoto.setImage(image);
-    }
-
-    private void updateTableView() {
-        ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList"));
-        tableViewSports.setItems(observableSportList);
-        tableViewSports.refresh();
-        tableViewSports.getSelectionModel().clearSelection();
     }
 }

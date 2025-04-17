@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
     <children>
         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -19,16 +19,19 @@
                     <children>
                         <StackPane>
                             <children>
-                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
+                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxWidth="1.7976931348623157E308" promptText="Buscar" styleClass="jfx-text-field-smaller">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin></MFXTextField>
                                 <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Search" StackPane.alignment="CENTER_RIGHT">
                                     <StackPane.margin>
                                         <Insets right="5.0" />
                                     </StackPane.margin>
                                 </ImageView>
                             </children>
-                     <padding>
+                     <VBox.margin>
                         <Insets top="10.0" />
-                     </padding>
+                     </VBox.margin>
                         </StackPane>
                         <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                             <columns>
@@ -83,8 +86,8 @@
                         <MFXTextField fx:id="txfTeamPoints" editable="false" maxWidth="1.7976931348623157E308" promptText="Puntos" styleClass="jfx-text-field-smaller" />
                         <HBox alignment="BOTTOM_CENTER" layoutX="20.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXButton maxWidth="1.7976931348623157E308" onAction="#onActionSave" text="Guardar" HBox.hgrow="ALWAYS" />
-                                <MFXButton layoutX="62.0" layoutY="37.0" maxWidth="1.7976931348623157E308" onAction="#onActionDelete" text="Eliminar" HBox.hgrow="ALWAYS" />
+                                <MFXButton defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#onActionSave" text="Guardar" HBox.hgrow="ALWAYS" />
+                                <MFXButton cancelButton="true" layoutX="62.0" layoutY="37.0" maxWidth="1.7976931348623157E308" onAction="#onActionDelete" text="Eliminar" HBox.hgrow="ALWAYS" />
                             </children>
                      <padding>
                         <Insets bottom="10.0" />

@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -77,7 +78,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         File chossedImage = fileChooser.showOpenDialog(imageViewTeamPhoto.getScene().getWindow());
         if (chossedImage != null) {
             try {
-                String URLtoResources = "src/main/resources/cr/ac/una/tournamentmanager/Resources/";
+                String URLtoResources = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
                 File destinationURL = new File(URLtoResources + chossedImage.getName());
 
                 Files.copy(chossedImage.toPath(), destinationURL.toPath(), StandardCopyOption.REPLACE_EXISTING);// Copiar el archivo seleccionado en Resources
@@ -117,12 +118,35 @@ public class TeamsManagerController extends Controller implements Initializable 
                 }
                 updateTableView();
                 changeValues(null);
+                System.out.println("Equipo guardado exitosamente.");
             } else {
-                System.out.println("Presenta Datos Incompletos.");
+                new Mensaje().showModal(Alert.AlertType.WARNING, "Datos incompletos", getStage(), "Por favor, complete todos los campos obligatorios.");
             }
         } catch (Exception ex) {
-            System.out.println("Error al guardar el equipo: " + ex.getMessage());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al guardar", getStage(), "Ocurrió un error al guardar el equipo: " + ex.getMessage());
         }
+    }
+
+    private boolean areFieldsValid() {
+        return !txfTeamName.getText().isBlank() &&
+               !txfTeamSport.getText().isBlank() &&
+               !showTeamPhotoURL.get().isBlank();
+    }
+
+    private void addNewTeam() {
+        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        TeamDto newTeam = new TeamDto();
+        newTeam.setName(txfTeamName.getText().trim());
+        newTeam.setSportName(txfTeamSport.getText().trim());
+        newTeam.setTeamImageURL(showTeamPhotoURL.get());
+        fullTeamArrayList.add(newTeam);
+        AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
+    }
+
+    private void updateExistingTeam() {
+        selectedTeam.setName(txfTeamName.getText().trim());
+        selectedTeam.setSportName(txfTeamSport.getText().trim());
+        selectedTeam.setTeamImageURL(showTeamPhotoURL.get());
     }
 
     @FXML
@@ -135,26 +159,20 @@ public class TeamsManagerController extends Controller implements Initializable 
         }
     }
 
-    private boolean areFieldsValid() {
-        return !showTeamProperty.get().getName().isBlank() &&
-                !showTeamProperty.get().getSportName().isBlank() &&
-                !showTeamProperty.get().getTeamImageURL().isBlank();
-    }
-
-    private void addNewTeam() {
+    private void updateTableView() {
         ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
-        TeamDto teamCopy = new TeamDto();
-        teamCopy.setName(showTeamProperty.get().getName());
-        teamCopy.setTeamImageURL(showTeamProperty.get().getTeamImageURL());
-        teamCopy.setSportName(showTeamProperty.get().getSportName());
-        fullTeamArrayList.add(teamCopy);
-        AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
-    }
+        ObservableList<TeamDto> filteredList = FXCollections.observableArrayList();
 
-    private void updateExistingTeam() {
-        selectedTeam.setName(showTeamProperty.get().getName());
-        selectedTeam.setTeamImageURL(showTeamProperty.get().getTeamImageURL());
-        selectedTeam.setSportName(showTeamProperty.get().getSportName());
+        String searchText = txfSearch.getText().toLowerCase().trim();
+        for (TeamDto team : fullTeamArrayList) {
+            if (team.getName().toLowerCase().contains(searchText)) {
+                filteredList.add(team);
+            }
+        }
+
+        tableViewTeams.setItems(filteredList);
+        tableViewTeams.refresh();
+        tableViewTeams.getSelectionModel().clearSelection();
     }
 
     @Override
@@ -224,6 +242,11 @@ public class TeamsManagerController extends Controller implements Initializable 
         } catch (Exception ex) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
         }
+
+        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateTableView();
+            System.out.println("Texto cambiado de: " + oldValue + " a: " + newValue);
+        });
     }
 
     private void changeValues(TeamDto value) {
@@ -244,13 +267,6 @@ public class TeamsManagerController extends Controller implements Initializable 
         showTeamPhotoURL.set(imagePath);
         Image image = new Image(getClass().getResourceAsStream(imagePath));
         imageViewTeamPhoto.setImage(image);
-    }
-
-    private void updateTableView() {
-        ObservableList<TeamDto> observableTeamList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
-        tableViewTeams.setItems(observableTeamList);
-        tableViewTeams.refresh();
-        tableViewTeams.getSelectionModel().clearSelection();
     }
 
 }

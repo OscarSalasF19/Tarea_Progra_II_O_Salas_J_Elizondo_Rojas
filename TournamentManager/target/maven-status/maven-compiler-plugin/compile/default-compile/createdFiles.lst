@@ -8,6 +8,7 @@ cr\ac\una\tournamentmanager\Util\FlowController.class
 cr\ac\una\tournamentmanager\Controller\MatchController$1.class
 cr\ac\una\tournamentmanager\Controller\TournamentController.class
 cr\ac\una\tournamentmanager\Controller\Controller.class
+cr\ac\una\tournamentmanager\Controller\TournamentFormController.class
 cr\ac\una\tournamentmanager\Util\Mensaje.class
 cr\ac\una\tournamentmanager\model\MatchDto.class
 cr\ac\una\tournamentmanager\Controller\MatchController.class
