@@ -27,7 +27,7 @@ public class InfoManager {
 
     }
 
-    public void saveSports() throws IOException {
+    private void saveSports() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("Sports.json")) {
             gson.toJson(AppContext.getInstance().get("fullSportArrayList"), writer);
@@ -40,7 +40,7 @@ public class InfoManager {
         }
     }
 
-    public void LoadSports() {
+    private void LoadSports() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Type sportList = new TypeToken<ArrayList<SportDto>>() {
         }.getType();
@@ -54,7 +54,7 @@ public class InfoManager {
         AppContext.getInstance().set("fullSportArrayList", sports);
     }
 
-    public void SaveTournaments() {
+    private void SaveTournaments() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("Tournament.json")) {
             gson.toJson(AppContext.getInstance().get("FullTournamentsArrayList"));
@@ -67,7 +67,7 @@ public class InfoManager {
         }
     }
 
-    public void loadTournaments() {
+    private void loadTournaments() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Type tournamentList = new TypeToken<ArrayList<TourneyDto>>() {
         }.getType();
@@ -79,6 +79,46 @@ public class InfoManager {
 
         }
         AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
+    }
+    
+    private void SaveTeams() throws IOException{
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try(FileWriter writer = new FileWriter("Teams.json")){
+            gson.toJson(AppContext.getInstance().get("FullTeamArrayList"));
+            writer.flush();
+            Mensaje message = new Mensaje();
+            message.show(Alert.AlertType.CONFIRMATION, "Saved Succesfully", "All teams were saved successfully");
+        } catch(IOException S){
+             Mensaje message = new Mensaje();
+            message.show(Alert.AlertType.ERROR, "Error Saving", "Teams were not able to save");
+        }
+    }
+    
+    private void LoadTeams(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Type teamsList = new TypeToken<ArrayList<TeamDto>>(){}.getType();
+        ArrayList<TeamDto> teams = new ArrayList<TeamDto>();
+        
+        try(FileReader reader = new FileReader("Teams.json")){
+            teams = gson.fromJson(reader, teamsList);
+        } catch (IOException s){
+            Mensaje message = new Mensaje();
+            message.show(Alert.AlertType.ERROR, "Error Loading", "Teams were not able to load");
+        }
+        AppContext.getInstance().set("FullTeamArrayList", teams);
+    }
+    
+    public void LoadInfo(){
+        LoadSports();
+        LoadTeams();
+        loadTournaments();
+
+    }
+    
+    public void saveInfo() throws IOException{
+        SaveTeams();
+        SaveTournaments();
+        saveSports();
     }
 }
 
