@@ -81,8 +81,8 @@
                         <MFXTextField fx:id="txfSportName" maxWidth="1.7976931348623157E308" promptText="Nombre" styleClass="jfx-text-field-smaller" />
                         <HBox alignment="BOTTOM_CENTER" layoutX="20.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXButton maxWidth="1.7976931348623157E308" onAction="#onActionSave" text="Guardar" HBox.hgrow="ALWAYS" />
-                                <MFXButton layoutX="62.0" layoutY="37.0" maxWidth="1.7976931348623157E308" onAction="#onActionDelete" text="Eliminar" HBox.hgrow="ALWAYS" />
+                                <MFXButton defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#onActionSave" text="Guardar" HBox.hgrow="ALWAYS" />
+                                <MFXButton cancelButton="true" layoutX="62.0" layoutY="37.0" maxWidth="1.7976931348623157E308" onAction="#onActionDelete" text="Eliminar" HBox.hgrow="ALWAYS" />
                             </children>
                      <padding>
                         <Insets bottom="10.0" />

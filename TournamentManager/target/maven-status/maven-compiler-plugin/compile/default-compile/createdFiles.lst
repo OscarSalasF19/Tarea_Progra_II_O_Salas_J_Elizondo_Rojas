@@ -1,3 +1,4 @@
+cr\ac\una\tournamentmanager\model\InfoManager$2.class
 cr\ac\una\tournamentmanager\App.class
 cr\ac\una\tournamentmanager\model\TeamDto.class
 cr\ac\una\tournamentmanager\Controller\TeamsManagerController$1.class
@@ -12,6 +13,8 @@ cr\ac\una\tournamentmanager\Controller\TournamentFormController.class
 cr\ac\una\tournamentmanager\Util\Mensaje.class
 cr\ac\una\tournamentmanager\model\MatchDto.class
 cr\ac\una\tournamentmanager\Controller\MatchController.class
+cr\ac\una\tournamentmanager\model\InfoManager$1.class
+cr\ac\una\tournamentmanager\model\InfoManager.class
 cr\ac\una\tournamentmanager\Controller\PrincipalController.class
 cr\ac\una\tournamentmanager\Util\AppContext.class
 cr\ac\una\tournamentmanager\model\SportDto.class
