@@ -88,21 +88,22 @@ public class MatchController extends  Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        TimerTask task = new TimerTask() {
+        TimerTask task = new TimerTask() { //task to update the timer
             @Override
             public void run() {
-                if (seconds > 0) {
+
+                if (seconds > 0) { //while there is time left
                     txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                     seconds--;
                 } else {
                     endMatch();
-                    timer.cancel();
+                    timer.cancel(); // Stop the timer
                     Stage stage = (Stage) root.getScene().getWindow();
                     stage.close();// Close the current window
                 }
             }
         };
-        timer.scheduleAtFixedRate(task, 0, 1000);
+        timer.scheduleAtFixedRate(task, 0, 1000); //countdown every second
     }
 
     private void endMatch() {
@@ -126,7 +127,6 @@ public class MatchController extends  Controller implements Initializable {
     private void tieBreaker() {
         Exception e = new Exception("Tie-breaker logic not implemented");
         // Implement tie-breaker logic here
-        // For example, you can create a new match between the tied teams
         // and update their scores accordingly.
     }
 

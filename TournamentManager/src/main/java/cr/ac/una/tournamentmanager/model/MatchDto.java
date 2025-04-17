@@ -5,7 +5,6 @@ public class MatchDto {
     private TeamDto fstTeam;
     private TeamDto sndTeam;
 
-
     public MatchDto(TeamDto fstTeam, TeamDto sndTeam) {
         this.fstTeam = fstTeam;
         this.sndTeam = sndTeam;
@@ -25,10 +24,6 @@ public class MatchDto {
 
     public void setSndTeam(TeamDto sndTeam) {
         this.sndTeam = sndTeam;
-    }
-
-    public void startMatch() {
-
     }
 
 }
