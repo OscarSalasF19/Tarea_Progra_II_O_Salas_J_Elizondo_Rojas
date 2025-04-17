@@ -27,7 +27,7 @@ public class InfoManager {
 
     }
 
-    private void saveSports() throws IOException {
+    private void saveSports(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("Sports.json")) {
             gson.toJson(AppContext.getInstance().get("fullSportArrayList"), writer);
@@ -81,7 +81,7 @@ public class InfoManager {
         AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
     }
     
-    private void SaveTeams() throws IOException{
+    private void SaveTeams(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try(FileWriter writer = new FileWriter("Teams.json")){
             gson.toJson(AppContext.getInstance().get("FullTeamArrayList"));
@@ -115,7 +115,7 @@ public class InfoManager {
 
     }
     
-    public void saveInfo() throws IOException{
+    public void saveInfo(){
         SaveTeams();
         SaveTournaments();
         saveSports();
