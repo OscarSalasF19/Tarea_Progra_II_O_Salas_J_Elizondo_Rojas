@@ -26,6 +26,8 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     void onActionBtnTourney(ActionEvent event) {
+        TournamentFormController controller = (TournamentFormController) FlowController.getInstance().getController("TournamentFormView");
+        controller.updateTableView();
         FlowController.getInstance().goView("TournamentFormView");
     }
 

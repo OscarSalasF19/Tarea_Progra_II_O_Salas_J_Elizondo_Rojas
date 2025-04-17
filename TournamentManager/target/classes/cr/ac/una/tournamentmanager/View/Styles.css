@@ -74,8 +74,7 @@
 }
 
 .jfx-panel-fondo{
-    -fx-background-color: -fx-color-base-information;/*si ve error
-    cambiar a -fx-base-color-titles*/
+    -fx-background-color: -fx-color-base-information;
     -fx-opacity: 1;
 }
 

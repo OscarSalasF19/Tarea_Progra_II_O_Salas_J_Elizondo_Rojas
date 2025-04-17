@@ -21,7 +21,7 @@
                     <children>
                         <StackPane prefHeight="17.0" prefWidth="1660.0">
                             <children>
-                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
+                                <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Deporte" styleClass="jfx-text-field-smaller" />
                                 <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Search" StackPane.alignment="CENTER_RIGHT">
                                     <StackPane.margin>
                                         <Insets right="5.0" />
@@ -61,7 +61,7 @@
                   <HBox alignment="CENTER" styleClass="jfx-time-input" VBox.vgrow="NEVER">
                      <children>
                                 <MFXSlider fx:id="sliderTeamsAmount" max="64.0" min="2.0" minorTicksCount="64" showTicksAtEdges="false" />
-                        <Label fx:id="txfTeamsAmount" styleClass="fx-label" text="2" />
+                        <Label fx:id="txfTeamsAmount" styleClass="fx-label" text="02" />
                      </children>
                   </HBox>
                   <Label styleClass="fx-label" text="Tiempo" />
@@ -75,15 +75,18 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                           </HBox>
-                  <TableView maxHeight="1.7976931348623157E308" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tableViewSelectedTeams" maxHeight="1.7976931348623157E308" maxWidth="180.0" minWidth="180.0" onMouseClicked="#onMouseClickedSelectedTeamsTable" prefWidth="180.0" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                      <columns>
-                        <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Equipos Seleccionados" />
+                        <TableColumn fx:id="infoSelectedTeamsTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos Seleccionados" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                          <MFXButton onAction="#onActionStartTourney" prefHeight="34.0" prefWidth="125.0" text="Iniciar Torneo" />
+                          <MFXButton onAction="#onActionStartTourney" prefHeight="34.0" prefWidth="125.0" text="Iniciar Torneo">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin></MFXButton>
                     </children>
                 </VBox>
             </children>

@@ -156,6 +156,9 @@ public class SportsManagerController extends Controller implements Initializable
     private void updateExistingSport() {
         selectedSport.setName(txfSportName.getText().trim());
         selectedSport.setBallImageURL(showSportPhotoURL.get());
+        //update team.setSport if needed
+
+
     }
 
     private void updateTableView() {

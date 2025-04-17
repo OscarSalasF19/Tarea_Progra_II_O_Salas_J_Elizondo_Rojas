@@ -40,10 +40,16 @@ public class TournamentFormController extends Controller implements Initializabl
     private TableColumn<TeamDto, String> infoTableColumn;
 
     @FXML
-    private MFXTextField txfMinutes;
+    private TableView<TeamDto> tableViewSelectedTeams;
+
+    @FXML
+    private TableColumn<TeamDto, String> infoSelectedTeamsTableColumn;
 
     @FXML
     private MFXTextField txfSearch;
+
+    @FXML
+    private MFXTextField txfMinutes;
 
     @FXML
     private MFXTextField txfSeconds;
@@ -51,9 +57,9 @@ public class TournamentFormController extends Controller implements Initializabl
     @FXML
     private Label txfTeamsAmount;
 
-    private ArrayList<TeamDto> tournamentTeams;
+    //private ArrayList<TeamDto> tournamentSelectedTeams;
 
-    //private ObservableList<TeamDto> tournamentTeams = FXCollections.observableArrayList();
+    private ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
 
     private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
 
@@ -65,10 +71,21 @@ public class TournamentFormController extends Controller implements Initializabl
     @FXML
     void onMouseClickedTeamsTable(MouseEvent event) {
         TeamDto selectedTeam = tableViewTeams.getSelectionModel().getSelectedItem();
-        if (selectedTeam != null && !tournamentTeams.contains(selectedTeam)) {
-            tournamentTeams.add(selectedTeam);
+        if (selectedTeam != null && !observableSeletedTeams.contains(selectedTeam)) {
+            observableSeletedTeams.add(selectedTeam);
             System.out.println("Equipo añadido al torneo: " + selectedTeam.getName());
         }
+        updateTableView();
+    }
+
+    @FXML
+    void onMouseClickedSelectedTeamsTable(MouseEvent event) {
+        TeamDto selectedTeam = tableViewSelectedTeams.getSelectionModel().getSelectedItem();
+        if (selectedTeam != null) {
+            observableSeletedTeams.remove(selectedTeam);
+            System.out.println("Equipo eliminado del torneo: " + selectedTeam.getName());
+        }
+        updateTableView();
     }
 
     @Override
@@ -79,14 +96,23 @@ public class TournamentFormController extends Controller implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        tournamentTeams = new ArrayList<>();
-
         ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
         tableViewTeams.setItems(fullTeamArrayList);
-
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        configureColumn(infoTableColumn);
 
-        infoTableColumn.setCellFactory(column -> {
+        //tournamentSelectedTeams = new ArrayList<>();
+        tableViewSelectedTeams.setItems(observableSeletedTeams);
+        infoSelectedTeamsTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        configureColumn(infoSelectedTeamsTableColumn);
+
+        setupSlider();
+        setupSearchListener();
+        //updateTableView();
+    }
+
+    private void configureColumn(TableColumn<TeamDto, String> column) {
+        column.setCellFactory(col -> {
             return new TableCell<TeamDto, String>() {
                 private final ImageView imageView = new ImageView();
 
@@ -115,9 +141,6 @@ public class TournamentFormController extends Controller implements Initializabl
                 }
             };
         });
-
-        setupSlider();
-        setupSearchListener();
     }
 
     private void setupSearchListener() {
@@ -126,12 +149,10 @@ public class TournamentFormController extends Controller implements Initializabl
             filteredTeamsList.clear();
             String searchText = newValue.toLowerCase().trim();
 
-            if (searchText.isEmpty()) {
-                filteredTeamsList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
-            } else {
+            if (!searchText.isEmpty()) {
                 ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
                 for (TeamDto team : fullTeamArrayList) {
-                    if (team.getName().trim().toLowerCase().contains(searchText)) {
+                    if (team.getSportName().toLowerCase().trim().equals(searchText)) {
                         filteredTeamsList.add(team);
                     }
                 }
@@ -147,20 +168,23 @@ public class TournamentFormController extends Controller implements Initializabl
         sliderTeamsAmount.setValue(2);
         txfTeamsAmount.setText(String.valueOf((int) sliderTeamsAmount.getValue()));
 
-        // Cambiar el color del slider//no sirve
         sliderTeamsAmount.setStyle("-fx-accent: #009999;");
 
         sliderTeamsAmount.valueProperty().addListener((observable, oldValue, newValue) -> {
             txfTeamsAmount.setText(String.valueOf((int) newValue.doubleValue()));
+            if ((int) newValue.doubleValue() <10) {
+                txfTeamsAmount.setText("0" + String.valueOf(newValue.intValue()));
+            }
         });
     }
 
-    private void updateTableView() {
-        System.out.println("Actualizando tabla de equipos.");
-        String searchValue = txfSearch.getText();
-        txfSearch.setText(searchValue + " ");
-        txfSearch.setText(searchValue);
+    void updateTableView() {
+        System.out.println("Actualizando tablas.");
         tableViewTeams.getSelectionModel().clearSelection();
+        String search = txfSearch.getText();
+        txfSearch.setText(search + " ");
+        txfSearch.setText(search);
+        tableViewSelectedTeams.refresh(); // Refrescar tabla de equipos seleccionados
     }
 }
 
