@@ -1,11 +1,18 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
+import com.sun.glass.ui.Cursor;
 import cr.ac.una.tournamentmanager.Util.Mensaje;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.utils.SwingFXUtils;
+import java.awt.image.BufferedImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,8 +38,15 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public class TeamsManagerController extends Controller implements Initializable {
+    
+    private volatile boolean capturing = true;
+    private Webcam webcam;
+    private BufferedImage lastCapturedShot;
+    private JFrame cameraWindow;
 
     private final StringProperty showTeamPhotoURL = new SimpleStringProperty();
     private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
@@ -53,6 +67,8 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     private MFXTextField txfTeamSport;
     private TeamDto selectedTeam;
+    @FXML
+    private MFXButton pictureBtn;
 
     @FXML
     void onActionAddTeam(ActionEvent event) {
@@ -84,7 +100,55 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     void onActionCamera(ActionEvent event) {
-        //abre camara para crear una imagen y despue sla setea
+        openCameraWindow();
+    }
+    
+    private void openCameraWindow(){
+        
+        pictureBtn.setVisible(true);
+        pictureBtn.setDisable(false);
+        pictureBtn.setManaged(true);
+        webcam = Webcam.getDefault();
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        webcam.open();
+        
+        WebcamPanel panel = new WebcamPanel(webcam);
+        panel.setFillArea(true);
+        panel.setMirrored(true);
+        
+        cameraWindow = new JFrame("Camera Overview");
+        
+        cameraWindow.add(panel);
+        cameraWindow.setResizable(true);
+        cameraWindow.pack();
+        cameraWindow.setVisible(true);
+        
+        capturing = true;
+        
+        cameraWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cameraWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+        private void windowClosing(){
+            capturing = false;
+            if(webcam != null && webcam.isOpen()){
+              webcam.close();
+          }
+        }
+        });
+        
+        new Thread (() -> {
+            while (capturing){
+                BufferedImage frame = webcam.getImage();
+                if(frame != null){
+                    lastCapturedShot = frame;
+                    try{
+                        Thread.sleep(100);
+                    } catch(InterruptedException e){
+                       e.printStackTrace();
+                        
+                    }
+                }
+            }
+        }).start();
     }
 
     @FXML
@@ -286,5 +350,32 @@ public class TeamsManagerController extends Controller implements Initializable 
         showTeamPhotoURL.set(imagePath); // Imagen predeterminada
     }
 
-}
+    @FXML
+    private void onActionTakeShot(ActionEvent event) throws IOException {
+        capturing  = false; 
+        
+        if(lastCapturedShot != null){
+            Image image = SwingFXUtils.toFXImage(lastCapturedShot, null);
+            imageViewTeamPhoto.setImage(image);
+            ImageIO.write(lastCapturedShot, "PNG", new File("Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr-ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png"));
+            showTeamPhotoURL.set("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png");
+        }
+        
+        if(webcam != null && webcam.isOpen()){
+            webcam.close();
+            
+        }
+        
+        if(cameraWindow != null){
+            cameraWindow.dispose();
+            cameraWindow = null;
+        }
+            pictureBtn.setVisible(false);
+            pictureBtn.setDisable(true);
+            pictureBtn.setManaged(false);
+            
+        }
+    }
+
+
 
