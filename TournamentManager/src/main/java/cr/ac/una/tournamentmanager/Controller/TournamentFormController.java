@@ -2,7 +2,6 @@ package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.TeamDto;
-import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -25,6 +24,8 @@ import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static java.lang.Integer.parseInt;
 
 public class TournamentFormController extends Controller implements Initializable {
 
@@ -106,6 +107,7 @@ public class TournamentFormController extends Controller implements Initializabl
 
         setupSlider();
         setupSearchListener();
+        setupTimer();
     }
 
     private void configureColumn(TableColumn<TeamDto, String> column) {
@@ -175,7 +177,39 @@ public class TournamentFormController extends Controller implements Initializabl
         });
     }
 
-    void updateTableView() {
+    private void setupTimer() {
+
+        txfMinutes.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {                                // "\\d" means ONLY digits, "*" means 0 or more times
+                txfMinutes.setText(newValue.replaceAll("[^\\d]", ""));      // Replace all non-digit characters with an empty string ("")
+            }
+            if (txfMinutes.getText().length() > 2) {
+                String reducedString = txfMinutes.getText().substring(0, 2);
+                txfMinutes.setText(reducedString);
+            }
+            if (txfMinutes.getText().length() == 1)
+                txfMinutes.setText("0" + txfMinutes.getText());{
+            }
+        });
+
+        txfSeconds.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txfSeconds.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            if (txfSeconds.getText().length() > 2) {
+                String reducedString = txfSeconds.getText().substring(0, 2);
+                txfSeconds.setText(reducedString);
+            }
+            if (parseInt(txfSeconds.getText()) > 59) {
+                txfSeconds.setText("59");
+            }
+            if (txfSeconds.getText().length() == 1)
+                txfSeconds.setText("0" + txfSeconds.getText());{
+            }
+        });
+    }
+
+    public void updateTableView() {
         System.out.println("Actualizando tablas.");
         tableViewTeams.getSelectionModel().clearSelection();
         String search = txfSearch.getText();

@@ -86,7 +86,7 @@ public class SportsManagerController extends Controller implements Initializable
         if (selectedSport != null) {
             ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
             fullSportArrayList.remove(selectedSport);
-            AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
+            InfoManager.SetSportList(fullSportArrayList);
             updateTableView();
         }
         changeValues(null);
@@ -171,12 +171,6 @@ public class SportsManagerController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         changeValues(null);
-
-        ArrayList<SportDto> tempArrayList = new ArrayList<SportDto>();
-        SportDto tempTeam = new SportDto();
-        tempTeam.setName("VolleyBall");
-        tempArrayList.add(tempTeam);
-        AppContext.getInstance().set("fullSportArrayList", tempArrayList);
 
         ObservableList<SportDto> observableSportList = FXCollections.observableArrayList(InfoManager.GetSportList());
         tableViewSports.setItems(observableSportList);

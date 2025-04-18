@@ -37,7 +37,7 @@ public class TourneyDto {
     }
 
     private ArrayList<TeamDto> filterTeamsBysportID() {
-        ArrayList<TeamDto> availableTeams = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        ArrayList<TeamDto> availableTeams = InfoManager.GetTeamList();
         for (TeamDto team : availableTeams) {
             if (team.getSportID() != sportID) {
                 availableTeams.remove(team);

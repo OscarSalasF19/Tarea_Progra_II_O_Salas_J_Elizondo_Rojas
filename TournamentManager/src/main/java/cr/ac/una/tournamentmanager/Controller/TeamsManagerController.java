@@ -92,7 +92,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         if (selectedTeam != null) {
             ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
             fullTeamArrayList.remove(selectedTeam);
-            AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
+            InfoManager.SetTeamList(fullTeamArrayList);
             updateTableView();
         }
         changeValues(null);
@@ -195,14 +195,6 @@ public class TeamsManagerController extends Controller implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         changeValues(null);
-
-        //eliminar
-        ArrayList<TeamDto> tempArrayList = new ArrayList<>();
-        TeamDto tempTeam = new TeamDto();
-        tempTeam.setName("Grupo 300");
-        tempArrayList.add(tempTeam);
-        AppContext.getInstance().set("fullTeamArrayList", tempArrayList);
-        //eliminar
 
         ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList(InfoManager.GetTeamList());
         tableViewTeams.setItems(fullTeamArrayList);
