@@ -111,8 +111,8 @@ public class FlowController {
                 HBox hBox = (HBox)borderPane.getCenter();
                 hBox.getChildren().clear();
                 hBox.getChildren().add(loader.getRoot());
-         
-                /*VBox vBox = ((VBox) ((BorderPane) stage.getScene().getRoot()).getCenter());
+                HBox.setHgrow(loader.getRoot(), javafx.scene.layout.Priority.ALWAYS);
+                      /*VBox vBox = ((VBox) ((BorderPane) stage.getScene().getRoot()).getCenter());
                 vBox.getChildren().clear();
                 vBox.getChildren().add(loader.getRoot());*/
                 break;

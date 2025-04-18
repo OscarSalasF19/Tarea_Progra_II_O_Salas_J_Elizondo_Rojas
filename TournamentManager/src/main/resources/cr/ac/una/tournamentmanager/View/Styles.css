@@ -251,3 +251,17 @@
     -fx-alignment: CENTER_LEFT;
     -fx-spacing: 20;
 }
+.jfx-text-field-Certificate-name{
+    
+     -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+    -fx-text-fill: -fx-base-color-titles;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+    -fx-font-size: 40px;
+    -fx-min-height: 80px;
+    -fx-max-height: 80px;
+    -fx-min-width: 400px;
+    -fx-max-width: 400px;
+    
+}

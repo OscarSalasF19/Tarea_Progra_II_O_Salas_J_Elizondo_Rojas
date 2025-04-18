@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.SportsManagerController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.SportsManagerController">
     <children>
-        <HBox spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER" layoutX="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="0.0">
             <children>
                 <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <StackPane>
+                        <StackPane maxWidth="1.7976931348623157E308">
                             <children>
                                 <MFXTextField fx:id="txfSearch" floatMode="DISABLED" maxHeight="115.0" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="1646.0" promptText="Buscar" styleClass="jfx-text-field-smaller" />
                                 <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Search" StackPane.alignment="CENTER_RIGHT">
@@ -30,13 +30,13 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                         </StackPane>
-                        <TableView fx:id="tableViewSports" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedSportsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableViewSports" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedSportsTable" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Deportes" />
+                                <TableColumn fx:id="infoTableColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="75.0" sortable="false" text="Deportes" />
                             </columns>
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                         </TableView>
                         <MFXButton maxWidth="1.7976931348623157E308" onAction="#onActionAddSport" prefHeight="29.0" styleClass="jfx-btn-anadir" text="Añadir" VBox.vgrow="ALWAYS">
                             <graphic>
@@ -51,7 +51,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
                 </VBox>
-                <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="200.0" prefHeight="564.0" prefWidth="159.0" spacing="10.0" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
@@ -81,7 +81,7 @@
                         <MFXTextField fx:id="txfSportName" maxWidth="1.7976931348623157E308" promptText="Nombre" styleClass="jfx-text-field-smaller" />
                         <HBox alignment="BOTTOM_CENTER" layoutX="20.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXButton defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#onActionSave" text="Guardar" HBox.hgrow="ALWAYS" />
+                                <MFXButton defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#onActionSave" prefHeight="34.0" prefWidth="76.0" text="Guardar" HBox.hgrow="ALWAYS" />
                                 <MFXButton cancelButton="true" layoutX="62.0" layoutY="37.0" maxWidth="1.7976931348623157E308" onAction="#onActionDelete" text="Eliminar" HBox.hgrow="ALWAYS" />
                             </children>
                      <padding>

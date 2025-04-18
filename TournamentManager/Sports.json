@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "sportID": 1,
+    "name": "ewdfewfdwef",
+    "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  },
+  {
+    "sportID": 2,
+    "name": "ewfrwef",
+    "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  },
+  {
+    "sportID": 3,
+    "name": "ewrewr",
+    "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  },
+  {
+    "sportID": 4,
+    "name": "ewrewrew",
+    "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  }
+]
