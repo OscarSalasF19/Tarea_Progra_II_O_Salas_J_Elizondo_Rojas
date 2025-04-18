@@ -1,47 +1,38 @@
 package cr.ac.una.tournamentmanager.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class SportDto {
 
-    private final StringProperty name;
-    private final StringProperty ballImageURL;
+    private final int sportID;
+    private String name;
+    private String ballImageURL;
 
     public SportDto() {
-        this.name = new SimpleStringProperty("");
-        this.ballImageURL = new SimpleStringProperty("");
+        this.sportID = newID();
+        this.name = "";
+        this.ballImageURL = "";
     }
 
-    public SportDto(String name, String ballImageURL) {
-        this.name = new SimpleStringProperty(name);
-        this.ballImageURL = new SimpleStringProperty(ballImageURL);
+    public int getID() {
+        return sportID;
     }
 
     public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public String getBallImageURL() {
-        return ballImageURL.get();
-    }
-
-    public void setBallImageURL(String ballImageURL) {
-        this.ballImageURL.set(ballImageURL);
-    }
-
-    public StringProperty getNameProperty() {
         return name;
     }
 
-    public StringProperty getBallImageURLProperty() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBallImageURL() {
         return ballImageURL;
+    }
+
+    public void setBallImageURL(String ballImageURL) {
+        this.ballImageURL = ballImageURL;
     }
 
     @Override
@@ -56,12 +47,26 @@ public class SportDto {
             return false;
         }
         final SportDto other = (SportDto) obj;
-        return Objects.equals(this.name.get(), other.name.get());
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public String toString() {
-        return "SportDto{" + "name=" + name.get() + ", ballImageURL=" + ballImageURL.get() + '}';
+        return "SportDto{" + "name=" + name + ", ballImageURL=" + ballImageURL + '}';
+    }
+
+    private int newID() {
+        ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
+        if (fullSportArrayList == null) {
+            return 1;
+        }
+        int maxId = 0;
+        for (SportDto sport : fullSportArrayList) {
+            if (sport.getID() > maxId) {
+                maxId = sport.getID();
+            }
+        }
+        return maxId + 1;
     }
 
 }

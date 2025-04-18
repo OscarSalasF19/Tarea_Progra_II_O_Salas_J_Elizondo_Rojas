@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-/**
- * @author oscar
- */
+
 public class InfoManager {
 
 
@@ -80,5 +78,74 @@ public class InfoManager {
         }
         AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
     }
+
+    public static ArrayList<SportDto> GetSportList() {
+        ArrayList<SportDto> sports = (ArrayList<SportDto>) AppContext.getInstance().get("fullSportArrayList");
+        if (sports == null) {
+            sports = new ArrayList<SportDto>();
+            AppContext.getInstance().set("fullSportArrayList", sports);
+        }
+        return sports;
+    }
+
+    public static ArrayList<TeamDto> GetTeamList() {
+        ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("fullTeamArrayList");
+        if (teams == null) {
+            teams = new ArrayList<TeamDto>();
+            AppContext.getInstance().set("fullTeamArrayList", teams);
+        }
+        return teams;
+    }
+
+    public static ArrayList<TourneyDto> GetTournamentList() {
+        ArrayList<TourneyDto> tournaments = (ArrayList<TourneyDto>) AppContext.getInstance().get("fullTournamentsArrayList");
+        if (tournaments == null) {
+            tournaments = new ArrayList<TourneyDto>();
+            AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
+        }
+        return tournaments;
+    }
+
+    public static void SetSportList(ArrayList<SportDto> sports) {
+        if (sports == null) {
+            sports = new ArrayList<SportDto>();
+        }
+        AppContext.getInstance().set("fullSportArrayList", sports);
+    }
+
+    public static void SetTeamList(ArrayList<TeamDto> teams) {
+        if (teams == null) {
+            teams = new ArrayList<TeamDto>();
+        }
+        AppContext.getInstance().set("fullTeamArrayList", teams);
+    }
+
+    public static void SetTournamentList(ArrayList<TourneyDto> tournaments) {
+        if (tournaments == null) {
+            tournaments = new ArrayList<TourneyDto>();
+        }
+        AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
+    }
+
+    public static String GetSportName(int sportID) {
+        ArrayList<SportDto> sports = GetSportList();
+        for (SportDto sport : sports) {
+            if (sport.getID() == sportID) {
+                return sport.getName();
+            }
+        }
+        return "";
+    }
+
+ public static int GetSportID(String sportName) {
+        ArrayList<SportDto> sports = GetSportList();
+        for (SportDto sport : sports) {
+            if (sport.getName().equals(sportName)) {
+                return sport.getID();
+            }
+        }
+        return 0;
+ }
+
 }
 

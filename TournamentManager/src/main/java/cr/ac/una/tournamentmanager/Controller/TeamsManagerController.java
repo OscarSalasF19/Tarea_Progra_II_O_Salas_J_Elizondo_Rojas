@@ -1,6 +1,7 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.Mensaje;
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
@@ -33,8 +34,7 @@ import java.util.ResourceBundle;
 
 public class TeamsManagerController extends Controller implements Initializable {
 
-    private final StringProperty showTeamPhotoURL = new SimpleStringProperty("");
-    private final ObjectProperty<TeamDto> showTeamProperty = new SimpleObjectProperty<>();
+    private final StringProperty showTeamPhotoURL = new SimpleStringProperty();
     private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
@@ -73,12 +73,11 @@ public class TeamsManagerController extends Controller implements Initializable 
                 String URLtoResources = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
                 File destinationURL = new File(URLtoResources + chossedImage.getName());
 
-                Files.copy(chossedImage.toPath(), destinationURL.toPath(), StandardCopyOption.REPLACE_EXISTING);// Copiar el archivo seleccionado en Resources
+                Files.copy(chossedImage.toPath(), destinationURL.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 showTeamPhotoURL.set(destinationURL.toURI().toString());
-                imageViewTeamPhoto.setImage(new Image(showTeamPhotoURL.get()));
             } catch (IOException e) {
-                System.out.println("Error al copiar la imagen: " + e.getMessage());
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Error al copiar la imagen", getStage(), "No se pudo copiar la imagen seleccionada: " + e.getMessage());
             }
         }
     }
@@ -91,7 +90,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     void onActionDelete(ActionEvent event) {//borra de el array de equipos segun seleccion
         if (selectedTeam != null) {
-            ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+            ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
             fullTeamArrayList.remove(selectedTeam);
             AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
             updateTableView();
@@ -118,20 +117,23 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private boolean areFieldsValid() {
+        if (showTeamPhotoURL.get().isBlank()) {
+            setDefaultImage(); // Establecer imagen predeterminada si no hay imagen seleccionada
+        }
         return isTeamNameValid(txfTeamName.getText().trim()) &&
-                isTeamSportValid(txfTeamSport.getText().trim()) &&
-                !showTeamPhotoURL.get().isBlank();
+               isTeamSportValid(txfTeamSport.getText().trim());
     }
 
     private boolean isTeamNameValid(String teamName) {
         if (teamName == null || teamName.isBlank()) {
+            new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, coloque un nombre.");
             return false; // Invalid team name
         }
-        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
         for (TeamDto team : fullTeamArrayList) {
             if (team.getName().equalsIgnoreCase(teamName) && !team.equals(selectedTeam)) {
-                new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, Por favor, escoja otro nombre que sea único.");
-                return false; // Team's name already exists
+                new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, escoja otro nombre que sea único.");
+                return false; // Nombre duplicado
             }
         }
         return true;
@@ -142,7 +144,7 @@ public class TeamsManagerController extends Controller implements Initializable 
             new Mensaje().showModal(Alert.AlertType.WARNING, "Deporte Invalido", getStage(), "Por favor, coloque un deporte.");
             return false; // Invalid team sport
         }
-        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
         for (SportDto sport : fullSportArrayList) {
             if (sport.getName().equalsIgnoreCase(teamSport)) {
                 return true; // Team's sport is valid
@@ -153,18 +155,18 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void addNewTeam() {
-        ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
         TeamDto newTeam = new TeamDto();
         newTeam.setName(txfTeamName.getText().trim());
-        newTeam.setSportName(txfTeamSport.getText().trim());
+        newTeam.setSportID(InfoManager.GetSportID(txfTeamSport.getText().trim()));
         newTeam.setTeamImageURL(showTeamPhotoURL.get());
         fullTeamArrayList.add(newTeam);
-        AppContext.getInstance().set("FullTeamArrayList", fullTeamArrayList);
+        InfoManager.SetTeamList(fullTeamArrayList);
     }
 
     private void updateExistingTeam() {
         selectedTeam.setName(txfTeamName.getText().trim());
-        selectedTeam.setSportName(txfTeamSport.getText().trim());
+        selectedTeam.setSportID(InfoManager.GetSportID(txfTeamSport.getText().trim()));
         selectedTeam.setTeamImageURL(showTeamPhotoURL.get());
     }
 
@@ -192,7 +194,6 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        bindShowTeam();
         changeValues(null);
 
         //eliminar
@@ -200,10 +201,10 @@ public class TeamsManagerController extends Controller implements Initializable 
         TeamDto tempTeam = new TeamDto();
         tempTeam.setName("Grupo 300");
         tempArrayList.add(tempTeam);
-        AppContext.getInstance().set("FullTeamArrayList", tempArrayList);
+        AppContext.getInstance().set("fullTeamArrayList", tempArrayList);
         //eliminar
 
-        ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+        ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList(InfoManager.GetTeamList());
         tableViewTeams.setItems(fullTeamArrayList);
 
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -223,7 +224,7 @@ public class TeamsManagerController extends Controller implements Initializable 
                             imageView.setImage(new Image(team.getTeamImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + team.getName() + " | " + team.getTeamImageURL());
-                            team.getTeamImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
+                            team.setTeamImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
                             imageView.setImage(new Image(team.getTeamImageURL()));
                         }
                         imageView.setFitHeight(30);
@@ -239,39 +240,27 @@ public class TeamsManagerController extends Controller implements Initializable 
         });
 
         setupSearchListener();
-    }
 
-    private void bindShowTeam() {
-        try {
-            showTeamProperty.addListener((obs, oldVal, newVal) -> {
-                if (oldVal != null) {
-                    txfTeamName.textProperty().unbindBidirectional(oldVal.getNameProperty());
-                    showTeamPhotoURL.unbindBidirectional(oldVal.getTeamImageURLProperty());
-                    txfTeamSport.textProperty().unbindBidirectional(oldVal.getSportNameProperty());
-                    txfTeamPoints.textProperty().unbind();
-                }
-                if (newVal != null) {
-                    txfTeamName.textProperty().bindBidirectional(newVal.getNameProperty());
-                    showTeamPhotoURL.bindBidirectional(newVal.getTeamImageURLProperty());
-                    txfTeamSport.textProperty().bindBidirectional(newVal.getSportNameProperty());
-                    txfTeamPoints.textProperty().bind(new SimpleStringProperty("Puntuación: " + newVal.getPoints() + " pts.")); // Vincular correctamente
-                }
-            });
-        } catch (Exception ex) {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
-        }
+        showTeamPhotoURL.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isBlank()) {
+                imageViewTeamPhoto.setImage(new Image(newValue));
+            } else {
+                setDefaultImage();
+            }
+        });
     }
 
     private void setupSearchListener() {
+        txfSearch.setText("");
         txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
 
             filteredTeamsList.clear();
             String searchText = newValue.toLowerCase().trim();
 
             if (searchText.isEmpty()) {
-                filteredTeamsList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+                filteredTeamsList = FXCollections.observableArrayList(InfoManager.GetTeamList());
             } else {
-                ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+                ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
                 for (TeamDto team : fullTeamArrayList) {
                     if (team.getName().trim().toLowerCase().contains(searchText)) {
                         filteredTeamsList.add(team);
@@ -286,21 +275,24 @@ public class TeamsManagerController extends Controller implements Initializable 
     private void changeValues(TeamDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
-            showTeamProperty.set(value);
-            imageViewTeamPhoto.setImage(new Image(value.getTeamImageURL()));
+            txfTeamName.setText(value.getName());
+            txfTeamSport.setText(InfoManager.GetSportName(value.getSportID()));
+            txfTeamPoints.setText(String.valueOf(value.getPoints()));
+            showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");
-            showTeamProperty.set(new TeamDto());
-            setDefaultImage();
+            txfTeamName.setText("");
+            txfTeamSport.setText("");
+            txfTeamPoints.setText("");
+            showTeamPhotoURL.set("");
         }
         selectedTeam = value;
     }
 
     private void setDefaultImage() {
         String imagePath = "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png";
-        showTeamPhotoURL.set(imagePath);
-        Image image = new Image(getClass().getResourceAsStream(imagePath));
-        imageViewTeamPhoto.setImage(image);
+        showTeamPhotoURL.set(imagePath); // Imagen predeterminada
     }
 
 }
+

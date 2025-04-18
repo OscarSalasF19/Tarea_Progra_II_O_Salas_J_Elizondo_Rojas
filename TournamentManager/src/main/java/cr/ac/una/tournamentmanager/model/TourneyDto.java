@@ -2,91 +2,69 @@ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.util.AppContext;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import java.util.ArrayList;
 
 public class TourneyDto {
 
-    private final StringProperty sport = new SimpleStringProperty("");
-    private final StringProperty totalOfTeams = new SimpleStringProperty("");
-    private final IntegerProperty matchTimeMilliseconds = new SimpleIntegerProperty(10000); // Match duration in milliseconds
-    private final ArrayList<ArrayList<TeamDto>> tournamentStages = new ArrayList<>();
-    private final boolean timesUp = false;
+    private int sportID = 0;
+    private int totalOfTeams = 0;
+    private int matchTimeMilliseconds = 10000; // Match duration in milliseconds
+    private final ArrayList<ArrayList<TeamDto>> tournamentRounds = new ArrayList<>();
 
-    public String getSport() {
-        return sport.get();
+    public int getsportIDID() {
+        return sportID;
     }
 
-    public void setSport(String sport) {
-        this.sport.set(sport);
+    public void setsportID(int sportIDID) {
+        this.sportID = sportIDID;
     }
 
     public int getTotalOfTeams() {
-        String totalTeams = this.totalOfTeams.get();
-        return (totalTeams != null && !totalTeams.isEmpty()) ? Integer.parseInt(totalTeams) : 0;
-    }
-
-    public void setTotalOfTeams(int totalOfTeams) {
-        this.totalOfTeams.set(String.valueOf(totalOfTeams));
-    }
-
-    public int getMatchTimeMilliseconds() {
-        int matchTimeMilliseconds = this.matchTimeMilliseconds.get();
-        return (matchTimeMilliseconds > 0) ? matchTimeMilliseconds : 10000; // Default to 10 seconds if invalid
-    }
-
-    public void setMatchTimeMilliseconds(int matchTimeMilliseconds) {
-        this.matchTimeMilliseconds.set(matchTimeMilliseconds);
-    }
-
-    public StringProperty getSportProperty() {
-        return sport;
-    }
-
-    public StringProperty getTotalTeamsProperty() {
         return totalOfTeams;
     }
 
-    public IntegerProperty getMatchTimeMillisecondsProperty() {
+    public void setTotalOfTeams(int totalOfTeams) {
+        this.totalOfTeams = totalOfTeams;
+    }
+
+    public int getMatchTimeMilliseconds() {
         return matchTimeMilliseconds;
     }
 
-
-    // Filters teams by the selected sport
-    private ArrayList<TeamDto> filterTeamsBySport() {
-        ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
-        for (int i = 0; i < teams.size(); i++) {
-            if (!teams.get(i).getSportName().equals(getSport())) {
-                teams.remove(i);
-                i--; // Ajustar el índice después de eliminar un elemento
-            }
-        }
-        return teams;
+    public void setMatchTimeMilliseconds(int matchTimeMilliseconds) {
+        this.matchTimeMilliseconds = matchTimeMilliseconds;
     }
 
-    // Creates the initial list of teams for the tournament
+    private ArrayList<TeamDto> filterTeamsBysportID() {
+        ArrayList<TeamDto> availableTeams = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+        for (TeamDto team : availableTeams) {
+            if (team.getSportID() != sportID) {
+                availableTeams.remove(team);
+            }
+        }
+        return availableTeams;
+    }
+
     public void createRandomTeamList() {
-        tournamentStages.add(filterTeamsBySport());
-        while (tournamentStages.get(0).size() > getTotalOfTeams()) {
-            tournamentStages.get(0).remove((int) (Math.random() * tournamentStages.get(0).size())); // Remove random teams until the size is equal to totalOfTeams
+        tournamentRounds.add(filterTeamsBysportID());
+        while (tournamentRounds.get(0).size() > getTotalOfTeams()) {
+            tournamentRounds.get(0).remove((int) (Math.random() * tournamentRounds.get(0).size())); // Remove random teams until the size is equal to totalOfTeams
         }
         startTournament();
     }
 
     // Starts the tournament and organizes matches by stages
     private void startTournament() {
-        for (int round = 0; tournamentStages.get(round).size() > 1; round++) {
-            tournamentStages.set(round + 1, new ArrayList<TeamDto>());// Create a new round
 
-            for (int team = 0; team < tournamentStages.get(round).size(); team += 2) {
-                MatchDto match = new MatchDto(tournamentStages.get(round).get(team), tournamentStages.get(round).get(team + 1));
+        for (int round = 0; tournamentRounds.get(round).size() > 1; round++) {
+            tournamentRounds.set(round + 1, new ArrayList<TeamDto>());// Create a new round
+
+            for (int team = 0; team < tournamentRounds.get(round).size(); team += 2) {
+                MatchDto match = new MatchDto(tournamentRounds.get(round).get(team), tournamentRounds.get(round).get(team + 1));
                 FlowController.getInstance().goViewInWindowModal("MatchView", null, true);
 
-                tournamentStages.get(round + 1).add((TeamDto) AppContext.getInstance().get("LastMatchWinner"));
+                tournamentRounds.get(round + 1).add((TeamDto) AppContext.getInstance().get("LastMatchWinner"));
                 AppContext.getInstance().set("LastMatchWinner", null);
             }
 

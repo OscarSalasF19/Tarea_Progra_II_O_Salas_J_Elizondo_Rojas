@@ -1,49 +1,42 @@
 package cr.ac.una.tournamentmanager.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.util.Objects;
 
 
 public class TeamDto {
 
-    private final StringProperty name;
-    private final StringProperty teamImageURL;
-    private final StringProperty sportName;
-    private int globalPoins; //de la clasificacion general
+    private String name = "";
+    private String teamImageURL = "";
+    private int sportID = 0; // sustituye por el id del deporte
+    private int globalPoins = 0; //de la clasificacion general
     private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
 
     public TeamDto() {
-        this.name = new SimpleStringProperty("");
-        this.teamImageURL = new SimpleStringProperty("");
-        this.sportName = new SimpleStringProperty("");
-        this.globalPoins = 0;
         this.performance = (int) (Math.random() * 100) + 1;
     }
 
     public String getName() {
-        return name.get();
+        return name;
     }
 
     public void setName(String nombre) {
-        this.name.set(nombre);
+        this.name = nombre;
     }
 
     public String getTeamImageURL() {
-        return teamImageURL.get();
+        return teamImageURL;
     }
 
     public void setTeamImageURL(String foto) {
-        this.teamImageURL.set(foto);
+        this.teamImageURL = foto;
     }
 
-    public String getSportName() {
-        return sportName.get();
+    public int getSportID() {
+        return sportID;
     }
 
-    public void setSportName(String sport) {
-        this.sportName.set(sport);
+    public void setSportID(int sportID) {
+        this.sportID = sportID;
     }
 
     public int getPoints() {
@@ -60,18 +53,6 @@ public class TeamDto {
 
     public void setPerformance(int performance) {
         this.performance = performance;
-    }
-
-    public StringProperty getNameProperty() {
-        return name;
-    }
-
-    public StringProperty getTeamImageURLProperty() {
-        return teamImageURL;
-    }
-
-    public StringProperty getSportNameProperty() {
-        return sportName;
     }
 
     public void sumPoints(int valor) {
@@ -93,6 +74,5 @@ public class TeamDto {
         final TeamDto other = (TeamDto) obj;
         return Objects.equals(this.getName(), other.getName());
     }
-
-
+    
 }

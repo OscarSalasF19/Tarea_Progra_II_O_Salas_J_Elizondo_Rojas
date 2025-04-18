@@ -1,5 +1,6 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXSlider;
@@ -57,8 +58,6 @@ public class TournamentFormController extends Controller implements Initializabl
     @FXML
     private Label txfTeamsAmount;
 
-    //private ArrayList<TeamDto> tournamentSelectedTeams;
-
     private ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
 
     private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
@@ -96,19 +95,17 @@ public class TournamentFormController extends Controller implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList((ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList"));
+        ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList(InfoManager.GetTeamList());
         tableViewTeams.setItems(fullTeamArrayList);
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         configureColumn(infoTableColumn);
 
-        //tournamentSelectedTeams = new ArrayList<>();
         tableViewSelectedTeams.setItems(observableSeletedTeams);
         infoSelectedTeamsTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         configureColumn(infoSelectedTeamsTableColumn);
 
         setupSlider();
         setupSearchListener();
-        //updateTableView();
     }
 
     private void configureColumn(TableColumn<TeamDto, String> column) {
@@ -127,7 +124,7 @@ public class TournamentFormController extends Controller implements Initializabl
                             imageView.setImage(new Image(team.getTeamImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + team.getName() + " | " + team.getTeamImageURL());
-                            team.getTeamImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
+                            team.setTeamImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
                             imageView.setImage(new Image(team.getTeamImageURL()));
                         }
                         imageView.setFitHeight(30);
@@ -150,9 +147,9 @@ public class TournamentFormController extends Controller implements Initializabl
             String searchText = newValue.toLowerCase().trim();
 
             if (!searchText.isEmpty()) {
-                ArrayList<TeamDto> fullTeamArrayList = (ArrayList<TeamDto>) AppContext.getInstance().get("FullTeamArrayList");
+                ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
                 for (TeamDto team : fullTeamArrayList) {
-                    if (team.getSportName().toLowerCase().trim().equals(searchText)) {
+                    if ((InfoManager.GetSportName(team.getSportID())).toLowerCase().trim().equals(searchText)) {
                         filteredTeamsList.add(team);
                     }
                 }
@@ -184,7 +181,7 @@ public class TournamentFormController extends Controller implements Initializabl
         String search = txfSearch.getText();
         txfSearch.setText(search + " ");
         txfSearch.setText(search);
-        tableViewSelectedTeams.refresh(); // Refrescar tabla de equipos seleccionados
+        tableViewSelectedTeams.refresh();
     }
 }
 

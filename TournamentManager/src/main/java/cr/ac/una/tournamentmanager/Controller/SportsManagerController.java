@@ -1,11 +1,10 @@
 package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.Mensaje;
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -20,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -34,11 +32,9 @@ import java.util.ResourceBundle;
 public class SportsManagerController extends Controller implements Initializable {
 
     private final StringProperty showSportPhotoURL = new SimpleStringProperty();
-    private final ObjectProperty<SportDto> showSportProperty = new SimpleObjectProperty<>();
+    private ObservableList<SportDto> filteredSportsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
-    @FXML
-    private VBox imageBox;
     @FXML
     private ImageView imageViewSportPhoto;
     @FXML
@@ -54,7 +50,7 @@ public class SportsManagerController extends Controller implements Initializable
     @FXML
     void onActionAddSport(ActionEvent event) {
         updateTableView();
-        changeValues(null); // Limpia los campos para añadir un nuevo deporte
+        changeValues(null);
     }
 
     @FXML
@@ -74,9 +70,8 @@ public class SportsManagerController extends Controller implements Initializable
                 Files.copy(chosenImage.toPath(), destinationPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 showSportPhotoURL.set(destinationPath.toURI().toString());
-                imageViewSportPhoto.setImage(new Image(showSportPhotoURL.get()));
             } catch (IOException e) {
-                System.out.println("Error al copiar la imagen: " + e.getMessage());
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Error al copiar la imagen", getStage(), "No se pudo copiar la imagen seleccionada: " + e.getMessage());
             }
         }
     }
@@ -89,7 +84,7 @@ public class SportsManagerController extends Controller implements Initializable
     @FXML
     void onActionDelete(ActionEvent event) {
         if (selectedSport != null) {
-            ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+            ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
             fullSportArrayList.remove(selectedSport);
             AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
             updateTableView();
@@ -106,9 +101,9 @@ public class SportsManagerController extends Controller implements Initializable
                 } else {
                     updateExistingSport();
                 }
+                System.out.println("Deporte guardado exitosamente.");
                 updateTableView();
                 changeValues(null);
-                System.out.println("Deporte guardado exitosamente.");
             }
         } catch (Exception ex) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error al guardar", getStage(), "Ocurrió un error al guardar el deporte: " + ex.getMessage());
@@ -126,15 +121,18 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private boolean areFieldsValid() {
-        return isSportNameValid(txfSportName.getText().trim()) &&
-                !showSportPhotoURL.get().isBlank();
+        if (showSportPhotoURL.get().isBlank()){
+           setDefaultImage();
+        }
+        return isSportNameValid(txfSportName.getText().trim());
     }
 
     private boolean isSportNameValid(String sportName) {
         if (sportName == null || sportName.isBlank()) {
+            new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, ingrese un nombre.");
             return false; // Invalid name
         }
-        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
         for (SportDto sport : fullSportArrayList) {
             if (sport.getName().equalsIgnoreCase(sportName) && !sport.equals(selectedSport)) {
                 new Mensaje().showModal(Alert.AlertType.WARNING, "Nombre Invalido", getStage(), "Por favor, escoja otro nombre que sea único.");
@@ -145,35 +143,24 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private void addNewSport() {
-        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
+        ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
         SportDto newSport = new SportDto();
         newSport.setName(txfSportName.getText().trim());
         newSport.setBallImageURL(showSportPhotoURL.get());
         fullSportArrayList.add(newSport);
-        AppContext.getInstance().set("FullSportArrayList", fullSportArrayList);
+        InfoManager.SetSportList(fullSportArrayList);
     }
 
     private void updateExistingSport() {
         selectedSport.setName(txfSportName.getText().trim());
         selectedSport.setBallImageURL(showSportPhotoURL.get());
-        //update team.setSport if needed
-
-
     }
 
     private void updateTableView() {
-        ArrayList<SportDto> fullSportArrayList = (ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList");
-        ObservableList<SportDto> filteredList = FXCollections.observableArrayList();
-
-        String searchText = txfSearch.getText().toLowerCase().trim();
-        for (SportDto sport : fullSportArrayList) {
-            if (sport.getName().toLowerCase().contains(searchText)) {
-                filteredList.add(sport);
-            }
-        }
-
-        tableViewSports.setItems(filteredList);
-        tableViewSports.refresh();
+        System.out.println("Actualizando tabla de deportes.");
+        String searchValue = txfSearch.getText();
+        txfSearch.setText(searchValue + " ");
+        txfSearch.setText(searchValue);
         tableViewSports.getSelectionModel().clearSelection();
     }
 
@@ -183,16 +170,15 @@ public class SportsManagerController extends Controller implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        bindShowSport();
         changeValues(null);
 
         ArrayList<SportDto> tempArrayList = new ArrayList<SportDto>();
         SportDto tempTeam = new SportDto();
         tempTeam.setName("VolleyBall");
         tempArrayList.add(tempTeam);
-        AppContext.getInstance().set("FullSportArrayList", tempArrayList);
+        AppContext.getInstance().set("fullSportArrayList", tempArrayList);
 
-        ObservableList<SportDto> observableSportList = FXCollections.observableArrayList((ArrayList<SportDto>) AppContext.getInstance().get("FullSportArrayList"));
+        ObservableList<SportDto> observableSportList = FXCollections.observableArrayList(InfoManager.GetSportList());
         tableViewSports.setItems(observableSportList);
 
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -212,7 +198,7 @@ public class SportsManagerController extends Controller implements Initializable
                             imageView.setImage(new Image(sport.getBallImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + sport.getName() + " | " + sport.getBallImageURL());
-                            sport.getBallImageURLProperty().set("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
+                            sport.setBallImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
                             imageView.setImage(new Image(sport.getBallImageURL()));
                         }
                         imageView.setFitHeight(30);
@@ -227,38 +213,48 @@ public class SportsManagerController extends Controller implements Initializable
             };
         });
 
-        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> { //to make the search work
-            updateTableView();
-            System.out.println("Texto cambiado de: " + oldValue + " a: " + newValue);
+        setupSearchListener();
+
+        showSportPhotoURL.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isBlank()) {
+                imageViewSportPhoto.setImage(new Image(newValue));
+            } else {
+                setDefaultImage();
+            }
         });
     }
 
-    private void bindShowSport() {
-        try {
-            showSportProperty.addListener((obs, oldVal, newVal) -> {
-                if (oldVal != null) {
-                    txfSportName.textProperty().unbindBidirectional(oldVal.getNameProperty());
-                    showSportPhotoURL.unbindBidirectional(oldVal.getBallImageURLProperty());
+    private void setupSearchListener() {
+        txfSearch.setText("");
+        txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            filteredSportsList.clear();
+            String searchText = newValue.toLowerCase().trim();
+
+            if (searchText.isEmpty()) {
+                filteredSportsList = FXCollections.observableArrayList(InfoManager.GetSportList());
+            } else {
+                ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
+                for (SportDto sport : fullSportArrayList) {
+                    if (sport.getName().trim().toLowerCase().contains(searchText)) {
+                        filteredSportsList.add(sport);
+                    }
                 }
-                if (newVal != null) {
-                    txfSportName.textProperty().bindBidirectional(newVal.getNameProperty());
-                    showSportPhotoURL.bindBidirectional(newVal.getBallImageURLProperty());
-                }
-            });
-        } catch (Exception ex) {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Error al realizar el bindeo", getStage(), "Ocurrió un error al realizar el bindeo");
-        }
+            }
+            tableViewSports.setItems(filteredSportsList);
+            tableViewSports.refresh();
+        });
     }
 
     private void changeValues(SportDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
-            showSportProperty.set(value);
-            imageViewSportPhoto.setImage(new Image(value.getBallImageURL()));
+            txfSportName.setText(value.getName());
+            showSportPhotoURL.set(value.getBallImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");
-            showSportProperty.set(new SportDto());
-            setDefaultImage();
+            txfSportName.setText("");
+            showSportPhotoURL.set("");
         }
         selectedSport = value;
     }
@@ -266,7 +262,5 @@ public class SportsManagerController extends Controller implements Initializable
     private void setDefaultImage() {
         String imagePath = "/cr/ac/una/tournamentmanager/Resources/Bola-300.png";
         showSportPhotoURL.set(imagePath);
-        Image image = new Image(getClass().getResourceAsStream(imagePath));
-        imageViewSportPhoto.setImage(image);
     }
 }
