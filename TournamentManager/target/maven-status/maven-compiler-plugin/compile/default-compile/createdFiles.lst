@@ -21,4 +21,5 @@ cr\ac\una\tournamentmanager\Util\AppContext.class
 cr\ac\una\tournamentmanager\model\SportDto.class
 cr\ac\una\tournamentmanager\Controller\TeamsManagerController.class
 cr\ac\una\tournamentmanager\Util\BindingUtils.class
+cr\ac\una\tournamentmanager\model\InfoManager$3.class
 cr\ac\una\tournamentmanager\Controller\SportsManagerController$1.class

@@ -26,4 +26,14 @@ public class MatchDto {
         this.sndTeam = sndTeam;
     }
 
+    public TeamDto tieBreaker() {
+        if (fstTeam.getPoints() > sndTeam.getPoints()) {
+            return fstTeam;
+        } else if (sndTeam.getPoints() > fstTeam.getPoints()) {
+            return sndTeam;
+        } else {
+            return fstTeam;
+        }
+    }
+
 }

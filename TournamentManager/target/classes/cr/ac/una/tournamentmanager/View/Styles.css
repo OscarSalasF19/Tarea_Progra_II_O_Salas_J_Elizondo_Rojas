@@ -74,7 +74,7 @@
 }
 
 .jfx-panel-fondo{
-    -fx-background-color: -fx-color-base-information;
+    -fx-background-color: #009999;
     -fx-opacity: 1;
 }
 
@@ -199,16 +199,6 @@
     -fx-max-width: 130px;
 }
 
-.mfx-slider .track {
-    -fx-background-color: #009999;
-}
-
-.mfx-slider .thumb {
-    -fx-background-color: #009999;
-    -fx-border-color: #006666;
-    -fx-border-width: 2px;
-}
-
 .jfx-match-display {
     -fx-background-color: -fx-base-color-theme;
     -fx-padding: 10 10 10 10;
@@ -244,6 +234,20 @@
     -fx-max-width: 200px;
 }
 
+.jfx-tournament-match-team-vbox-format {
+    -fx-background-color: -fx-base-color-titles;
+    -fx-background-radius: 5px;
+    -fx-alignment: CENTER;
+}
 
+.jfx-tournament-match-team-vbox-format > HBox > Label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
 
+.jfx-tournament-rounds {
+    -fx-max-width: Infinity;
 
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20;
+}

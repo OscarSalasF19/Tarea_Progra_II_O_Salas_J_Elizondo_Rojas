@@ -1,12 +1,14 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.MatchDto;
-import io.github.palexdev.materialfx.controls.MFXButton;
+import cr.ac.una.tournamentmanager.model.TeamDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -18,9 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MatchController extends Controller implements Initializable {
-    @FXML
-    private MFXButton btnFinishMatch;
-
     @FXML
     private ImageView imageViewBall;
 
@@ -45,6 +44,7 @@ public class MatchController extends Controller implements Initializable {
     private MatchDto match;
     private int seconds = 10;
     private Timer timer = new Timer();
+
 
     @FXML
     void onActionFinishMatch(ActionEvent event) {
@@ -86,11 +86,23 @@ public class MatchController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        startMatch();
+    }
 
+    public void setValues(MatchDto match, int SportID) {
+        this.match = match;
+
+        imageViewBall.setImage(new Image(InfoManager.GetSportImage(SportID)));
+        imageViewFstTeam.setImage(new Image(match.getFstTeam().getTeamImageURL()));
+        imageViewSndTeam.setImage(new Image(match.getSndTeam().getTeamImageURL()));
+        txfFstTeamScore.setText("0");
+        txfSndTeamScore.setText("0");
+    }
+
+    private void startMatch() {
         TimerTask task = new TimerTask() { //task to update the timer
             @Override
             public void run() {
-
                 if (seconds > 0) { //while there is time left
                     txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                     seconds--;
@@ -106,13 +118,17 @@ public class MatchController extends Controller implements Initializable {
     }
 
     private void endMatch() {
+        TournamentController tournamentController = new TournamentController();
         if (getScore(txfFstTeamScore) > getScore(txfSndTeamScore)) {
             match.getFstTeam().sumPoints(3);
+            tournamentController.weHaveAWinner(match.getFstTeam());
         } else if (getScore(txfFstTeamScore) < getScore(txfSndTeamScore)) {
             match.getSndTeam().sumPoints(3);
-        } else {
-            tieBreaker();
+            tournamentController.weHaveAWinner(match.getSndTeam());
+        } else {//apenas paara tener algo
+            tournamentController.weHaveAWinner(tieBreaker());
         }
+        closeMatch();
     }
 
     private Integer getScore(Label scoreLabel) {
@@ -123,11 +139,15 @@ public class MatchController extends Controller implements Initializable {
         }
     }
 
-    private void tieBreaker() {
+    private TeamDto tieBreaker() { //apenas para tener algo
         Exception e = new Exception("Tie-breaker logic not implemented");
-        // Implement tie-breaker logic here
-        // and update their scores accordingly.
+        match.tieBreaker().sumPoints(2);
+        return match.tieBreaker();
     }
 
+    private void closeMatch() {
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.close(); // Close the current window
+    }
 
 }

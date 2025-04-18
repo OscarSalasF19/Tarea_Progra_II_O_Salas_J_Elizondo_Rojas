@@ -1,7 +1,9 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.TeamDto;
+import cr.ac.una.tournamentmanager.model.TourneyDto;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -65,7 +67,14 @@ public class TournamentFormController extends Controller implements Initializabl
 
     @FXML
     void onActionStartTourney(ActionEvent event) {
-
+        TourneyDto tourney = new TourneyDto(
+                InfoManager.GetSportID(txfSearch.getText()),
+                (int) sliderTeamsAmount.getValue(),
+                parseInt(txfMinutes.getText()) * 60 + parseInt(txfSeconds.getText()),
+                new ArrayList<TeamDto>(observableSeletedTeams));
+        TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        tournamentController.setValues(tourney);
+        FlowController.getInstance().goView("TournamentView");
     }
 
     @FXML

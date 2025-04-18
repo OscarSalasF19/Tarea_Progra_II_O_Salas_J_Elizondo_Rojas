@@ -43,7 +43,7 @@
                <children>
                   <Label fx:id="txfTimer" styleClass="jfx-text-field-match-score" text="00:00" />
                   <HBox fillHeight="false" maxWidth="1.7976931348623157E308" minWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <MFXButton fx:id="btnFinishMatch" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="200.0" onAction="#onActionFinishMatch" text="Terminar Partido" />
+                  <MFXButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="200.0" onAction="#onActionFinishMatch" text="Terminar Partido" />
                </children>
             </HBox>
          </children>
