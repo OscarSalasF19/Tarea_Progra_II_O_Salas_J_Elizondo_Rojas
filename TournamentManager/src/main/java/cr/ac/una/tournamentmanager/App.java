@@ -1,6 +1,7 @@
 package cr.ac.una.tournamentmanager;
 
 import cr.ac.una.tournamentmanager.Util.FlowController;
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
@@ -36,7 +37,10 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        InfoManager manager = new InfoManager();
+        manager.LoadInfo();
         launch();
+        manager.saveInfo();
     }
 
 }
