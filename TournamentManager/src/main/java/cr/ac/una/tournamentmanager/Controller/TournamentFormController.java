@@ -13,10 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -69,16 +66,24 @@ public class TournamentFormController extends Controller implements Initializabl
     void onActionStartTourney(ActionEvent event) {
         int seconds;
         try {
-            seconds = parseInt(txfMinutes.getText()) * 60 + parseInt(txfSeconds.getText());
+            seconds = parseInt(txfMinutes.getText()) * 60;
+            seconds += parseInt(txfSeconds.getText());
         } catch (NumberFormatException e) {
+            System.out.println("\nError al cargar los segundos.\n");
             seconds = 100;
         }
 
+        int sportID = InfoManager.GetSportID(txfSearch.getText());
+        if (sportID == 0) {
+            sportID = observableSeletedTeams.get(0).getSportID();
+        }
+
         TourneyDto tourney = new TourneyDto(
-                InfoManager.GetSportID(txfSearch.getText()),
+                sportID,
                 (int) sliderTeamsAmount.getValue(),
                 seconds,
                 new ArrayList<TeamDto>(observableSeletedTeams));
+
         TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
         tournamentController.setValues(tourney);
         FlowController.getInstance().goView("TournamentView");
@@ -181,7 +186,8 @@ public class TournamentFormController extends Controller implements Initializabl
         sliderTeamsAmount.setMin(2);
         sliderTeamsAmount.setMax(64);
         sliderTeamsAmount.setValue(2);
-        txfTeamsAmount.setText(String.valueOf((int) sliderTeamsAmount.getValue()));
+        sliderTeamsAmount.setUnitIncrement(1);
+        txfTeamsAmount.setText("0" + String.valueOf((int) sliderTeamsAmount.getValue()));
 
         sliderTeamsAmount.setStyle("-fx-accent: #009999;");
 
@@ -193,19 +199,24 @@ public class TournamentFormController extends Controller implements Initializabl
         });
     }
 
-    private void setupNumericFilter(MFXTextField textField, int maxLength) {
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("\\D", ""));
-            } else if (newValue.length() > maxLength) {
-                textField.setText(newValue.substring(0, maxLength));
-            }
-        });
-    }
-
     private void setupTimer() {
         setupNumericFilter(txfMinutes, 2);
         setupNumericFilter(txfSeconds, 2);
+    }
+
+    private void setupNumericFilter(MFXTextField textField, int maxLength) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String cleaned = newValue.replaceAll("\\D", "");
+
+            if (cleaned.length() > maxLength) {
+                cleaned = cleaned.substring(0, maxLength);
+            }
+
+            if (!newValue.equals(cleaned)) {
+                final String finalCleaned = cleaned;
+                javafx.application.Platform.runLater(() -> textField.setText(finalCleaned));//runLater to avoid stack overflow
+            }
+        });
     }
 
     public void updateTableView() {

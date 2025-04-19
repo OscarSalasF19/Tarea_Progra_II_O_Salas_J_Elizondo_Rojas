@@ -2,9 +2,11 @@ package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,8 +15,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TournamentController extends Controller implements Initializable {
@@ -46,6 +50,7 @@ public class TournamentController extends Controller implements Initializable {
     private VBox fieldRoundSix;
 
     private TourneyDto tourney;
+    private ArrayList<ArrayList<Line>> roundLines;
 
     @FXML
     void onActionNextGame(ActionEvent event) {
@@ -58,90 +63,112 @@ public class TournamentController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //llamar a setValues
-        //setValues((TourneyDto) AppContext.getInstance().get("tourney"));
+        // setValues((TourneyDto) AppContext.getInstance().get("tourney"));
     }
 
     public void setValues(TourneyDto tourney) {
-
         this.tourney = tourney;
 
         totalAvailableSpace.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(totalAvailableSpace, Priority.ALWAYS);
 
-        fieldRoundZero.getChildren().clear();
-        constructBox(fieldRoundZero);
-
-        fieldRoundOne.getChildren().clear();
-        constructBox(fieldRoundOne);
-
-        fieldRoundTwo.getChildren().clear();
-        constructBox(fieldRoundTwo);
-
-        fieldRoundThree.getChildren().clear();
-        constructBox(fieldRoundThree);
-
-        fieldRoundFour.getChildren().clear();
-        constructBox(fieldRoundFour);
-
-        fieldRoundFive.getChildren().clear();
-        constructBox(fieldRoundFive);
-
-        fieldRoundSix.getChildren().clear();
-        constructBox(fieldRoundSix);
-
-        updateRound(fieldRoundZero, 0);
-
+        for (int i = 0; i <= 6; i++) {
+            VBox vBox = getVBoxForRound(i);
+            if (vBox != null) {
+                vBox.getChildren().clear();
+                constructBox(vBox);
+            }
+        }
+        updateRound(0);
+        roundLines = new ArrayList<>();
+        for (int i = 0; i < tourney.findHowManyRounds(); i++) {
+            roundLines.add(new ArrayList<>());
+        }
     }
 
-    public void updateRound(int round) {
+    private VBox getVBoxForRound(int round) {
         switch (round) {
-            //case 0 is impossible to happen
-            case 1:
-                updateRound(fieldRoundOne, round);
-                break;
-            case 2:
-                updateRound(fieldRoundTwo, round);
-                break;
-            case 3:
-                updateRound(fieldRoundThree,round);
-                break;
-            case 4:
-                updateRound(fieldRoundFour, round);
-                break;
-            case 5:
-                updateRound(fieldRoundFive,round);
-                break;
-            case 6:
-                updateRound(fieldRoundSix, round);
-                break;
-            default:
-                System.out.println("Invalid round");
-                break;
+            case 0: return fieldRoundZero;
+            case 1: return fieldRoundOne;
+            case 2: return fieldRoundTwo;
+            case 3: return fieldRoundThree;
+            case 4: return fieldRoundFour;
+            case 5: return fieldRoundFive;
+            case 6: return fieldRoundSix;
+            default: return null;
         }
     }
 
-    private void addEncounterBox(VBox vBox, int round, int match) {
+    public void updateRound(int roundToUpdate) {
+        ArrayList<ArrayList<TeamDto>> rounds = tourney.getTournamentRounds();
+        if (roundToUpdate >= rounds.size()) return;
 
-        VBox encounterBox = new VBox();
-        encounterBox.getStyleClass().add("jfx-tournament-match-team-vbox-format");
+        VBox currentRoundBox = getVBoxForRound(roundToUpdate);
+        if (currentRoundBox == null) return;
 
-        TeamDto team = new TeamDto();
-        try {//team 1 mini box
-            team = tourney.getTournamentRounds().get(round).get(match);
-            if (team != null) encounterBox.getChildren().add(setupHBox(team));//equipo 1
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("No hay equipo rival");
+        currentRoundBox.getChildren().clear();
+        ArrayList<TeamDto> currentRound = rounds.get(roundToUpdate);
+
+        if (roundToUpdate == 0) {
+            for (int i = 0; i < currentRound.size(); i += 2) {
+                TeamDto team1 = currentRound.get(i);
+                TeamDto team2 = (i + 1 < currentRound.size()) ? currentRound.get(i + 1) : null;
+
+                VBox matchBox = createTeamMatchBox(team1, team2);
+                currentRoundBox.getChildren().add(matchBox);
+            }
+            return;// no lines to draw
         }
 
-        try {//team 2 mini box
-            team = tourney.getTournamentRounds().get(round).get(match + 1);
-            if (team != null) encounterBox.getChildren().add(setupHBox(team));
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("No hay equipo rival");
+        ArrayList<TeamDto> previousRound = rounds.get(roundToUpdate - 1);
+        VBox previousRoundBox = getVBoxForRound(roundToUpdate - 1);
+        if (previousRoundBox == null) return;
+
+        for (Line line : roundLines.get(roundToUpdate - 1)) {
+            root.getChildren().remove(line);// remove previous lines
+        }
+        roundLines.get(roundToUpdate - 1).clear();
+
+
+        for (int i = 0; i < currentRound.size(); i += 2) {
+            TeamDto team1 = currentRound.get(i);
+            TeamDto team2 = (i + 1 < currentRound.size()) ? currentRound.get(i + 1) : null;
+
+            VBox matchBox = createTeamMatchBox(team1, team2);
+            currentRoundBox.getChildren().add(matchBox);
+
+            if (team1 != null) {
+                VBox source = findVBoxForTeam(previousRoundBox, previousRound, team1);
+                if (source != null) roundLines.get(roundToUpdate - 1).add(drawLine(source, matchBox));
+            }
+
+            if (team2 != null) {
+                VBox source = findVBoxForTeam(previousRoundBox, previousRound, team2);
+                if (source != null) roundLines.get(roundToUpdate - 1).add(drawLine(source, matchBox));
+            }
         }
 
-        vBox.getChildren().add(encounterBox);
+        root.getChildren().addAll(roundLines.get(roundToUpdate - 1));
+    }
+
+    private VBox findVBoxForTeam(VBox previousRoundBox, ArrayList<TeamDto> previousTeams, TeamDto target) {
+        for (int i = 0; i < previousTeams.size(); i++) {
+            TeamDto team = previousTeams.get(i);
+            if (team != null && team.equals(target)) {
+                return (VBox) previousRoundBox.getChildren().get(i / 2);
+            }
+        }
+        return null;
+    }
+
+    private VBox createTeamMatchBox(TeamDto team1, TeamDto team2) {
+        VBox matchBox = new VBox();
+        matchBox.getStyleClass().add("jfx-tournament-match-team-vbox-format");
+
+        if (team1 != null) matchBox.getChildren().add(setupHBox(team1));
+        if (team2 != null) matchBox.getChildren().add(setupHBox(team2));
+
+        return matchBox;
     }
 
     private void constructBox(VBox vBox) {
@@ -152,11 +179,41 @@ public class TournamentController extends Controller implements Initializable {
         vBox.setAlignment(Pos.CENTER_LEFT);
     }
 
-    private void updateRound(VBox vBox, int round) {//updates the round visually
-        vBox.getChildren().clear();
-        for (int i = 0; i < tourney.getTournamentRounds().get(round).size(); i += 2) {
-            addEncounterBox(vBox, round, i);
-        }
+    private Line drawLine(VBox sourceBox, VBox targetBox) {
+        Line line = new Line();
+        line.setStyle("-fx-stroke: #009999; -fx-stroke-width: 3;");
+
+        Runnable updateLine = () -> {
+            Point2D start = sourceBox.localToScene(sourceBox.getWidth(), sourceBox.getHeight() / 2);
+            Point2D end = targetBox.localToScene(0, targetBox.getHeight() / 2);
+
+            Point2D startInRoot = root.sceneToLocal(start);
+            Point2D endInRoot = root.sceneToLocal(end);
+
+            line.setStartX(startInRoot.getX());
+            line.setStartY(startInRoot.getY());
+            line.setEndX(endInRoot.getX());
+            line.setEndY(endInRoot.getY());
+        };
+
+        // Actualizar en cambios de layout o ventana
+        root.layoutBoundsProperty().addListener((obs, o, n) -> updateLine.run());
+        sourceBox.boundsInParentProperty().addListener((obs, o, n) -> updateLine.run());
+        targetBox.boundsInParentProperty().addListener((obs, o, n) -> updateLine.run());
+
+        sourceBox.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obsWin, oldWin, newWin) -> {
+                    if (newWin != null) {
+                        newWin.showingProperty().addListener((obsShow, wasShowing, isNowShowing) -> {
+                            if (isNowShowing) updateLine.run();
+                        });
+                    }
+                });
+            }
+        });
+
+        return line;
     }
 
     private HBox setupHBox(TeamDto team) {
@@ -165,20 +222,18 @@ public class TournamentController extends Controller implements Initializable {
         teamBox.setAlignment(Pos.CENTER_LEFT);
         teamBox.setMaxHeight(30);
         teamBox.setMaxWidth(Double.MAX_VALUE);
+
         ImageView teamImageView = new ImageView(new Image(team.getTeamImageURL()));
         teamImageView.setFitHeight(30);
         teamImageView.setFitWidth(30);
+
         Label teamNameLabel = new Label(team.getName());
 
-        teamBox.getChildren().add(teamImageView);
-        teamBox.getChildren().add(teamNameLabel);
+        teamBox.getChildren().addAll(teamImageView, teamNameLabel);
         return teamBox;
     }
 
     public void weHaveAWinner(TeamDto team) {
         tourney.weHaveAWinner(team);
     }
-
 }
-
-

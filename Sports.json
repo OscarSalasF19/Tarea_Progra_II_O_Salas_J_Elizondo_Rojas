@@ -3,5 +3,10 @@
     "sportID": 1,
     "name": "asd",
     "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  },
+  {
+    "sportID": 2,
+    "name": "q",
+    "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
   }
 ]
