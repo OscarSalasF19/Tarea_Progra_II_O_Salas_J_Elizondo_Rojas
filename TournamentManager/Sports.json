@@ -18,5 +18,10 @@
     "sportID": 4,
     "name": "ewrewrew",
     "ballImageURL": "/cr/ac/una/tournamentmanager/Resources/Bola-300.png"
+  },
+  {
+    "sportID": 5,
+    "name": "volley",
+    "ballImageURL": "file:/C:/Users/oscar/Documents/GitHub/Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/hd-yellow-blue-and-white-volleyball-ball-png-70408169487874060mrdnzifk.png"
   }
 ]
