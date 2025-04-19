@@ -3,7 +3,6 @@ package cr.ac.una.tournamentmanager.Controller;
 import cr.ac.una.tournamentmanager.Util.Mensaje;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.SportDto;
-import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -63,7 +62,7 @@ public class SportsManagerController extends Controller implements Initializable
         File chosenImage = fileChooser.showOpenDialog(imageViewSportPhoto.getScene().getWindow());
         if (chosenImage != null) {
             try {
-                String resourcesPath = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
+                String resourcesPath = "/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
                 File destinationPath = new File(resourcesPath + chosenImage.getName());
 
                 // Copy the selected file to the Resources folder
@@ -121,8 +120,8 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private boolean areFieldsValid() {
-        if (showSportPhotoURL.get().isBlank()){
-           setDefaultImage();
+        if (showSportPhotoURL.get().isBlank()) {
+            setDefaultImage();
         }
         return isSportNameValid(txfSportName.getText().trim());
     }

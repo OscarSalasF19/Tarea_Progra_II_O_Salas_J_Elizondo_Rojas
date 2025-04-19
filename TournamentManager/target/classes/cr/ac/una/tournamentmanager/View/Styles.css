@@ -217,10 +217,6 @@
     -fx-spacing: 20;
 }
 
-.jfx-match-team-vbox-format > ImageView {
-    -fx-image: url("../Resources/Grupo-300.png");
-}
-
 .jfx-text-field-match-score{
     -fx-background-color: -fx-base-color-theme;
     -fx-background-radius: 5px;
@@ -245,14 +241,12 @@
     -fx-font-weight: bold;
 }
 
-.jfx-tournament-rounds {
-    -fx-max-width: Infinity;
-
+.jfx-tournament-rounds, .jfx-tournament-rounds > HBox {
     -fx-alignment: CENTER_LEFT;
-    -fx-spacing: 20;
+    -fx-spacing: 30;
 }
+
 .jfx-text-field-Certificate-name{
-    
      -fx-background-color: -fx-base-color-theme;
     -fx-background-radius: 5px;
     -fx-text-fill: -fx-base-color-titles;

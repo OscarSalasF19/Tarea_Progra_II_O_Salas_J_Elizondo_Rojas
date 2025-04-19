@@ -2,23 +2,20 @@ package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.event.ActionEvent;
 
-import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static javafx.scene.layout.Priority.*;
 
 public class TournamentController extends Controller implements Initializable {
     @FXML
@@ -56,81 +53,67 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { //llamar a setValues
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //llamar a setValues
         //setValues((TourneyDto) AppContext.getInstance().get("tourney"));
     }
 
     public void setValues(TourneyDto tourney) {
+
         this.tourney = tourney;
+
+        totalAvailableSpace.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(totalAvailableSpace, Priority.ALWAYS);
+
         fieldRoundZero.getChildren().clear();
+        constructBox(fieldRoundZero);
+
         fieldRoundOne.getChildren().clear();
+        constructBox(fieldRoundOne);
+
         fieldRoundTwo.getChildren().clear();
+        constructBox(fieldRoundTwo);
+
         fieldRoundThree.getChildren().clear();
+        constructBox(fieldRoundThree);
+
         fieldRoundFour.getChildren().clear();
+        constructBox(fieldRoundFour);
+
         fieldRoundFive.getChildren().clear();
+        constructBox(fieldRoundFive);
+
         fieldRoundSix.getChildren().clear();
-        disableAndHideUnusedfields();
+        constructBox(fieldRoundSix);
+
+        updateRound(fieldRoundZero, 0);
+
     }
 
-    private void disableAndHideUnusedfields() {
-        fieldRoundZero.setDisable(false);
-        fieldRoundOne.setDisable(false);
-        fieldRoundTwo.setDisable(false);
-        fieldRoundThree.setDisable(false);
-        fieldRoundFour.setDisable(false);
-        fieldRoundFive.setDisable(false);
-        fieldRoundSix.setDisable(false);
-
-        switch(calculateRounds(tourney.getTotalOfTeams())) {
-            case 2:
-                fieldRoundTwo.setDisable(true);
-            case 3:
-                fieldRoundThree.setDisable(true);
-            case 4:
-                fieldRoundFour.setDisable(true);
-            case 5:
-                fieldRoundFive.setDisable(true);
-            case 6:
-                fieldRoundSix.setDisable(true);
-                break;
-        }
-    }
-
-    private int calculateRounds(int totalOfTeams) {
-        int maxTeamCapacity = 1;
-        for (int i = 1; i < totalOfTeams; i++) {
-            maxTeamCapacity *= 2;
-            if (maxTeamCapacity >= totalOfTeams) return i;
-
-        }
-        return 0;
-    }
-
-    private void updateRound(int round) {
+    public void updateRound(int round) {
         switch (round) {
-            case 0:
-                setupRound(fieldRoundZero, round);
-                break;
+            //case 0 is impossible to happen
             case 1:
-                setupRound(fieldRoundOne, round);
+                updateRound(fieldRoundOne, round);
                 break;
             case 2:
-                setupRound(fieldRoundTwo, round);
+                updateRound(fieldRoundTwo, round);
                 break;
             case 3:
-                setupRound(fieldRoundThree, round);
+                updateRound(fieldRoundThree,round);
                 break;
             case 4:
-                setupRound(fieldRoundFour, round);
+                updateRound(fieldRoundFour, round);
                 break;
             case 5:
-                setupRound(fieldRoundFive, round);
+                updateRound(fieldRoundFive,round);
                 break;
             case 6:
-                setupRound(fieldRoundSix, round);
+                updateRound(fieldRoundSix, round);
                 break;
             default:
                 System.out.println("Invalid round");
@@ -138,30 +121,42 @@ public class TournamentController extends Controller implements Initializable {
         }
     }
 
-    private void setupRound(VBox vBox, int round) {
-        vBox.getChildren().clear();
-        vBox.setSpacing(5);
-        vBox.setFillWidth(true);
-        vBox.setMaxWidth(Double.MAX_VALUE);
-        //vBox.setMaxHeight(65);
-        VBox.setVgrow(vBox, Priority.ALWAYS);//sospechar
-        vBox.setAlignment(Pos.CENTER_LEFT);
+    private void addEncounterBox(VBox vBox, int round, int match) {
 
-        for (int i = 0; i < tourney.getTournamentRounds().get(round).size(); i += 2) {
-            VBox matchBox = new VBox();
-            matchBox.getStyleClass().add("jfx-tournament-match-team-vbox-format");
+        VBox encounterBox = new VBox();
+        encounterBox.getStyleClass().add("jfx-tournament-match-team-vbox-format");
 
-            TeamDto team = tourney.getTournamentRounds().get(round).get(i);
-            matchBox.getChildren().add(setupHBox(team));//equipo 1
-
-            team = tourney.getTournamentRounds().get(round).get(i + 1);
-            if (team != null) {
-                matchBox.getChildren().add(setupHBox(team));//equipo 2
-            }
-
-            vBox.getChildren().add(matchBox);
+        TeamDto team = new TeamDto();
+        try {//team 1 mini box
+            team = tourney.getTournamentRounds().get(round).get(match);
+            if (team != null) encounterBox.getChildren().add(setupHBox(team));//equipo 1
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("No hay equipo rival");
         }
 
+        try {//team 2 mini box
+            team = tourney.getTournamentRounds().get(round).get(match + 1);
+            if (team != null) encounterBox.getChildren().add(setupHBox(team));
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("No hay equipo rival");
+        }
+
+        vBox.getChildren().add(encounterBox);
+    }
+
+    private void constructBox(VBox vBox) {
+        vBox.setSpacing(20);
+        vBox.setFillWidth(true);
+        vBox.setMaxWidth(80);
+        VBox.setVgrow(vBox, Priority.ALWAYS);
+        vBox.setAlignment(Pos.CENTER_LEFT);
+    }
+
+    private void updateRound(VBox vBox, int round) {//updates the round visually
+        vBox.getChildren().clear();
+        for (int i = 0; i < tourney.getTournamentRounds().get(round).size(); i += 2) {
+            addEncounterBox(vBox, round, i);
+        }
     }
 
     private HBox setupHBox(TeamDto team) {
@@ -169,6 +164,7 @@ public class TournamentController extends Controller implements Initializable {
         teamBox.setSpacing(5);
         teamBox.setAlignment(Pos.CENTER_LEFT);
         teamBox.setMaxHeight(30);
+        teamBox.setMaxWidth(Double.MAX_VALUE);
         ImageView teamImageView = new ImageView(new Image(team.getTeamImageURL()));
         teamImageView.setFitHeight(30);
         teamImageView.setFitWidth(30);
@@ -181,8 +177,8 @@ public class TournamentController extends Controller implements Initializable {
 
     public void weHaveAWinner(TeamDto team) {
         tourney.weHaveAWinner(team);
-        updateRound(tourney.getCurrentRound() + 1);
     }
+
 }
 
 

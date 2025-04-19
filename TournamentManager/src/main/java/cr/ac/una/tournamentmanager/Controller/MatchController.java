@@ -1,8 +1,10 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.MatchDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -22,6 +25,9 @@ import java.util.TimerTask;
 public class MatchController extends Controller implements Initializable {
     @FXML
     private ImageView imageViewBall;
+
+    @FXML
+    private Pane ballPane;
 
     @FXML
     private ImageView imageViewFstTeam;
@@ -42,9 +48,11 @@ public class MatchController extends Controller implements Initializable {
     private Label txfTimer;
 
     private MatchDto match;
-    private int seconds = 10;
-    private Timer timer = new Timer();
+    private int seconds;
+    private Timer timer;
 
+    private Double initalBallX;
+    private Double initalBallY;
 
     @FXML
     void onActionFinishMatch(ActionEvent event) {
@@ -52,32 +60,32 @@ public class MatchController extends Controller implements Initializable {
     }
 
     @FXML
+    void onMousePressedBallImage(MouseEvent event) {
+        initalBallX = event.getSceneX() - imageViewBall.getLayoutX();
+        initalBallY = event.getSceneY() - imageViewBall.getLayoutY();
+    }
+
+    @FXML
     void onMouseDraggedBallImage(MouseEvent event) {
-        imageViewBall.setLayoutX(event.getSceneX() - imageViewBall.getFitWidth() / 2);
-        imageViewBall.setLayoutY(event.getSceneY() - imageViewBall.getFitHeight() / 2);
+        imageViewBall.toFront();
+        imageViewBall.setLayoutX(event.getSceneX() - initalBallX);
+        imageViewBall.setLayoutY(event.getSceneY() - initalBallY);
     }
 
     @FXML
     void onMouseReleasedBallImage(MouseEvent event) {
-        double mouseX = event.getSceneX();
-        double mouseY = event.getSceneY();
-        System.out.println("Mouse Released at: X=" + mouseX + ", Y=" + mouseY);
-
         Bounds ballBounds = imageViewBall.localToScene(imageViewBall.getBoundsInLocal());
         Bounds fstTeamBounds = imageViewFstTeam.localToScene(imageViewFstTeam.getBoundsInLocal());
         Bounds sndTeamBounds = imageViewSndTeam.localToScene(imageViewSndTeam.getBoundsInLocal());
 
         if (ballBounds.intersects(fstTeamBounds)) {
-            System.out.println("Ball dropped on Team 1");
             txfFstTeamScore.setText(String.valueOf(getScore(txfFstTeamScore) + 1));
-
+            System.out.println("Equipo1 :" + txfFstTeamScore.getText());
         } else if (ballBounds.intersects(sndTeamBounds)) {
-            System.out.println("Ball dropped on Team 2");
             txfSndTeamScore.setText(String.valueOf(getScore(txfSndTeamScore) + 1));
-
-        } else {
-            System.out.println("Ball not dropped on any team");
+            System.out.println("Equipo2 :" + txfSndTeamScore.getText());
         }
+        imageViewBall.toFront();
     }
 
     @Override
@@ -86,49 +94,88 @@ public class MatchController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+
+    public void setValues(MatchDto match, int sportID, int seconds) {
+        this.match = match;
+        this.seconds = seconds;
+
+        imageViewBall.setImage(new Image(InfoManager.GetSportImage(sportID)));
+
+        // Asegurarse de cargar correctamente las imágenes de los equipos
+        try {
+            imageViewFstTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + match.getFstTeam().getTeamImageURL()).toExternalForm()));
+        } catch (Exception e) {
+            System.out.println("Error al cargar la imagen del primer equipo: " + e.getMessage());
+            imageViewFstTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
+        }
+
+        try {
+            imageViewSndTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + match.getSndTeam().getTeamImageURL()).toExternalForm()));
+        } catch (Exception e) {
+            System.out.println("Error al cargar la imagen del segundo equipo: " + e.getMessage());
+            imageViewSndTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
+        }
+
+        txfFstTeamScore.setText("0");
+        txfSndTeamScore.setText("0");
+
+        // Centrar la bola al iniciar (esperar al render para obtener ancho/alto)
+        Platform.runLater(() -> {
+            double centerX = ballPane.getWidth() / 2 - imageViewBall.getFitWidth() / 2;
+            double centerY = ballPane.getHeight() / 2 - imageViewBall.getFitHeight() / 2;
+            imageViewBall.setLayoutX(centerX);
+            imageViewBall.setLayoutY(centerY);
+            imageViewBall.toFront();
+        });
+
         startMatch();
     }
 
-    public void setValues(MatchDto match, int SportID) {
-        this.match = match;
-
-        imageViewBall.setImage(new Image(InfoManager.GetSportImage(SportID)));
-        imageViewFstTeam.setImage(new Image(match.getFstTeam().getTeamImageURL()));
-        imageViewSndTeam.setImage(new Image(match.getSndTeam().getTeamImageURL()));
-        txfFstTeamScore.setText("0");
-        txfSndTeamScore.setText("0");
-    }
-
     private void startMatch() {
-        TimerTask task = new TimerTask() { //task to update the timer
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        Platform.runLater(() -> {
+            txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+        });
+
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (seconds > 0) { //while there is time left
-                    txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
-                    seconds--;
-                } else {
-                    endMatch();
-                    timer.cancel(); // Stop the timer
-                    Stage stage = (Stage) root.getScene().getWindow();
-                    stage.close();// Close the current window
-                }
+                Platform.runLater(() -> {
+                    if (seconds > 0) {
+                        txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+                        seconds--;
+                    } else {
+                        endMatch();
+                        timer.cancel();
+                        closeMatch();
+                    }
+                });
             }
         };
-        timer.scheduleAtFixedRate(task, 0, 1000); //countdown every second
+        timer.scheduleAtFixedRate(task, 1000, 1000);
     }
 
     private void endMatch() {
-        TournamentController tournamentController = new TournamentController();
-        if (getScore(txfFstTeamScore) > getScore(txfSndTeamScore)) {
+        TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        int fstScore = getScore(txfFstTeamScore);
+        int sndScore = getScore(txfSndTeamScore);
+
+        if (fstScore > sndScore) {
             match.getFstTeam().sumPoints(3);
             tournamentController.weHaveAWinner(match.getFstTeam());
-        } else if (getScore(txfFstTeamScore) < getScore(txfSndTeamScore)) {
+        } else if (fstScore < sndScore) {
             match.getSndTeam().sumPoints(3);
             tournamentController.weHaveAWinner(match.getSndTeam());
-        } else {//apenas paara tener algo
-            tournamentController.weHaveAWinner(tieBreaker());
+        } else {
+            TeamDto winner = tieBreaker();
+            winner.sumPoints(2);
+            tournamentController.weHaveAWinner(winner);
         }
-        closeMatch();
     }
 
     private Integer getScore(Label scoreLabel) {
@@ -139,15 +186,13 @@ public class MatchController extends Controller implements Initializable {
         }
     }
 
-    private TeamDto tieBreaker() { //apenas para tener algo
-        Exception e = new Exception("Tie-breaker logic not implemented");
-        match.tieBreaker().sumPoints(2);
+    private TeamDto tieBreaker() {
+        // Aquí puedes poner tu lógica real, esto es un placeholder
         return match.tieBreaker();
     }
 
     private void closeMatch() {
         Stage stage = (Stage) root.getScene().getWindow();
-        stage.close(); // Close the current window
+        stage.close();
     }
-
 }

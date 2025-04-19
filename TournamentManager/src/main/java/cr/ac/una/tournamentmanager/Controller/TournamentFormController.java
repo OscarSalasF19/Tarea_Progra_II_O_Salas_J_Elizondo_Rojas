@@ -6,9 +6,9 @@ import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -61,16 +61,23 @@ public class TournamentFormController extends Controller implements Initializabl
     @FXML
     private Label txfTeamsAmount;
 
-    private ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
+    private final ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
 
-    private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
+    private final ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
 
     @FXML
     void onActionStartTourney(ActionEvent event) {
+        int seconds;
+        try {
+            seconds = parseInt(txfMinutes.getText()) * 60 + parseInt(txfSeconds.getText());
+        } catch (NumberFormatException e) {
+            seconds = 100;
+        }
+
         TourneyDto tourney = new TourneyDto(
                 InfoManager.GetSportID(txfSearch.getText()),
                 (int) sliderTeamsAmount.getValue(),
-                parseInt(txfMinutes.getText()) * 60 + parseInt(txfSeconds.getText()),
+                seconds,
                 new ArrayList<TeamDto>(observableSeletedTeams));
         TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
         tournamentController.setValues(tourney);
@@ -180,42 +187,25 @@ public class TournamentFormController extends Controller implements Initializabl
 
         sliderTeamsAmount.valueProperty().addListener((observable, oldValue, newValue) -> {
             txfTeamsAmount.setText(String.valueOf((int) newValue.doubleValue()));
-            if ((int) newValue.doubleValue() <10) {
-                txfTeamsAmount.setText("0" + String.valueOf(newValue.intValue()));
+            if ((int) newValue.doubleValue() < 10) {
+                txfTeamsAmount.setText("0" + newValue.intValue());
+            }
+        });
+    }
+
+    private void setupNumericFilter(MFXTextField textField, int maxLength) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("\\D", ""));
+            } else if (newValue.length() > maxLength) {
+                textField.setText(newValue.substring(0, maxLength));
             }
         });
     }
 
     private void setupTimer() {
-
-        txfMinutes.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {                                // "\\d" means ONLY digits, "*" means 0 or more times
-                txfMinutes.setText(newValue.replaceAll("[^\\d]", ""));      // Replace all non-digit characters with an empty string ("")
-            }
-            if (txfMinutes.getText().length() > 2) {
-                String reducedString = txfMinutes.getText().substring(0, 2);
-                txfMinutes.setText(reducedString);
-            }
-            if (txfMinutes.getText().length() == 1)
-                txfMinutes.setText("0" + txfMinutes.getText());{
-            }
-        });
-
-        txfSeconds.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                txfSeconds.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-            if (txfSeconds.getText().length() > 2) {
-                String reducedString = txfSeconds.getText().substring(0, 2);
-                txfSeconds.setText(reducedString);
-            }
-            if (parseInt(txfSeconds.getText()) > 59) {
-                txfSeconds.setText("59");
-            }
-            if (txfSeconds.getText().length() == 1)
-                txfSeconds.setText("0" + txfSeconds.getText());{
-            }
-        });
+        setupNumericFilter(txfMinutes, 2);
+        setupNumericFilter(txfSeconds, 2);
     }
 
     public void updateTableView() {

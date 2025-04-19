@@ -15,6 +15,12 @@ public class TeamDto {
         this.performance = (int) (Math.random() * 100) + 1;
     }
 
+    public TeamDto(String nombre) {
+        this.name = nombre;
+        this.sportID = 1;
+        this.performance = (int) (Math.random() * 100) + 1;
+    }
+
     public String getName() {
         return name;
     }

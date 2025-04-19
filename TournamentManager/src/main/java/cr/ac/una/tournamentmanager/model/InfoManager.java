@@ -170,7 +170,7 @@ public class InfoManager {
     public static int GetSportID(String sportName) {
         ArrayList<SportDto> sports = GetSportList();
         for (SportDto sport : sports) {
-            if (sport.getName().equals(sportName)) {
+            if (sport.getName().equalsIgnoreCase(sportName)) {
                 return sport.getID();
             }
         }

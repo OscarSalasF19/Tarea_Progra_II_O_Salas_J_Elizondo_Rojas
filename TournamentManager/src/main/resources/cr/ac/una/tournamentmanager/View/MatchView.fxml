@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.Pane?>
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="680.0" styleClass="jfx-match-display" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.MatchController">
    <children>
       <VBox layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -36,7 +37,15 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <ImageView fx:id="imageViewBall" fitHeight="150.0" fitWidth="150.0" onMouseDragged="#onMouseDraggedBallImage" onMouseReleased="#onMouseReleasedBallImage" pickOnBounds="true" preserveRatio="true" />
+                  <Pane fx:id="ballPane">
+                     <children>
+                        <ImageView fx:id="imageViewBall" fitHeight="150.0" fitWidth="150.0"
+                                   onMousePressed="#onMousePressedBallImage"
+                                   onMouseDragged="#onMouseDraggedBallImage"
+                                   onMouseReleased="#onMouseReleasedBallImage"
+                                   pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </Pane>
                </children>
             </StackPane>
             <HBox>

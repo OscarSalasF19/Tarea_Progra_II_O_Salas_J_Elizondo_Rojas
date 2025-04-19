@@ -1,6 +1,7 @@
 package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.Controller.MatchController;
+import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 
 import java.util.ArrayList;
@@ -53,19 +54,25 @@ public class TourneyDto {
             currentRound++;
         }
         if (tournamentRounds.get(currentRound).size() > 1 && currentMatch == 0) {// Check if there are more rounds
-            tournamentRounds.set(currentRound + 1, new ArrayList<TeamDto>());
+            tournamentRounds.add(new ArrayList<TeamDto>());
         }
         if (tournamentRounds.get(currentRound).size() == 1) {// Check if there is a winner
             System.out.println("El torneo ha terminado");
+            //Aqui Joshua el equipo ganador es el tournamentRounds.get(currentRound).get(0)
+
             return;
         }
 
-        MatchDto match = new MatchDto(tournamentRounds.get(currentRound).get(currentMatch), tournamentRounds.get(currentRound).get(currentMatch + 1));
-        MatchController controller = (MatchController) FlowController.getInstance().getController("MatchView");
-        controller.setValues(match, sportID);
-        FlowController.getInstance().goView("MatchView");
+        if (tournamentRounds.get(currentRound).get(currentMatch) == null && currentMatch == 0) {//check if the first team is single
+            luckyTeam(tournamentRounds.get(currentRound).get(currentMatch + 1));
+            currentMatch += 2;
+        }
 
-        currentMatch += 2;
+        MatchDto match = new MatchDto(tournamentRounds.get(currentRound).get(currentMatch), tournamentRounds.get(currentRound).get(currentMatch + 1));
+        System.out.println("\nEl partido es entre: " + currentMatch + " y " + (currentMatch + 1) + "\n");
+        MatchController controller = (MatchController) FlowController.getInstance().getController("MatchView");
+        controller.setValues(match, sportID, matchTimeSeconds);
+        FlowController.getInstance().goViewInWindowModal("MatchView", controller.getStage(), true);
     }
 
     public ArrayList<ArrayList<TeamDto>> getTournamentRounds() {
@@ -82,10 +89,36 @@ public class TourneyDto {
             }
         }
         totalOfTeams = tournamentRounds.get(0).size();
-        System.out.println("Por falta de equipos el torneo sera de " + totalOfTeams + " equipos");
+        System.out.println("Por falta de equipos el torneo sera de " + totalOfTeams + " participantes.");
     }
 
     public void weHaveAWinner(TeamDto team) {
+        TournamentController controller = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        int updateTheRound = currentRound + 1;
+
+        if (currentMatch == 0 && nextRoundSize(currentRound) % 2 != 0) { // Check if the first team may be single
+            tournamentRounds.get(currentRound + 1).add(null);
+        }
+
         tournamentRounds.get(currentRound + 1).add(team);
+        System.out.println("\nGanó el equipo: " + team.getName() + "\n");
+
+        currentMatch += 2;
+
+        if (currentMatch == tournamentRounds.get(currentRound).size() - 1) {// Check if there is a singleteam
+            luckyTeam(tournamentRounds.get(currentRound).get(currentMatch));
+            currentMatch = 0;
+            currentRound++;
+        }
+        controller.updateRound(updateTheRound);
+    }
+
+    public int nextRoundSize(int roundActual) {
+        return tournamentRounds.get(roundActual).size() / 2 + tournamentRounds.get(roundActual).size() % 2;
+    }
+
+    public void luckyTeam(TeamDto team) {
+        tournamentRounds.get(currentRound + 1).add(team);
+        System.out.println("\nPasa el equipo: " + team.getName() + "\n");
     }
 }

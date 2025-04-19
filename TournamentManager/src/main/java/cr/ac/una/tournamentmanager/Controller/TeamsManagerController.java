@@ -3,18 +3,13 @@ package cr.ac.una.tournamentmanager.Controller;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
-import com.sun.glass.ui.Cursor;
 import cr.ac.una.tournamentmanager.Util.Mensaje;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
-import cr.ac.una.tournamentmanager.util.AppContext;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
-import java.awt.image.BufferedImage;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -31,6 +26,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -38,17 +36,14 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 public class TeamsManagerController extends Controller implements Initializable {
-    
+
+    private final StringProperty showTeamPhotoURL = new SimpleStringProperty();
     private volatile boolean capturing = true;
     private Webcam webcam;
     private BufferedImage lastCapturedShot;
     private JFrame cameraWindow;
-
-    private final StringProperty showTeamPhotoURL = new SimpleStringProperty();
     private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
@@ -102,49 +97,49 @@ public class TeamsManagerController extends Controller implements Initializable 
     void onActionCamera(ActionEvent event) {
         openCameraWindow();
     }
-    
-    private void openCameraWindow(){
-        
+
+    private void openCameraWindow() {
+
         pictureBtn.setVisible(true);
         pictureBtn.setDisable(false);
         pictureBtn.setManaged(true);
         webcam = Webcam.getDefault();
         webcam.setViewSize(WebcamResolution.VGA.getSize());
         webcam.open();
-        
+
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setFillArea(true);
         panel.setMirrored(true);
-        
+
         cameraWindow = new JFrame("Camera Overview");
-        
+
         cameraWindow.add(panel);
         cameraWindow.setResizable(true);
         cameraWindow.pack();
         cameraWindow.setVisible(true);
-        
+
         capturing = true;
-        
+
         cameraWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         cameraWindow.addWindowListener(new java.awt.event.WindowAdapter() {
-        private void windowClosing(){
-            capturing = false;
-            if(webcam != null && webcam.isOpen()){
-              webcam.close();
-          }
-        }
+            private void windowClosing() {
+                capturing = false;
+                if (webcam != null && webcam.isOpen()) {
+                    webcam.close();
+                }
+            }
         });
-        
-        new Thread (() -> {
-            while (capturing){
+
+        new Thread(() -> {
+            while (capturing) {
                 BufferedImage frame = webcam.getImage();
-                if(frame != null){
+                if (frame != null) {
                     lastCapturedShot = frame;
-                    try{
+                    try {
                         Thread.sleep(100);
-                    } catch(InterruptedException e){
-                       e.printStackTrace();
-                        
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+
                     }
                 }
             }
@@ -182,10 +177,10 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     private boolean areFieldsValid() {
         if (showTeamPhotoURL.get().isBlank()) {
-            setDefaultImage(); // Establecer imagen predeterminada si no hay imagen seleccionada
+            setDefaultImage();
         }
         return isTeamNameValid(txfTeamName.getText().trim()) &&
-               isTeamSportValid(txfTeamSport.getText().trim());
+                isTeamSportValid(txfTeamSport.getText().trim());
     }
 
     private boolean isTeamNameValid(String teamName) {
@@ -260,7 +255,18 @@ public class TeamsManagerController extends Controller implements Initializable 
     public void initialize(URL url, ResourceBundle rb) {
         changeValues(null);
 
+        //si te llego en un commit borra esto
+        ArrayList<TeamDto> fullTeamArray = new ArrayList<>();
+        fullTeamArray.add(new TeamDto("A"));
+        fullTeamArray.add(new TeamDto("B"));
+        fullTeamArray.add(new TeamDto("C"));
+        fullTeamArray.add(new TeamDto("D"));
+        fullTeamArray.add(new TeamDto("E"));
+        fullTeamArray.add(new TeamDto("F"));
+        InfoManager.SetTeamList(fullTeamArray);
+
         ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList(InfoManager.GetTeamList());
+
         tableViewTeams.setItems(fullTeamArrayList);
 
         infoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -352,29 +358,29 @@ public class TeamsManagerController extends Controller implements Initializable 
 
     @FXML
     private void onActionTakeShot(ActionEvent event) throws IOException {
-        capturing  = false; 
-        
-        if(lastCapturedShot != null){
+        capturing = false;
+
+        if (lastCapturedShot != null) {
             Image image = SwingFXUtils.toFXImage(lastCapturedShot, null);
             imageViewTeamPhoto.setImage(image);
             ImageIO.write(lastCapturedShot, "PNG", new File("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png"));
         }
-        
-        if(webcam != null && webcam.isOpen()){
+
+        if (webcam != null && webcam.isOpen()) {
             webcam.close();
-            
+
         }
-        
-        if(cameraWindow != null){
+
+        if (cameraWindow != null) {
             cameraWindow.dispose();
             cameraWindow = null;
         }
-            pictureBtn.setVisible(false);
-            pictureBtn.setDisable(true);
-            pictureBtn.setManaged(false);
-            
-        }
+        pictureBtn.setVisible(false);
+        pictureBtn.setDisable(true);
+        pictureBtn.setManaged(false);
+
     }
+}
 
 
 
