@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="431.0" prefHeight="494.0" prefWidth="643.0" styleClass="jfx-match-display" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.MatchController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <VBox alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" prefHeight="82.0" prefWidth="488.0" VBox.vgrow="NEVER">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                     <children>
+                        <Label maxWidth="277.0" minWidth="362.0" prefHeight="80.0" prefWidth="362.0" styleClass="jfx-text-field-Certificate-name" text="Nombre Torneo" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="171.0" prefWidth="543.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="206.0" prefWidth="315.0" styleClass="jfx-match-team-vbox-format" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="txfFstTeamScore" alignment="CENTER" styleClass="jfx-text-field-match-score" text="Ganador del Torneo" />
+                              <ImageView fx:id="imageViewFstTeam" fitHeight="103.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Teams" />
+                              <Label fx:id="txfFstTeamScore1" styleClass="jfx-text-field-match-score" text="PTS(Obt)" />
+                              <Label fx:id="txfFstTeamScore111" maxWidth="240.0" prefHeight="40.0" prefWidth="240.0" styleClass="jfx-text-field-match-score" text="Rendimiento" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefHeight="206.0" prefWidth="315.0" styleClass="jfx-match-team-vbox-format" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="txfFstTeamScore1" styleClass="jfx-text-field-match-score" text="Deporte" />
+                              <ImageView fx:id="imageViewFstTeam1" fitHeight="103.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-image-View-Sport" />
+                              <Label fx:id="txfFstTeamScore121" maxWidth="275.0" prefHeight="40.0" prefWidth="275.0" styleClass="jfx-text-field-match-score" text="#Equipos" />
+                              <Label fx:id="txfFstTeamScore12" maxWidth="275.0" prefHeight="40.0" prefWidth="275.0" styleClass="jfx-text-field-match-score" text="Certificado por: J,J,O" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+            <HBox alignment="BOTTOM_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <MFXButton text="Exit">
+                     <graphic>
+                        <ImageView fitHeight="31.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

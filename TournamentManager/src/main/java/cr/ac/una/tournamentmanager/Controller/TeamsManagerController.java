@@ -357,8 +357,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         if(lastCapturedShot != null){
             Image image = SwingFXUtils.toFXImage(lastCapturedShot, null);
             imageViewTeamPhoto.setImage(image);
-            ImageIO.write(lastCapturedShot, "PNG", new File("Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr-ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png"));
-            showTeamPhotoURL.set("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png");
+            ImageIO.write(lastCapturedShot, "PNG", new File("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png"));
         }
         
         if(webcam != null && webcam.isOpen()){
