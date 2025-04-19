@@ -75,8 +75,11 @@ public class InfoManager {
 
     private void SaveTeams() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println("gson created");
+
         try (FileWriter writer = new FileWriter("Teams.json")) {
-            gson.toJson(AppContext.getInstance().get("FullTeamArrayList"), writer);
+            System.out.println("enter try");
+            gson.toJson((ArrayList<TeamDto>)AppContext.getInstance().get("FullTeamArrayList"), writer);
             writer.flush();
             System.out.println("All teams were saved successfully.");
         } catch (IOException s) {

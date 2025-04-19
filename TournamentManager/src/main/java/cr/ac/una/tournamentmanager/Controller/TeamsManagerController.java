@@ -218,7 +218,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         TeamDto newTeam = new TeamDto();
         newTeam.setName(txfTeamName.getText().trim());
         newTeam.setSportID(InfoManager.GetSportID(txfTeamSport.getText().trim()));
-        newTeam.setTeamImageURL(showTeamPhotoURL.get());
+        newTeam.setTeamImageURL(showTeamPhotoURL.getValue());
         fullTeamArrayList.add(newTeam);
         InfoManager.SetTeamList(fullTeamArrayList);
     }
@@ -363,7 +363,9 @@ public class TeamsManagerController extends Controller implements Initializable 
         if (lastCapturedShot != null) {
             Image image = SwingFXUtils.toFXImage(lastCapturedShot, null);
             imageViewTeamPhoto.setImage(image);
-            ImageIO.write(lastCapturedShot, "PNG", new File("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png"));
+            File file = new File("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png");
+            ImageIO.write(lastCapturedShot, "PNG", file);
+            showTeamPhotoURL.set(file.toURI().toString());
         }
 
         if (webcam != null && webcam.isOpen()) {

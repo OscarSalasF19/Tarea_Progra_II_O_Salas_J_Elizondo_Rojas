@@ -104,14 +104,14 @@ public class MatchController extends Controller implements Initializable {
 
         // Asegurarse de cargar correctamente las imágenes de los equipos
         try {
-            imageViewFstTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + match.getFstTeam().getTeamImageURL()).toExternalForm()));
+            imageViewFstTeam.setImage(new Image(match.getFstTeam().getTeamImageURL().toString()));
         } catch (Exception e) {
             System.out.println("Error al cargar la imagen del primer equipo: " + e.getMessage());
             imageViewFstTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
         }
 
         try {
-            imageViewSndTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + match.getSndTeam().getTeamImageURL()).toExternalForm()));
+            imageViewSndTeam.setImage(new Image(match.getSndTeam().getTeamImageURL().toString()));
         } catch (Exception e) {
             System.out.println("Error al cargar la imagen del segundo equipo: " + e.getMessage());
             imageViewSndTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
