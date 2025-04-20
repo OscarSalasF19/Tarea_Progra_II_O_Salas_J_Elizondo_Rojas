@@ -71,6 +71,10 @@ public class TeamsManagerController extends Controller implements Initializable 
     private Label labelTeamWins;
     @FXML
     private Label labelTeamLosses;
+    @FXML
+    private Label labelTeamPoints;
+    @FXML
+    private TextArea textAreaTournamentSummary;
 
     @FXML
     void onActionAddTeam(ActionEvent event) {
@@ -345,6 +349,7 @@ public class TeamsManagerController extends Controller implements Initializable 
             labelTeamTies.setText(String.valueOf(value.getTies()));
             labelTeamWins.setText(String.valueOf(value.getWins()));
             labelTeamLosses.setText(String.valueOf(value.getLosses()));
+            labelTeamPoints.setText(String.valueOf(value.getPoints()));
             showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");

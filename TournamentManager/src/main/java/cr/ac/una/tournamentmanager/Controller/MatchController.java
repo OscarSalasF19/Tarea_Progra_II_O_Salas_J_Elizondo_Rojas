@@ -67,18 +67,36 @@ public class MatchController extends Controller implements Initializable {
 
     @FXML
     void onActionFinishMatch(ActionEvent event) {
-        seconds = 0; // Reset the timer when the match is finished
-        if (winner != null) {
-            TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        seconds = 0;
+    if (winner != null) {
+        TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
 
-            int points = 3;
-            if (isTieBreaker) points = 2;
+        TeamDto loser = (winner.equals(match.getFstTeam())) ? match.getSndTeam() : match.getFstTeam();
+        int fstScore = getScore(txfFstTeamScore);
+        int sndScore = getScore(txfSndTeamScore);
 
-            winner.sumPoints(points);
-            tournamentController.weHaveAWinner(winner);
+        // Scores individuales
+        match.getFstTeam().setScores(match.getFstTeam().getScores() + fstScore);
+        match.getSndTeam().setScores(match.getSndTeam().getScores() + sndScore);
 
-            closeMatch();
+        if (isTieBreaker) {
+            // Empate → 2 puntos para cada uno, +1 tie
+            match.getFstTeam().setTies(match.getFstTeam().getTies() + 1);
+            match.getSndTeam().setTies(match.getSndTeam().getTies() + 1);
+
+            match.getFstTeam().sumPoints(2);
+            match.getSndTeam().sumPoints(2);
+        } else {
+            // Victoria/derrota clásica
+            winner.setWins(winner.getWins() + 1);
+            winner.sumPoints(3);
+
+            loser.setLosses(loser.getLosses() + 1);
         }
+
+        tournamentController.weHaveAWinner(winner);
+        closeMatch();
+    }
     }
 
     @FXML
