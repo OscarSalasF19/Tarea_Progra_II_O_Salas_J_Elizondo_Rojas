@@ -2,7 +2,6 @@ package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -49,7 +48,7 @@ public class TournamentController extends Controller implements Initializable {
     @FXML
     private VBox fieldRoundSix;
 
-    private TourneyDto tourney;
+    private TourneyDto tourney = null;
     private ArrayList<ArrayList<Line>> roundLines;
 
     @FXML
@@ -63,7 +62,11 @@ public class TournamentController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // setValues((TourneyDto) AppContext.getInstance().get("tourney"));
+        // Initialization logic for the controller
+    }
+
+    public TourneyDto getTourney() {
+        return tourney;
     }
 
     public void setValues(TourneyDto tourney) {
@@ -72,6 +75,7 @@ public class TournamentController extends Controller implements Initializable {
         totalAvailableSpace.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(totalAvailableSpace, Priority.ALWAYS);
 
+        // Clear and construct boxes for each round
         for (int i = 0; i <= 6; i++) {
             VBox vBox = getVBoxForRound(i);
             if (vBox != null) {
@@ -80,6 +84,8 @@ public class TournamentController extends Controller implements Initializable {
             }
         }
         updateRound(0);
+
+        // Initialize line connections for rounds
         roundLines = new ArrayList<>();
         for (int i = 0; i < tourney.findHowManyRounds(); i++) {
             roundLines.add(new ArrayList<>());
@@ -88,14 +94,22 @@ public class TournamentController extends Controller implements Initializable {
 
     private VBox getVBoxForRound(int round) {
         switch (round) {
-            case 0: return fieldRoundZero;
-            case 1: return fieldRoundOne;
-            case 2: return fieldRoundTwo;
-            case 3: return fieldRoundThree;
-            case 4: return fieldRoundFour;
-            case 5: return fieldRoundFive;
-            case 6: return fieldRoundSix;
-            default: return null;
+            case 0:
+                return fieldRoundZero;
+            case 1:
+                return fieldRoundOne;
+            case 2:
+                return fieldRoundTwo;
+            case 3:
+                return fieldRoundThree;
+            case 4:
+                return fieldRoundFour;
+            case 5:
+                return fieldRoundFive;
+            case 6:
+                return fieldRoundSix;
+            default:
+                return null;
         }
     }
 
@@ -109,6 +123,7 @@ public class TournamentController extends Controller implements Initializable {
         currentRoundBox.getChildren().clear();
         ArrayList<TeamDto> currentRound = rounds.get(roundToUpdate);
 
+        // Handle first round (no lines to draw)
         if (roundToUpdate == 0) {
             for (int i = 0; i < currentRound.size(); i += 2) {
                 TeamDto team1 = currentRound.get(i);
@@ -117,19 +132,20 @@ public class TournamentController extends Controller implements Initializable {
                 VBox matchBox = createTeamMatchBox(team1, team2);
                 currentRoundBox.getChildren().add(matchBox);
             }
-            return;// no lines to draw
+            return;
         }
 
         ArrayList<TeamDto> previousRound = rounds.get(roundToUpdate - 1);
         VBox previousRoundBox = getVBoxForRound(roundToUpdate - 1);
         if (previousRoundBox == null) return;
 
+        // Remove previous lines
         for (Line line : roundLines.get(roundToUpdate - 1)) {
-            root.getChildren().remove(line);// remove previous lines
+            root.getChildren().remove(line);
         }
         roundLines.get(roundToUpdate - 1).clear();
 
-
+        // Create match boxes and draw lines for the current round
         for (int i = 0; i < currentRound.size(); i += 2) {
             TeamDto team1 = currentRound.get(i);
             TeamDto team2 = (i + 1 < currentRound.size()) ? currentRound.get(i + 1) : null;
@@ -152,6 +168,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private VBox findVBoxForTeam(VBox previousRoundBox, ArrayList<TeamDto> previousTeams, TeamDto target) {
+        // Locate the VBox corresponding to a specific team in the previous round
         for (int i = 0; i < previousTeams.size(); i++) {
             TeamDto team = previousTeams.get(i);
             if (team != null && team.equals(target)) {
@@ -162,6 +179,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private VBox createTeamMatchBox(TeamDto team1, TeamDto team2) {
+        // Create a VBox to represent a match between two teams
         VBox matchBox = new VBox();
         matchBox.getStyleClass().add("jfx-tournament-match-team-vbox-format");
 
@@ -172,6 +190,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private void constructBox(VBox vBox) {
+        // Configure the layout properties of a VBox
         vBox.setSpacing(20);
         vBox.setFillWidth(true);
         vBox.setMaxWidth(80);
@@ -180,6 +199,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private Line drawLine(VBox sourceBox, VBox targetBox) {
+        // Draw a line connecting two VBoxes
         Line line = new Line();
         line.setStyle("-fx-stroke: #009999; -fx-stroke-width: 3;");
 
@@ -196,7 +216,7 @@ public class TournamentController extends Controller implements Initializable {
             line.setEndY(endInRoot.getY());
         };
 
-        // Actualizar en cambios de layout o ventana
+        // Update line position on layout or window changes
         root.layoutBoundsProperty().addListener((obs, o, n) -> updateLine.run());
         sourceBox.boundsInParentProperty().addListener((obs, o, n) -> updateLine.run());
         targetBox.boundsInParentProperty().addListener((obs, o, n) -> updateLine.run());
@@ -217,6 +237,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private HBox setupHBox(TeamDto team) {
+        // Create an HBox to display a team's information
         HBox teamBox = new HBox();
         teamBox.setSpacing(5);
         teamBox.setAlignment(Pos.CENTER_LEFT);
@@ -236,4 +257,15 @@ public class TournamentController extends Controller implements Initializable {
     public void weHaveAWinner(TeamDto team) {
         tourney.weHaveAWinner(team);
     }
+
+    public void winnerAnimation(TeamDto team) {
+
+
+        // Implement winner animation logic here
+        // This method can be used to animate the winning team
+
+
+    }
+
+
 }

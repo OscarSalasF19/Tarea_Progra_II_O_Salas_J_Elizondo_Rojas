@@ -24,12 +24,12 @@ public abstract class Controller {
         this.accion = accion;
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
     public Stage getStage() {
         return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public String getNombreVista() {

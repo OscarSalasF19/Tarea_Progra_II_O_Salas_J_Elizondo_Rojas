@@ -13,7 +13,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -28,43 +31,36 @@ import static java.lang.Integer.parseInt;
 
 public class TournamentFormController extends Controller implements Initializable {
 
+    private final ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
+    private final ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
-
     @FXML
     private MFXSlider sliderTeamsAmount;
-
     @FXML
     private TableView<TeamDto> tableViewTeams;
-
     @FXML
     private TableColumn<TeamDto, String> infoTableColumn;
-
     @FXML
     private TableView<TeamDto> tableViewSelectedTeams;
-
     @FXML
     private TableColumn<TeamDto, String> infoSelectedTeamsTableColumn;
-
     @FXML
     private MFXTextField txfSearch;
-
     @FXML
     private MFXTextField txfMinutes;
-
     @FXML
     private MFXTextField txfSeconds;
-
     @FXML
     private Label txfTeamsAmount;
-
-    private final ObservableList<TeamDto> observableSeletedTeams = FXCollections.observableArrayList();
-
-    private final ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
 
     @FXML
     void onActionStartTourney(ActionEvent event) {
         int seconds;
+
+        if (txfMinutes.getText().trim().isEmpty()) txfMinutes.setText("0");
+        if (txfSeconds.getText().trim().isEmpty()) txfSeconds.setText("0");
+
         try {
             seconds = parseInt(txfMinutes.getText()) * 60;
             seconds += parseInt(txfSeconds.getText());
@@ -187,7 +183,7 @@ public class TournamentFormController extends Controller implements Initializabl
         sliderTeamsAmount.setMax(64);
         sliderTeamsAmount.setValue(2);
         sliderTeamsAmount.setUnitIncrement(1);
-        txfTeamsAmount.setText("0" + String.valueOf((int) sliderTeamsAmount.getValue()));
+        txfTeamsAmount.setText("0" + (int) sliderTeamsAmount.getValue());
 
         sliderTeamsAmount.setStyle("-fx-accent: #009999;");
 

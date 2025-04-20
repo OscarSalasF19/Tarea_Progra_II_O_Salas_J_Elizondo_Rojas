@@ -80,5 +80,5 @@ public class TeamDto {
         final TeamDto other = (TeamDto) obj;
         return Objects.equals(this.getName(), other.getName());
     }
-    
+
 }

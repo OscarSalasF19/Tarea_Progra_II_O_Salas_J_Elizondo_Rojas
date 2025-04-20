@@ -56,7 +56,7 @@ public class MatchController extends Controller implements Initializable {
 
     @FXML
     void onActionFinishMatch(ActionEvent event) {
-        seconds = 0;
+        seconds = 0; // Reset the timer when the match is finished
     }
 
     @FXML
@@ -74,6 +74,7 @@ public class MatchController extends Controller implements Initializable {
 
     @FXML
     void onMouseReleasedBallImage(MouseEvent event) {
+        // Check if the ball intersects with either team's goal area
         Bounds ballBounds = imageViewBall.localToScene(imageViewBall.getBoundsInLocal());
         Bounds fstTeamBounds = imageViewFstTeam.localToScene(imageViewFstTeam.getBoundsInLocal());
         Bounds sndTeamBounds = imageViewSndTeam.localToScene(imageViewSndTeam.getBoundsInLocal());
@@ -102,16 +103,16 @@ public class MatchController extends Controller implements Initializable {
 
         imageViewBall.setImage(new Image(InfoManager.GetSportImage(sportID)));
 
-        // Asegurarse de cargar correctamente las imágenes de los equipos
+        // Load team images, fallback to default if loading fails
         try {
-            imageViewFstTeam.setImage(new Image(match.getFstTeam().getTeamImageURL().toString()));
+            imageViewFstTeam.setImage(new Image(match.getFstTeam().getTeamImageURL()));
         } catch (Exception e) {
             System.out.println("Error al cargar la imagen del primer equipo: " + e.getMessage());
             imageViewFstTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
         }
 
         try {
-            imageViewSndTeam.setImage(new Image(match.getSndTeam().getTeamImageURL().toString()));
+            imageViewSndTeam.setImage(new Image(match.getSndTeam().getTeamImageURL()));
         } catch (Exception e) {
             System.out.println("Error al cargar la imagen del segundo equipo: " + e.getMessage());
             imageViewSndTeam.setImage(new Image(getClass().getResource("/cr/ac/una/tournamentmanager/Resources/Default-Image.png").toExternalForm()));
@@ -120,7 +121,7 @@ public class MatchController extends Controller implements Initializable {
         txfFstTeamScore.setText("0");
         txfSndTeamScore.setText("0");
 
-        // Centrar la bola al iniciar (esperar al render para obtener ancho/alto)
+        // Center the ball on the pane after rendering
         Platform.runLater(() -> {
             double centerX = ballPane.getWidth() / 2 - imageViewBall.getFitWidth() / 2;
             double centerY = ballPane.getHeight() / 2 - imageViewBall.getFitHeight() / 2;
@@ -134,9 +135,10 @@ public class MatchController extends Controller implements Initializable {
 
     private void startMatch() {
         if (timer != null) {
-            timer.cancel();
+            timer.cancel(); // Cancel any existing timer
         }
 
+        // Initialize the timer display
         Platform.runLater(() -> {
             txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
         });
@@ -150,6 +152,7 @@ public class MatchController extends Controller implements Initializable {
                         txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                         seconds--;
                     } else {
+                        // End the match when the timer reaches zero
                         endMatch();
                         timer.cancel();
                         closeMatch();
@@ -157,7 +160,7 @@ public class MatchController extends Controller implements Initializable {
                 });
             }
         };
-        timer.scheduleAtFixedRate(task, 1000, 1000);
+        timer.scheduleAtFixedRate(task, 1000, 1000); // Schedule the timer to update every second
     }
 
     private void endMatch() {
@@ -192,6 +195,7 @@ public class MatchController extends Controller implements Initializable {
     }
 
     private void closeMatch() {
+        // Close the current stage
         Stage stage = (Stage) root.getScene().getWindow();
         stage.close();
     }

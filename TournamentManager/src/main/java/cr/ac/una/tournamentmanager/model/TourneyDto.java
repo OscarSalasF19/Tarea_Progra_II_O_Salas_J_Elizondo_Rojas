@@ -6,13 +6,15 @@ import cr.ac.una.tournamentmanager.Util.FlowController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TourneyDto {
 
+    private final ArrayList<ArrayList<TeamDto>> tournamentRounds = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
     private int matchTimeSeconds = 10000; // Match duration in seconds
-    private final ArrayList<ArrayList<TeamDto>> tournamentRounds = new ArrayList<>();
     private int currentRound = 0;
     private int currentMatch = 0;
 
@@ -49,11 +51,11 @@ public class TourneyDto {
     public int getsportID() {
         return sportID;
     }
-    
+
     public int getTotalOfTeams() {
         return totalOfTeams;
     }
-    
+
     public int getmatchTimeSeconds() {
         return matchTimeSeconds;
     }
@@ -74,7 +76,23 @@ public class TourneyDto {
         }
         if (tournamentRounds.get(currentRound).size() == 1) {// Check if there is a winner
             System.out.println("El torneo ha terminado");
-            //Aqui Joshua el equipo ganador es el tournamentRounds.get(currentRound).get(0)
+
+            ArrayList<TourneyDto> tournaments = InfoManager.GetTournamentList();
+            tournaments.add(this);
+            InfoManager.SetTournamentList(tournaments);
+            System.out.println("Torneo guardado con exito");
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    FlowController.getInstance().goView("TournamentFormView");
+                    FlowController.getInstance().limpiarLoader("TournamentView");
+                }
+            }, 10 * 1000);// 10,000 = 10 segundos, 1000 = 1 segundo // tiempo antes de quitar la animacion
+
+            TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+            tournamentController.winnerAnimation(tournamentRounds.get(currentRound).get(0));
 
             return;
         }
