@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.TeamsManagerController">
     <children>
         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -39,7 +32,7 @@
                      <children>
                               <TableView fx:id="tableViewTeams" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMouseClickedTeamsTable" prefHeight="337.0" prefWidth="540.0" styleClass="jfx-table-view-format" VBox.vgrow="ALWAYS">
                                   <columns>
-                                      <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Equipos" />
+                                      <TableColumn fx:id="infoTableColumn" editable="false" prefWidth="75.0" sortable="false" text="Ranking General de Equipos" />
                                   </columns>
                                   <columnResizePolicy>
                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -55,12 +48,8 @@
                               </MFXButton>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="221.0" prefWidth="540.0" spacing="5.0">
-                     <children>
-                        <Label styleClass="fx-label" text="Informacion por Torneo Equipo" />
-                        <TextArea prefHeight="285.0" prefWidth="540.0" styleClass="jfx-table-view-format" text="NameTorneo1 | Posi.Equipo |  Empates | Victorias | Derrotas" />
-                     </children>
-                  </VBox>
+                  <Label styleClass="fx-label" text="Informacion por Torneo Equipo" />
+                  <TextArea prefHeight="125.0" styleClass="jfx-table-view-format" text="NameTorneo1 | Posi.Equipo |  Empates | Victorias | Derrotas" />
                     </children>
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -35,16 +35,32 @@ public class InfoManager {
     }
 
     public static ArrayList<TeamDto> GetTeamList() {
+        System.out.println("\nObteniendo lista de equipos");
         ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("fullTeamArrayList");
         if (teams == null) {
             System.out.println("empty");
             teams = new ArrayList<TeamDto>();
             AppContext.getInstance().set("fullTeamArrayList", teams);
-            
+        } else {
+            // Sort teams by points and name
+            for (int i = 0; i < teams.size(); i++) {
+                for (int j = 0; j < teams.size() - 1; j++) {
+                    TeamDto current = teams.get(j);
+                    TeamDto next = teams.get(j + 1);
+
+                    if (current.getPoints() < next.getPoints()) {
+                        teams.set(j, next);
+                        teams.set(j + 1, current);
+                    } else if (current.getPoints() == next.getPoints()) {
+                        if (current.getName().compareToIgnoreCase(next.getName()) > 0) {
+                            teams.set(j, next);
+                            teams.set(j + 1, current);
+                        }
+                    }
+                }
+            }
         }
-         for(TeamDto team: teams){
-        System.out.println("name:" + team.getName());
-        }
+
         return teams;
     }
 
