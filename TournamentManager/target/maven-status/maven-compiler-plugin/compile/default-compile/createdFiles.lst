@@ -8,6 +8,7 @@ cr\ac\una\tournamentmanager\model\TourneyDto.class
 cr\ac\una\tournamentmanager\Util\Formato.class
 cr\ac\una\tournamentmanager\Controller\SportsManagerController.class
 cr\ac\una\tournamentmanager\Util\FlowController.class
+cr\ac\una\tournamentmanager\model\TourneyDto$1.class
 cr\ac\una\tournamentmanager\Controller\MatchController$1.class
 cr\ac\una\tournamentmanager\Controller\TournamentController.class
 cr\ac\una\tournamentmanager\Controller\Controller.class

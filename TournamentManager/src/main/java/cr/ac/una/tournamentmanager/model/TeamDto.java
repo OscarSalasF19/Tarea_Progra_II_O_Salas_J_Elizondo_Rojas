@@ -10,6 +10,10 @@ public class TeamDto {
     private int sportID = 0; // sustituye por el id del deporte
     private int globalPoins = 0; //de la clasificacion general
     private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
+    private int scores = 0; //de la clasificacion general
+    private int wins =0; //de la clasificacion general
+    private int losses =0; //de la clasificacion general
+    private int ties =0; //de la clasificacion general
 
     public TeamDto() {
         this.performance = (int) (Math.random() * 100) + 1;
@@ -59,6 +63,38 @@ public class TeamDto {
 
     public void setPerformance(int performance) {
         this.performance = performance;
+    }
+    
+     public int getScores() {
+        return this.scores;
+    }
+
+    public void setScores(int scores) {
+        this.scores = scores;
+    }
+    
+    public int getWins() {
+        return this.wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+    
+    public int getLosses() {
+        return this.losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+    
+     public int getTies() {
+        return this.ties;
+    }
+
+    public void setTies(int ties) {
+        this.ties = ties;
     }
 
     public void sumPoints(int valor) {

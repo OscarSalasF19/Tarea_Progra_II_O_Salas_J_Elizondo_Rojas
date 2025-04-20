@@ -58,12 +58,17 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     private MFXTextField txfTeamName;
     @FXML
-    private MFXTextField txfTeamPoints;
-    @FXML
     private MFXTextField txfTeamSport;
     private TeamDto selectedTeam;
-    @FXML
     private MFXButton pictureBtn;
+    @FXML
+    private Label labelTeamScores;
+    @FXML
+    private Label labelTeamTies;
+    @FXML
+    private Label labelTeamWins;
+    @FXML
+    private Label labelTeamLosses;
 
     @FXML
     void onActionAddTeam(ActionEvent event) {
@@ -339,13 +344,19 @@ public class TeamsManagerController extends Controller implements Initializable 
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             txfTeamName.setText(value.getName());
             txfTeamSport.setText(InfoManager.GetSportName(value.getSportID()));
-            txfTeamPoints.setText(String.valueOf(value.getPoints()));
+            labelTeamScores.setText(String.valueOf(value.getScores()));
+            labelTeamTies.setText(String.valueOf(value.getTies()));
+            labelTeamWins.setText(String.valueOf(value.getWins()));
+            labelTeamLosses.setText(String.valueOf(value.getLosses()));
             showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");
             txfTeamName.setText("");
             txfTeamSport.setText("");
-            txfTeamPoints.setText("");
+            labelTeamScores.setText("_");
+            labelTeamTies.setText("_");
+            labelTeamWins.setText("_");
+            labelTeamLosses.setText("_");
             showTeamPhotoURL.set("");
         }
         selectedTeam = value;
@@ -356,7 +367,6 @@ public class TeamsManagerController extends Controller implements Initializable 
         showTeamPhotoURL.set(imagePath); // Imagen predeterminada
     }
 
-    @FXML
     private void onActionTakeShot(ActionEvent event) throws IOException {
         capturing = false;
 

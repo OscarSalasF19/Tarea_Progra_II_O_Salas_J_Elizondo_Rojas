@@ -13,7 +13,7 @@
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="jfx-panel-fondo" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.SportsManagerController">
     <children>
-        <HBox alignment="CENTER" layoutX="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER" layoutX="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" styleClass="jfx-panel-fondo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
             <children>
                 <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
