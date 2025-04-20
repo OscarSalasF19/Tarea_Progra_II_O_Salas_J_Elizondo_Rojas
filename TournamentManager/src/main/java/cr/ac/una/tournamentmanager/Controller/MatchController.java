@@ -5,15 +5,19 @@ import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.MatchDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -47,16 +51,34 @@ public class MatchController extends Controller implements Initializable {
     @FXML
     private Label txfTimer;
 
+    @FXML
+    private BorderPane tieBreakerMenu;
+
+
+
     private MatchDto match;
     private int seconds;
     private Timer timer;
 
     private Double initalBallX;
     private Double initalBallY;
+    private boolean isTieBreaker = false;
+    private TeamDto winner = null;
 
     @FXML
     void onActionFinishMatch(ActionEvent event) {
         seconds = 0; // Reset the timer when the match is finished
+        if (winner != null) {
+            TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+
+            int points = 3;
+            if (isTieBreaker) points = 2;
+
+            winner.sumPoints(points);
+            tournamentController.weHaveAWinner(winner);
+
+            closeMatch();
+        }
     }
 
     @FXML
@@ -81,12 +103,35 @@ public class MatchController extends Controller implements Initializable {
 
         if (ballBounds.intersects(fstTeamBounds)) {
             txfFstTeamScore.setText(String.valueOf(getScore(txfFstTeamScore) + 1));
-            System.out.println("Equipo1 :" + txfFstTeamScore.getText());
+            System.out.println("Equipo 1 :" + txfFstTeamScore.getText());
+            if (isTieBreaker) seconds = 0;
         } else if (ballBounds.intersects(sndTeamBounds)) {
             txfSndTeamScore.setText(String.valueOf(getScore(txfSndTeamScore) + 1));
-            System.out.println("Equipo2 :" + txfSndTeamScore.getText());
+            System.out.println("Equipo 2 :" + txfSndTeamScore.getText());
+            if (isTieBreaker) seconds = 0;
         }
         imageViewBall.toFront();
+    }
+
+    @FXML
+    void onActionBtnIlegal(ActionEvent event) {
+        showTieBreakerMenuAndChildren(false);
+        Platform.runLater(() -> {
+            double centerX = ballPane.getWidth() / 2 - imageViewBall.getFitWidth() / 2;
+            double centerY = ballPane.getHeight() / 2 - imageViewBall.getFitHeight() / 2;
+            imageViewBall.setLayoutX(centerX);
+            imageViewBall.setLayoutY(centerY);
+            imageViewBall.toFront();
+        });
+        seconds = 10; // Reset the timer to 10 seconds
+        startMatch();
+    }
+
+    @FXML
+    void onActionBtnLegal(ActionEvent event) {
+        showTieBreakerMenuAndChildren(false);
+        winner = match.tieBreaker();
+        onActionFinishMatch(null);
     }
 
     @Override
@@ -130,6 +175,8 @@ public class MatchController extends Controller implements Initializable {
             imageViewBall.toFront();
         });
 
+        showTieBreakerMenuAndChildren(false);
+
         startMatch();
     }
 
@@ -155,12 +202,11 @@ public class MatchController extends Controller implements Initializable {
                         // End the match when the timer reaches zero
                         endMatch();
                         timer.cancel();
-                        closeMatch();
                     }
                 });
             }
         };
-        timer.scheduleAtFixedRate(task, 1000, 1000); // Schedule the timer to update every second
+        timer.scheduleAtFixedRate(task, 0, 1000); // Schedule the timer to update every second
     }
 
     private void endMatch() {
@@ -169,15 +215,13 @@ public class MatchController extends Controller implements Initializable {
         int sndScore = getScore(txfSndTeamScore);
 
         if (fstScore > sndScore) {
-            match.getFstTeam().sumPoints(3);
-            tournamentController.weHaveAWinner(match.getFstTeam());
-        } else if (fstScore < sndScore) {
-            match.getSndTeam().sumPoints(3);
-            tournamentController.weHaveAWinner(match.getSndTeam());
+            winner = match.getFstTeam();
+            onActionFinishMatch(null);
+            } else if (fstScore < sndScore) {
+            winner = match.getSndTeam();
+            onActionFinishMatch(null);
         } else {
-            TeamDto winner = tieBreaker();
-            winner.sumPoints(2);
-            tournamentController.weHaveAWinner(winner);
+            tieBreaker();
         }
     }
 
@@ -189,13 +233,29 @@ public class MatchController extends Controller implements Initializable {
         }
     }
 
-    private TeamDto tieBreaker() {
-        // Aquí puedes poner tu lógica real, esto es un placeholder
-        return match.tieBreaker();
+    private void tieBreaker() {
+        isTieBreaker = true;
+        showTieBreakerMenuAndChildren(true);
+    }
+
+    private void showTieBreakerMenuAndChildren(boolean show) {
+        tieBreakerMenu.setVisible(show);
+        tieBreakerMenu.setManaged(show);
+        tieBreakerMenu.setDisable(!show);
+
+        if (show) tieBreakerMenu.toFront();
+
+        for (Node child : tieBreakerMenu.getChildren()) {
+            child.setVisible(show);
+            child.setManaged(show);
+            child.setDisable(!show);
+        }
     }
 
     private void closeMatch() {
-        // Close the current stage
+        if (timer != null) timer.cancel();
+        isTieBreaker = false;
+        match = null;
         Stage stage = (Stage) root.getScene().getWindow();
         stage.close();
     }

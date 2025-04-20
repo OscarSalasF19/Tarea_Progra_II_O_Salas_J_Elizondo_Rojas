@@ -3,6 +3,7 @@ package cr.ac.una.tournamentmanager.model;
 import cr.ac.una.tournamentmanager.Controller.MatchController;
 import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -78,6 +79,10 @@ public class TourneyDto {
             System.out.println("El torneo ha terminado");
 
             ArrayList<TourneyDto> tournaments = InfoManager.GetTournamentList();
+            if (!tournaments.isEmpty() && tournaments.get(tournaments.size() - 1).equals(this)) {
+                System.out.println("El torneo ya fue guardado previamente.");
+                return;  // makes you wait for te animation to go away
+            }
             tournaments.add(this);
             InfoManager.SetTournamentList(tournaments);
             System.out.println("Torneo guardado con exito");
@@ -86,8 +91,11 @@ public class TourneyDto {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    FlowController.getInstance().goView("TournamentFormView");
-                    FlowController.getInstance().limpiarLoader("TournamentView");
+
+                    Platform.runLater(() -> {
+                        FlowController.getInstance().goView("TournamentFormView");
+                        FlowController.getInstance().limpiarLoader("TournamentView");
+                    });
                 }
             }, 10 * 1000);// 10,000 = 10 segundos, 1000 = 1 segundo // tiempo antes de quitar la animacion
 
@@ -101,6 +109,8 @@ public class TourneyDto {
             luckyTeam(tournamentRounds.get(currentRound).get(currentMatch + 1));
             currentMatch += 2;
         }
+
+        FlowController.getInstance().limpiarLoader("MatchView");
 
         MatchDto match = new MatchDto(tournamentRounds.get(currentRound).get(currentMatch), tournamentRounds.get(currentRound).get(currentMatch + 1));
         System.out.println("\nEl partido es entre: " + currentMatch + " y " + (currentMatch + 1) + "\n");

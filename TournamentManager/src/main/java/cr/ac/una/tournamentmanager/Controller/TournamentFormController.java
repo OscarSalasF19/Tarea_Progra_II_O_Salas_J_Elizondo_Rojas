@@ -6,6 +6,7 @@ import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +28,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;import javafx.scene.control.TextFormatter;
+
 
 public class TournamentFormController extends Controller implements Initializable {
 
@@ -56,7 +58,7 @@ public class TournamentFormController extends Controller implements Initializabl
 
     @FXML
     void onActionStartTourney(ActionEvent event) {
-        int seconds;
+        int seconds = 0;
 
         if (txfMinutes.getText().trim().isEmpty()) txfMinutes.setText("0");
         if (txfSeconds.getText().trim().isEmpty()) txfSeconds.setText("0");
@@ -64,14 +66,23 @@ public class TournamentFormController extends Controller implements Initializabl
         try {
             seconds = parseInt(txfMinutes.getText()) * 60;
             seconds += parseInt(txfSeconds.getText());
+            System.out.println(txfMinutes.getText() + " : " + txfSeconds.getText());
         } catch (NumberFormatException e) {
             System.out.println("\nError al cargar los segundos.\n");
-            seconds = 100;
         }
+        txfMinutes.setText("");
+        txfSeconds.setText("");
+
+        if (seconds < 5) seconds = 15;
 
         int sportID = InfoManager.GetSportID(txfSearch.getText());
         if (sportID == 0) {
-            sportID = observableSeletedTeams.get(0).getSportID();
+            try {
+                sportID = observableSeletedTeams.get(0).getSportID();
+            } catch (NullPointerException e) {
+                System.out.println("No se ha seleccionado un deporte.");
+                return;
+            }
         }
 
         TourneyDto tourney = new TourneyDto(
@@ -201,16 +212,33 @@ public class TournamentFormController extends Controller implements Initializabl
     }
 
     private void setupNumericFilter(MFXTextField textField, int maxLength) {
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String cleaned = newValue.replaceAll("\\D", "");
+        textField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getText().matches("[0-9]*")) {
+                return change;
+            }
+            return null;
+        }));
 
-            if (cleaned.length() > maxLength) {
-                cleaned = cleaned.substring(0, maxLength);
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String cleaned = newValue; //.replaceAll("\\D", ""); // Esto ahora es más bien redundante por el formatter, pero sirve
+
+            if (cleaned.length() > maxLength) cleaned = cleaned.substring(0, maxLength);
+
+
+            if (!cleaned.isEmpty()) {
+                try {
+                    int value = Integer.parseInt(cleaned);
+                    if (value >= 60) {
+                        cleaned = "59";
+                    }
+                } catch (NumberFormatException e) {
+                    cleaned = "0";
+                }
             }
 
             if (!newValue.equals(cleaned)) {
                 final String finalCleaned = cleaned;
-                javafx.application.Platform.runLater(() -> textField.setText(finalCleaned));//runLater to avoid stack overflow
+                Platform.runLater(() -> textField.setText(finalCleaned));
             }
         });
     }

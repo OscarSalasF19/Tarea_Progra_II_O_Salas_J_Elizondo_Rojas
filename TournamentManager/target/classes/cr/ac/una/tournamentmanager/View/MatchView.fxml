@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.Pane?>
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="680.0" styleClass="jfx-match-display" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.tournamentmanager.Controller.MatchController">
    <children>
       <VBox layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -18,8 +21,43 @@
                   <Label styleClass="jfx-text-field-match-score" text="MARCADOR" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-border-pane-tie-breaker" VBox.vgrow="ALWAYS">
                <children>
+                  <BorderPane fx:id="tieBreakerMenu" prefHeight="200.0" prefWidth="200.0" styleClass="jfx-match-display">
+                     <top>
+                        <Label styleClass="fx-label" text="DES-EMPATE!" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" />
+                           </BorderPane.margin>
+                        </Label>
+                     </top>
+                     <left>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label styleClass="fx-label" text="Según Reglamento" />
+                              <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" text="El ganador se elige según su rendimiento, una cualidad desconocida que entidades reguladoras usan cuando no hay ganador claro." VBox.vgrow="ALWAYS" />
+                              <MFXButton onAction="#onActionBtnLegal" styleClass="jfx-btn-legal" text="Legal">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                              </MFXButton>
+                           </children>
+                        </VBox>
+                     </left>
+                     <right>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label styleClass="fx-label" text="Corrución" />
+                              <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" text="Pues resultó que un equipo no le habían contado un punto, pero cuál equipo habrá sido?.." VBox.vgrow="ALWAYS" />
+                              <MFXButton onAction="#onActionBtnIlegal" styleClass="jfx-btn-ilegal" text="Shh..">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                              </MFXButton>
+                           </children>
+                        </VBox>
+                     </right>
+                  </BorderPane>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
                         <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" styleClass="jfx-match-team-vbox-format" HBox.hgrow="NEVER">
@@ -39,11 +77,7 @@
                   </HBox>
                   <Pane fx:id="ballPane">
                      <children>
-                        <ImageView fx:id="imageViewBall" fitHeight="150.0" fitWidth="150.0"
-                                   onMousePressed="#onMousePressedBallImage"
-                                   onMouseDragged="#onMouseDraggedBallImage"
-                                   onMouseReleased="#onMouseReleasedBallImage"
-                                   pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imageViewBall" fitHeight="150.0" fitWidth="150.0" onMouseDragged="#onMouseDraggedBallImage" onMousePressed="#onMousePressedBallImage" onMouseReleased="#onMouseReleasedBallImage" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </Pane>
                </children>
