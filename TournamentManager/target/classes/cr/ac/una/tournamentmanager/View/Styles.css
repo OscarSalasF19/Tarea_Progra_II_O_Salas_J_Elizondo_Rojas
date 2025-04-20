@@ -50,6 +50,15 @@
     -fx-background-color: #EA2222;
 }
 
+.jfx-btn-ilegal, .jfx-btn-ilegal:focused, .jfx-btn-ilegal:hover {
+    -fx-background-color: #EA2222;
+
+}
+
+.jfx-btn-legal, .jfx-btn-legal:focused, .jfx-btn-legal:hover {
+    -fx-background-color: #FFAA00;
+}
+
 .fx-label {
     -fx-text-fill: -fx-base-color-titles;
     -fx-font-size: 20px;
@@ -71,6 +80,14 @@
 
 .jfx-btn-exit > ImageView {
     -fx-image: url("../Resources/Salida-48.png");
+}
+
+.jfx-btn-ilegal > ImageView {
+    -fx-image: url("../Resources/Dollar-48.png");
+}
+
+.jfx-btn-legal > ImageView {
+    -fx-image: url("../Resources/Stats-48.png");
 }
 
 .jfx-panel-fondo{
@@ -258,4 +275,21 @@
     -fx-min-width: 400px;
     -fx-max-width: 400px;
     
+}
+
+.jfx-border-pane-tie-breaker {
+    -fx-background-color: -fx-base-color-theme;
+    -fx-background-radius: 5px;
+    -fx-border-color: -fx-base-color-titles;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10 10 10 10;
+}
+
+.jfx-border-pane-tie-breaker > VBox {
+    -fx-background-color: -fx-base-color-information;
+    -fx-background-radius: 5px;
+    -fx-padding: 10 10 10 10;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
 }
