@@ -86,6 +86,7 @@
                                             </VBox.margin>
                                         </MFXButton>
                                         <MFXButton maxWidth="1.7976931348623157E308" onAction="#onActionArchive" text="Archivo" />
+                              <MFXButton fx:id="pictureBtn" disable="true" maxWidth="1.7976931348623157E308" onAction="#onActionTakeShot" text="Shot" visible="false" />
                                     </children>
                                 </VBox>
                             </children>
