@@ -57,8 +57,8 @@
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="221.0" prefWidth="540.0" spacing="5.0">
                      <children>
-                        <Label styleClass="fx-label" text="Informacion por Torneo Equipo" />
-                        <TextArea prefHeight="285.0" prefWidth="540.0" styleClass="jfx-table-view-format" text="NameTorneo1 | Posi.Equipo |  Empates | Victorias | Derrotas" />
+                        <Label styleClass="fx-label" text="Información por Torneo Equipo" />
+                        <TextArea fx:id="textAreaTournamentSummary" editable="false" prefHeight="285.0" prefWidth="540.0" styleClass="jfx-table-view-format" />
                      </children>
                   </VBox>
                     </children>
@@ -96,11 +96,12 @@
                         </HBox>
                         <MFXTextField fx:id="txfTeamName" maxWidth="1.7976931348623157E308" promptText="Nombre" styleClass="jfx-text-field-smaller" />
                         <MFXTextField fx:id="txfTeamSport" maxWidth="1.7976931348623157E308" promptText="Deporte" styleClass="jfx-text-field-smaller" />
-                  <Label styleClass="fx-label" text="Ranking Global" />
+                  <Label prefHeight="30.0" prefWidth="192.0" styleClass="fx-label" text="Estadisticas Global" />
                   <HBox maxHeight="1.7976931348623157E308" prefHeight="152.0" prefWidth="180.0" spacing="10.0" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox prefHeight="190.0" prefWidth="195.0" spacing="10.0">
                            <children>
+                              <MFXTextField editable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefWidth="105.0" promptText="Puntos Globales" styleClass="jfx-text-field-smaller" />
                               <MFXTextField editable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefWidth="105.0" promptText="Anotaciones Totales" styleClass="jfx-text-field-smaller" />
                               <MFXTextField editable="false" maxWidth="1.7976931348623157E308" prefWidth="105.0" promptText="Total Empates" styleClass="jfx-text-field-smaller" />
                               <MFXTextField editable="false" maxWidth="1.7976931348623157E308" prefWidth="105.0" promptText="Total victorias" styleClass="jfx-text-field-smaller" />
@@ -112,6 +113,12 @@
                         </VBox>
                         <VBox prefHeight="120.0" prefWidth="103.0" spacing="10.0">
                            <children>
+                              <HBox layoutX="10.0" layoutY="136.0" prefHeight="32.0" prefWidth="71.0" spacing="3.0">
+                                 <children>
+                                    <Label styleClass="fx-label" text="#" />
+                                    <Label fx:id="labelTeamPoints" styleClass="fx-label" />
+                                 </children>
+                              </HBox>
                               <HBox layoutX="10.0" layoutY="134.0" prefHeight="32.0" prefWidth="71.0" spacing="3.0">
                                  <children>
                                     <Label styleClass="fx-label" text="#" />
