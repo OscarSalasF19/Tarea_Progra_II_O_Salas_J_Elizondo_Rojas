@@ -19,11 +19,11 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FlowController.getInstance().InitializeFlow(stage, null);
-        scene = new Scene(loadFXML("PrincipalView"), 640, 480);
+        scene = new Scene(loadFXML("PrincipalView"), 780, 610);
         MFXThemeManager.addOn(scene,Themes.DEFAULT,Themes.LEGACY);
         stage.setScene(scene);
-        stage.setMinHeight(500.0);
-        stage.setMinWidth(720.0);
+        stage.setMinWidth(780.0);
+        stage.setMinHeight(610.0);
         stage.show();
     }
 

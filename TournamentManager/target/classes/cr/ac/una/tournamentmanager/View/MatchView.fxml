@@ -23,17 +23,6 @@
             </VBox>
             <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-border-pane-tie-breaker" VBox.vgrow="ALWAYS">
                <children>
-<<<<<<< HEAD
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="jfx-panel-fondo">
-                     <top>
-                        <Label styleClass="fx-label" text="DES-EMPATE!" BorderPane.alignment="CENTER" />
-                     </top>
-                     <left>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
-                     </left>
-                     <right>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
-=======
                   <BorderPane fx:id="tieBreakerMenu" prefHeight="200.0" prefWidth="200.0" styleClass="jfx-match-display">
                      <top>
                         <Label styleClass="fx-label" text="DES-EMPATE!" BorderPane.alignment="CENTER">
@@ -67,7 +56,6 @@
                               </MFXButton>
                            </children>
                         </VBox>
->>>>>>> 8da559e848712eb7e0e280bc4843f97c50eae7b7
                      </right>
                   </BorderPane>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
