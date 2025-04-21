@@ -5,6 +5,8 @@ import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import javafx.application.Platform;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Timer;
@@ -15,18 +17,30 @@ public class TourneyDto {
     private final ArrayList<ArrayList<TeamDto>> tournamentRounds = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
-    private int matchTimeSeconds = 10000; // Match duration in seconds
+    private int matchTimeSeconds = 10000;
     private int currentRound = 0;
     private int currentMatch = 0;
+
+    private final int numberOfRounds;
+    private final String creationDate;     // solo la fecha: "20-04-2025"
+    private final String creationTime;     // solo la hora: "14:45:30"
+
 
     public TourneyDto(int sportID, int totalOfTeams, int matchTimeSeconds, ArrayList<TeamDto> teams) {
         this.sportID = sportID;
         this.totalOfTeams = totalOfTeams;
         this.matchTimeSeconds = matchTimeSeconds;
         tournamentRounds.add(teams);
+        
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        Iterator<TeamDto> iterator = tournamentRounds.get(0).iterator(); //if the first team needs to be remove pops exceptio
-        while (iterator.hasNext()) {// a solution for that
+        this.creationDate = now.format(dateFormatter);
+        this.creationTime = now.format(timeFormatter);
+
+        Iterator<TeamDto> iterator = tournamentRounds.get(0).iterator();
+        while (iterator.hasNext()) {
             TeamDto team = iterator.next();
             if (team.getSportID() != sportID) {
                 System.out.println("El equipo " + team.getName() + " no es del deporte " + InfoManager.GetSportName(sportID));
@@ -40,13 +54,15 @@ public class TourneyDto {
 
         if (totalOfTeams == 1) {
             System.out.println("El torneo no se puede realizar, solo hay un equipo.");
+            numberOfRounds = 0;
             return;
         }
 
-        for (int i = 0; i < findHowManyRounds(); i++) {
+        this.numberOfRounds = findHowManyRounds();
+
+        for (int i = 0; i < numberOfRounds; i++) {
             tournamentRounds.add(new ArrayList<>());
         }
-
     }
 
     public int getsportID() {
@@ -69,20 +85,37 @@ public class TourneyDto {
         return currentMatch;
     }
 
-    public void nextMatch() {
+    public int getNumberOfRounds() {
+        return numberOfRounds;
+    }
 
-        if (currentMatch >= tournamentRounds.get(currentRound).size()) {// Check if there are more matches in the current round
+    public String getCreationDate() {
+    return creationDate;
+    }
+
+    public String getCreationTime() {
+    return creationTime;
+    }
+
+    public void nextMatch() {
+        if (currentMatch >= tournamentRounds.get(currentRound).size()) {
             currentMatch = 0;
             currentRound++;
         }
-        if (tournamentRounds.get(currentRound).size() == 1) {// Check if there is a winner
+
+        if (tournamentRounds.get(currentRound).size() == 1) {
             System.out.println("El torneo ha terminado");
 
             ArrayList<TourneyDto> tournaments = InfoManager.GetTournamentList();
             if (!tournaments.isEmpty() && tournaments.get(tournaments.size() - 1).equals(this)) {
                 System.out.println("El torneo ya fue guardado previamente.");
-                return;  // makes you wait for te animation to go away
+                return;
             }
+            
+            System.out.println("⚠️ Se va a crear el certificado del ganador...");
+            TeamDto winner = tournamentRounds.get(currentRound).get(0);
+            InfoManager.createWinnerCertificate(winner, this);
+            
             tournaments.add(this);
             InfoManager.SetTournamentList(tournaments);
             System.out.println("Torneo guardado con exito");
@@ -91,13 +124,12 @@ public class TourneyDto {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
                     Platform.runLater(() -> {
                         FlowController.getInstance().goView("TournamentFormView");
                         FlowController.getInstance().limpiarLoader("TournamentView");
                     });
                 }
-            }, 10 * 1000);// 10,000 = 10 segundos, 1000 = 1 segundo // tiempo antes de quitar la animacion
+            }, 10 * 1000);
 
             TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
             tournamentController.winnerAnimation(tournamentRounds.get(currentRound).get(0));
@@ -105,7 +137,7 @@ public class TourneyDto {
             return;
         }
 
-        if (tournamentRounds.get(currentRound).get(currentMatch) == null && currentMatch == 0) {//check if the first team is single
+        if (tournamentRounds.get(currentRound).get(currentMatch) == null && currentMatch == 0) {
             luckyTeam(tournamentRounds.get(currentRound).get(currentMatch + 1));
             currentMatch += 2;
         }
@@ -140,7 +172,7 @@ public class TourneyDto {
         TournamentController controller = (TournamentController) FlowController.getInstance().getController("TournamentView");
         int updateTheRound = currentRound + 1;
 
-        if (currentMatch == 0 && nextRoundSize(currentRound) != 1 && nextRoundSize(currentRound) % 2 != 0) { // Check if the first team MAY be single
+        if (currentMatch == 0 && nextRoundSize(currentRound) != 1 && nextRoundSize(currentRound) % 2 != 0) {
             tournamentRounds.get(currentRound + 1).add(null);
             System.out.println("\nSe añade equipo nulo\n");
         }
@@ -148,9 +180,9 @@ public class TourneyDto {
         tournamentRounds.get(currentRound + 1).add(team);
         System.out.println("\nGanó el equipo: " + team.getName() + "\n");
 
-        currentMatch += 2; // Next match
+        currentMatch += 2;
 
-        if (currentMatch + 1 == tournamentRounds.get(currentRound).size()) {// Check if there is a singleteam
+        if (currentMatch + 1 == tournamentRounds.get(currentRound).size()) {
             luckyTeam(tournamentRounds.get(currentRound).get(currentMatch));
             currentMatch = 0;
             currentRound++;
@@ -176,4 +208,9 @@ public class TourneyDto {
         tournamentRounds.get(currentRound + 1).add(team);
         System.out.println("\nPasa el equipo: " + team.getName() + "\n");
     }
+    
+    
+    
+    
+    
 }

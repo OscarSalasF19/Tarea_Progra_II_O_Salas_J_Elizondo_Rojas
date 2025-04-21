@@ -58,7 +58,7 @@
                   <VBox alignment="TOP_CENTER" prefHeight="221.0" prefWidth="540.0" spacing="5.0">
                      <children>
                         <Label styleClass="fx-label" text="Información por Torneo Equipo" />
-                        <TextArea prefHeight="285.0" prefWidth="540.0" styleClass="jfx-table-view-format" text="NameTorneo1 | Posi.Equipo |  Empates | Victorias | Derrotas" />
+                        <TextArea fx:id="textAreaTournamentSummary" editable="false" prefHeight="285.0" prefWidth="540.0" styleClass="jfx-table-view-format" />
                      </children>
                   </VBox>
                     </children>
