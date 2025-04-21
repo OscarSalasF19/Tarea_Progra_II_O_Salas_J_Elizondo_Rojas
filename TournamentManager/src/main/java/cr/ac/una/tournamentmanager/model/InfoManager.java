@@ -129,8 +129,8 @@ public class InfoManager {
         return null;
     }
 
-    public static TeamDto GetTeam(int teamID) {
-        if (teamID == 0) {
+    public static TeamDto GetTeam(Integer teamID) {
+        if (teamID == 0 || teamID == null) {
             return null;
         }
         ArrayList<TeamDto> teams = GetTeamList();
@@ -293,7 +293,7 @@ public class InfoManager {
             teamInfo.add(new Chunk("\nEquipo ganador: ", boldFont));
             teamInfo.add(new Chunk(winner.getName() + "\n", normalFont));
             teamInfo.add(new Chunk("Deporte: ", boldFont));
-            teamInfo.add(new Chunk(GetSportName(winner.getSportID()) + "\n", normalFont));
+            teamInfo.add(new Chunk(GetSport(winner.getSportID()).getName() + "\n", normalFont));
             document.add(teamInfo);
 
             Paragraph tournamentInfo = new Paragraph();

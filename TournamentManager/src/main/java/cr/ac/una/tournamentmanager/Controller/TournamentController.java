@@ -114,7 +114,7 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     public void updateRound(int roundToUpdate) {
-        ArrayList<ArrayList<TeamDto>> rounds = tourney.getTournamentRounds();
+        ArrayList<ArrayList<TeamDto>> rounds = tourney.getTournamentRoundsTeams();
         if (roundToUpdate >= rounds.size()) return;
 
         VBox currentRoundBox = getVBoxForRound(roundToUpdate);
