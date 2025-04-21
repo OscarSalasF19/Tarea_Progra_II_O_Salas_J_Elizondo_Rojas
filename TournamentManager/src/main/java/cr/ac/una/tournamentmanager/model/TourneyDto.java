@@ -5,6 +5,8 @@ import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import javafx.application.Platform;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Timer;
@@ -15,9 +17,14 @@ public class TourneyDto {
     private final ArrayList<ArrayList<TeamDto>> tournamentRounds = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
-    private int matchTimeSeconds = 10000; // Match duration in seconds
+    private int matchTimeSeconds = 10000;
     private int currentRound = 0;
     private int currentMatch = 0;
+
+    private final int numberOfRounds;
+    private final String creationDate;     // solo la fecha: "20-04-2025"
+    private final String creationTime;     // solo la hora: "14:45:30"
+
 
     public TourneyDto(int sportID, int totalOfTeams, int matchTimeSeconds, ArrayList<TeamDto> teams) {
         this.sportID = sportID;
@@ -27,8 +34,15 @@ public class TourneyDto {
         currentRound = 0;
         currentMatch = 0;
 
-        Iterator<TeamDto> iterator = tournamentRounds.get(0).iterator(); //if the first team needs to be remove pops exceptio
-        while (iterator.hasNext()) {// a solution for that
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        this.creationDate = now.format(dateFormatter);
+        this.creationTime = now.format(timeFormatter);
+
+        Iterator<TeamDto> iterator = tournamentRounds.get(0).iterator();
+        while (iterator.hasNext()) {
             TeamDto team = iterator.next();
             if (team.getSportID() != sportID) {
                 System.out.println("El equipo " + team.getName() + " no es del deporte " + InfoManager.GetSport(sportID).getName());
@@ -43,13 +57,15 @@ public class TourneyDto {
 
         if (totalOfTeams == 1) {
             System.out.println("El torneo no se puede realizar, solo hay un equipo.");
+            numberOfRounds = 0;
             return;
         }
 
-        for (int i = 0; i < findHowManyRounds(); i++) {
+        this.numberOfRounds = findHowManyRounds();
+
+        for (int i = 0; i < numberOfRounds; i++) {
             tournamentRounds.add(new ArrayList<>());
         }
-
     }
 
     public int getsportID() {
@@ -72,21 +88,36 @@ public class TourneyDto {
         return currentMatch;
     }
 
-    public void nextMatch() {
+    public int getNumberOfRounds() {
+        return numberOfRounds;
+    }
 
-        if (currentMatch >= tournamentRounds.get(currentRound).size()) {// Check if there are more matches in the current round
+    public String getCreationDate() {
+    return creationDate;
+    }
+
+    public String getCreationTime() {
+    return creationTime;
+    }
+
+    public void nextMatch() {
+        if (currentMatch >= tournamentRounds.get(currentRound).size()) {
             currentMatch = 0;
             currentRound++;
         }
-        if (tournamentRounds.get(currentRound).size() == 1) {// Check if there is a winner
+
+        if (tournamentRounds.get(currentRound).size() == 1) {
             System.out.println("El torneo ha terminado");
 
             ArrayList<TourneyDto> tournaments = InfoManager.GetTournamentList();
             if (!tournaments.isEmpty() && tournaments.get(tournaments.size() - 1).equals(this)) {
                 System.out.println("El torneo ya fue guardado previamente.");
-                return;  // makes you wait for te animation to go away
+                return;
             }
-            //de aqui para abajo se ejecuta solo una vez por torneo cuando termina
+
+            System.out.println("⚠️ Se va a crear el certificado del ganador...");
+            TeamDto winner = tournamentRounds.get(currentRound).get(0);
+            InfoManager.createWinnerCertificate(winner, this);
 
             tournaments.add(this);
             InfoManager.SetTournamentList(tournaments);
@@ -180,4 +211,5 @@ public class TourneyDto {
         tournamentRounds.get(currentRound + 1).add(team);
         System.out.println("\nPasa el equipo: " + team.getName() + "\n");
     }
+
 }

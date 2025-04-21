@@ -8,14 +8,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import cr.ac.una.tournamentmanager.util.AppContext;
-
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import java.net.URL;
+import java.net.URISyntaxException;
+import java.awt.Color;
+
 
 public class InfoManager {
 
@@ -245,4 +253,73 @@ public class InfoManager {
         SaveTournaments();
         saveSports();
     }
+    
+    public static void createWinnerCertificate(TeamDto winner, TourneyDto tournament) {
+        String folderPath = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Certificados";
+        File folder = new File(folderPath);
+        if (!folder.exists()) folder.mkdirs();
+
+        String sanitizedName = winner.getName().replaceAll("\\s+", "_");
+        String fileName = folderPath + File.separator + "Certificado_" + sanitizedName + ".pdf";
+
+        try {
+            Document document = new Document(PageSize.A4, 36, 36, 36, 36);
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
+            document.open();
+
+            Font titleFont = new Font(Font.HELVETICA, 24, Font.BOLD, Color.BLACK);
+            Paragraph title = new Paragraph("🏆 CERTIFICADO DE CAMPEÓN 🏆\n\n", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            try {
+                String uriPath = winner.getTeamImageURL();
+                String imagePath = new File(new URL(uriPath).toURI()).getAbsolutePath();
+                Image image = Image.getInstance(imagePath);
+                image.scaleToFit(180, 180);
+                image.setAlignment(Image.ALIGN_CENTER);
+                document.add(image);
+            } catch (Exception e) {
+                Paragraph error = new Paragraph("\n⚠ No se pudo cargar la imagen del equipo.\n");
+                error.setAlignment(Element.ALIGN_CENTER);
+                document.add(error);
+            }
+
+            Font boldFont = new Font(Font.HELVETICA, 14, Font.BOLD, Color.BLACK);
+            Font normalFont = new Font(Font.HELVETICA, 14, Font.NORMAL, Color.BLACK);
+
+            Paragraph teamInfo = new Paragraph();
+            teamInfo.setAlignment(Element.ALIGN_CENTER);
+            teamInfo.add(new Chunk("\nEquipo ganador: ", boldFont));
+            teamInfo.add(new Chunk(winner.getName() + "\n", normalFont));
+            teamInfo.add(new Chunk("Deporte: ", boldFont));
+            teamInfo.add(new Chunk(GetSportName(winner.getSportID()) + "\n", normalFont));
+            document.add(teamInfo);
+
+            Paragraph tournamentInfo = new Paragraph();
+            tournamentInfo.setAlignment(Element.ALIGN_CENTER);
+            tournamentInfo.add(new Chunk("\n📋 Información del Torneo:\n", boldFont));
+            tournamentInfo.add(new Chunk("- Número de equipos: " + tournament.getTotalOfTeams() + "\n", normalFont));
+            tournamentInfo.add(new Chunk("- Rondas jugadas: " + tournament.getNumberOfRounds() + "\n", normalFont));
+            tournamentInfo.add(new Chunk("- Fecha: " + tournament.getCreationDate() + "\n", normalFont));
+            tournamentInfo.add(new Chunk("- Hora: " + tournament.getCreationTime() + "\n", normalFont));
+            document.add(tournamentInfo);
+
+            Paragraph congratulations = new Paragraph("\n¡Felicidades por su excelente desempeño!\n", normalFont);
+            congratulations.setAlignment(Element.ALIGN_CENTER);
+            document.add(congratulations);
+
+            Font footerFont = new Font(Font.HELVETICA, 10, Font.ITALIC, new Color(102, 102, 102));
+            Paragraph footer = new Paragraph("\nEste certificado está avalado por la Asociación de Torneos y Deportes O.S.J.E.J.R\n", footerFont);
+            footer.setAlignment(Element.ALIGN_CENTER);
+            document.add(footer);
+
+            document.close();
+            System.out.println("✅ Certificado PDF generado: " + fileName);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "❌ Error al crear el certificado PDF", e);
+        }
+    }
+    
+    
 }
