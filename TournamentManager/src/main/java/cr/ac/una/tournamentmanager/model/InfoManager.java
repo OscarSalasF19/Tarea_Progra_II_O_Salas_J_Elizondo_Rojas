@@ -7,6 +7,8 @@ package cr.ac.una.tournamentmanager.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import cr.ac.una.tournamentmanager.Controller.TournamentController;
+import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.util.AppContext;
 import java.io.File;
 import java.io.FileReader;
@@ -313,14 +315,19 @@ public class InfoManager {
     public static void deleteTeam(int teamID) {
         ArrayList<TourneyDto> tournaments = GetTournamentList();
 
+        TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        TourneyDto currentTourney = tournamentController.getTourney();
+        if (currentTourney != null && currentTourney.getTournamentRoundsID().get(0).contains(teamID)) {
+            System.out.println("\nEl equipo " + GetTeam(teamID).getName() +" no se puede eliminar porque está en participando en el torneo actual.");
+            return;
+        }
+
         for (TourneyDto tourney : tournaments) {// Look into all tournaments
+            if (tourney.getTournamentRoundsID() == null) continue; // If the tournament has no rounds, skip it
             for (ArrayList<Integer> round : tourney.getTournamentRoundsID()) {// Look in the rounds
                 int index = round.indexOf(teamID);// Look for the team you want to delete
-                if (index != -1) { // If the team is in the round
-                    round.set(index, -teamID);// delete the team id
-                } else {
-                    break; // Go to the next tournament
-                }
+                if (index != -1)  round.set(index, -teamID);// replace the team Id
+                else break; // go to next tourney
             }
         }
 

@@ -165,7 +165,6 @@ public class TourneyDto {
 
         FlowController.getInstance().limpiarLoader("MatchView");
 
-        //experimento
         TeamDto fstTeam = InfoManager.GetTeam(tournamentRoundsID.get(currentRound).get(currentMatch));
         TeamDto sndTeam = InfoManager.GetTeam(tournamentRoundsID.get(currentRound).get(currentMatch + 1));
 
@@ -187,13 +186,14 @@ public class TourneyDto {
         tournamentRoundsTeams.add(firstRoundTeams);
 
         for (int i = 1; i < tournamentRoundsID.size(); i++) {
+            //if (tournamentRoundsID.get(i).isEmpty()) break;
             ArrayList<TeamDto> currentRoundTeams = new ArrayList<>();
             ArrayList<Integer> currentRoundIDs = tournamentRoundsID.get(i);
 
             if (!currentRoundIDs.isEmpty() && currentRoundIDs.get(0) == null) currentRoundTeams.add(null);
 
             for (TeamDto team : tournamentRoundsTeams.get(i - 1)) {
-                if (currentRoundIDs.contains(team.getID())) {
+                if (team != null && currentRoundIDs.contains(team.getID())) {
                     currentRoundTeams.add(team);
                 }
             }
@@ -201,9 +201,7 @@ public class TourneyDto {
             tournamentRoundsTeams.add(currentRoundTeams);
         }
 
-        return tournamentRoundsTeams;//hasta aca
-
-        //return tournamentRounds;
+        return tournamentRoundsTeams;
     }
 
     public void searchForNewTeams(int cuantity) {

@@ -341,10 +341,11 @@ public class TeamsManagerController extends Controller implements Initializable 
             tableViewTeams.setItems(filteredTeamsList);
             tableViewTeams.refresh();
         });
+        txfSearch.setText(" ");
         txfSearch.setText("");
     }
 
-    private void changeValues(TeamDto value) {
+    public void changeValues(TeamDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             txfTeamName.setText(value.getName());

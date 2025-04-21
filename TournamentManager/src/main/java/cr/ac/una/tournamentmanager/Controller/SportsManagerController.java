@@ -229,9 +229,11 @@ public class SportsManagerController extends Controller implements Initializable
             tableViewSports.setItems(filteredSportsList);
             tableViewSports.refresh();
         });
+        txfSearch.setText(" ");
+        txfSearch.setText("");
     }
 
-    private void changeValues(SportDto value) {
+    public void changeValues(SportDto value) {
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             txfSportName.setText(value.getName());

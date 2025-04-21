@@ -81,12 +81,11 @@ public class TournamentFormController extends Controller implements Initializabl
 
         if (InfoManager.GetSport(txfSearch.getText()) != null) sportID = InfoManager.GetSport(txfSearch.getText()).getID();
         if (sportID == 0) {
-            try {
-                sportID = observableSeletedTeams.get(0).getSportID();
-            } catch (NullPointerException e) {
+            if (observableSeletedTeams.size() == 0) {
                 System.out.println("No se ha seleccionado un deporte.");
                 return;
             }
+
         }
 
         TourneyDto tourney = new TourneyDto(

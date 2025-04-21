@@ -176,14 +176,12 @@ public class FlowController {
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
 
-        //experimento
         if (parentStage != null) {
             stage.initOwner(parentStage);
         }else {
             stage.initOwner(this.mainStage);
         }
 
-        //stage.initOwner(parentStage); esta linea no forma parte del experimento
         stage.centerOnScreen();
         stage.showAndWait();
 
