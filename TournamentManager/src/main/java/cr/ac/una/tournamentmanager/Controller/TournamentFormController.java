@@ -2,6 +2,7 @@ package cr.ac.una.tournamentmanager.Controller;
 
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.model.InfoManager;
+import cr.ac.una.tournamentmanager.model.SportDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
 import io.github.palexdev.materialfx.controls.MFXSlider;
@@ -179,14 +180,13 @@ public class TournamentFormController extends Controller implements Initializabl
             filteredTeamsList.clear();
             String searchText = newValue.toLowerCase().trim();
 
-            if (!searchText.isEmpty()) {
-                ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
-                for (TeamDto team : fullTeamArrayList) {
-                    if ((InfoManager.GetSport(team.getSportID()).getName()).toLowerCase().trim().equals(searchText)) {
-                        filteredTeamsList.add(team);
-                    }
-                }
-            }
+            filteredTeamsList.addAll(InfoManager.GetTeamList());
+            filteredTeamsList.removeIf(team -> team.getID() <= 0);
+
+            SportDto sport = InfoManager.GetSport(searchText);
+            if (sport != null) filteredTeamsList.removeIf(team -> team.getSportID() != sport.getID());
+            else filteredTeamsList.clear();
+
             tableViewTeams.setItems(filteredTeamsList);
             tableViewTeams.refresh();
         });

@@ -24,7 +24,6 @@ import java.net.URL;
 import java.net.URISyntaxException;
 import java.awt.Color;
 
-
 public class InfoManager {
 
     private static final Logger LOGGER = Logger.getLogger(InfoManager.class.getName());
@@ -43,32 +42,12 @@ public class InfoManager {
     }
 
     public static ArrayList<TeamDto> GetTeamList() {
-        System.out.println("\nObteniendo lista de equipos");
         ArrayList<TeamDto> teams = (ArrayList<TeamDto>) AppContext.getInstance().get("fullTeamArrayList");
         if (teams == null) {
             System.out.println("empty");
             teams = new ArrayList<TeamDto>();
             AppContext.getInstance().set("fullTeamArrayList", teams);
-        } else {
-            // Sort teams by points and name
-            for (int i = 0; i < teams.size(); i++) {
-                for (int j = 0; j < teams.size() - 1; j++) {
-                    TeamDto current = teams.get(j);
-                    TeamDto next = teams.get(j + 1);
-
-                    if (current.getPoints() < next.getPoints()) {
-                        teams.set(j, next);
-                        teams.set(j + 1, current);
-                    } else if (current.getPoints() == next.getPoints()) {
-                        if (current.getName().compareToIgnoreCase(next.getName()) > 0) {
-                            teams.set(j, next);
-                            teams.set(j + 1, current);
-                        }
-                    }
-                }
-            }
         }
-
         return teams;
     }
 
@@ -90,9 +69,9 @@ public class InfoManager {
 
     public static void SetTeamList(ArrayList<TeamDto> teams) {
         if (teams == null) {
-            System.out.println("empty");
             teams = new ArrayList<TeamDto>();
         }
+        System.out.println("\n Se llama a setTeamList\n");
         AppContext.getInstance().set("fullTeamArrayList", teams);
     }
 
@@ -104,9 +83,6 @@ public class InfoManager {
     }
 
     public static SportDto GetSport(int sportID) {
-        if (sportID == 0) {
-            return null;
-        }
         ArrayList<SportDto> sports = GetSportList();
         for (SportDto sport : sports) {
             if (sport.getID() == sportID) {
@@ -117,9 +93,7 @@ public class InfoManager {
     }
 
     public static SportDto GetSport(String sportName) {
-        if (sportName == null || sportName.isEmpty()) {
-            return null;
-        }
+        if (sportName == null || sportName.trim().isEmpty()) sportName = "NoName";
         ArrayList<SportDto> sports = GetSportList();
         for (SportDto sport : sports) {
             if (sport.getName().trim().equalsIgnoreCase(sportName)) {
@@ -130,9 +104,7 @@ public class InfoManager {
     }
 
     public static TeamDto GetTeam(Integer teamID) {
-        if (teamID == 0 || teamID == null) {
-            return null;
-        }
+        if (teamID == null || teamID <= 0) teamID = 0;
         ArrayList<TeamDto> teams = GetTeamList();
         for (TeamDto team : teams) {
             if (team.getID() == teamID) {
@@ -141,7 +113,6 @@ public class InfoManager {
         }
         return null;
     }
-
 
     private void saveSports() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -320,6 +291,42 @@ public class InfoManager {
             LOGGER.log(Level.SEVERE, "❌ Error al crear el certificado PDF", e);
         }
     }
-    
-    
+
+    public static void deleteSport(int sportID) {
+        ArrayList<TourneyDto> tournaments = GetTournamentList();
+        for (TourneyDto tourney : tournaments) {
+            if (tourney.getSportID() == sportID) tourney.setSportID(0);
+        }
+        SetTournamentList(tournaments);
+
+        ArrayList<TeamDto> teams = GetTeamList();
+        for (TeamDto team : teams) {
+            if (team.getSportID() == sportID) team.setSportID(0);
+        }
+        SetTeamList(teams);
+
+        ArrayList<SportDto> sports = GetSportList();
+        sports.removeIf(sport -> sport.getID() == sportID);
+        SetSportList(sports);
+    }
+
+    public static void deleteTeam(int teamID) {
+        ArrayList<TourneyDto> tournaments = GetTournamentList();
+
+        for (TourneyDto tourney : tournaments) {// Look into all tournaments
+            for (ArrayList<Integer> round : tourney.getTournamentRoundsID()) {// Look in the rounds
+                int index = round.indexOf(teamID);// Look for the team you want to delete
+                if (index != -1) { // If the team is in the round
+                    round.set(index, -teamID);// delete the team id
+                } else {
+                    break; // Go to the next tournament
+                }
+            }
+        }
+
+        ArrayList<TeamDto> teams = GetTeamList();
+        teams.removeIf(team -> team.getID() == teamID);
+        SetTeamList(teams);
+    }
+
 }

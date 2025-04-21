@@ -83,9 +83,7 @@ public class SportsManagerController extends Controller implements Initializable
     @FXML
     void onActionDelete(ActionEvent event) {
         if (selectedSport != null) {
-            ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
-            fullSportArrayList.remove(selectedSport);
-            InfoManager.SetSportList(fullSportArrayList);
+            InfoManager.deleteSport(selectedSport.getID());
             updateTableView();
         }
         changeValues(null);
@@ -155,7 +153,7 @@ public class SportsManagerController extends Controller implements Initializable
         selectedSport.setBallImageURL(showSportPhotoURL.get());
     }
 
-    private void updateTableView() {
+    public void updateTableView() {
         System.out.println("Actualizando tabla de deportes.");
         String searchValue = txfSearch.getText();
         txfSearch.setText(searchValue + " ");
@@ -224,16 +222,10 @@ public class SportsManagerController extends Controller implements Initializable
             filteredSportsList.clear();
             String searchText = newValue.toLowerCase().trim();
 
-            if (searchText.isEmpty()) {
-                filteredSportsList = FXCollections.observableArrayList(InfoManager.GetSportList());
-            } else {
-                ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
-                for (SportDto sport : fullSportArrayList) {
-                    if (sport.getName().trim().toLowerCase().contains(searchText)) {
-                        filteredSportsList.add(sport);
-                    }
-                }
-            }
+            filteredSportsList.addAll(InfoManager.GetSportList());
+            filteredSportsList.removeIf(sport -> sport.getID() <= 0);
+            filteredSportsList.removeIf(sport -> !sport.getName().toLowerCase().contains(searchText));
+
             tableViewSports.setItems(filteredSportsList);
             tableViewSports.refresh();
         });

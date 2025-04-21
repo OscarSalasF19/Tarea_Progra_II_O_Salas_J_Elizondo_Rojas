@@ -5,19 +5,11 @@
 *.iml
 
 # ======================================
-# NetBeans
-# ======================================
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-# ======================================
 # Maven
 # ======================================
 /target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -25,18 +17,24 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
-.mvn/
-!/.mvn/wrapper/maven-wrapper.jar
-mvnw
-mvnw.cmd
 
 # ======================================
-# General (compilados / salidas)
+# Archivos de compilación
 # ======================================
-/out/
-*/out/
-bin/
-build/
+*.class
+*.jar
+*.war
+*.ear
+
+# ======================================
+# Archivos temporales y logs
+# ======================================
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
 
 # ======================================
 # Archivos del sistema
@@ -45,25 +43,23 @@ build/
 Thumbs.db
 
 # ======================================
-# Archivos temporales de Java
+# Directorios comunes de salida
 # ======================================
-*.class
-*.log
-*.jar
-*.war
-*.ear
-*.tmp
-*.bak
+/out/
+*/out/
+bin/
+build/
 
 # ======================================
-# Configs de ejecución (opcionales)
+# Configuraciones de ejecución
 # ======================================
 *.launch
 *.run.xml
 
 # ======================================
-# Logs / Otros
+# JSONs locales opcionales
 # ======================================
-*.swp
-*.swo
-*.orig
+# Eliminalo si querés guardar los .json
+/Sports.json
+/Teams.json
+/Tournament.json

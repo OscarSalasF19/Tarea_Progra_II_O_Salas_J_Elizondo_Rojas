@@ -151,13 +151,13 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     @FXML
-    void onActionDelete(ActionEvent event) {//borra de el array de equipos segun seleccion
+    void onActionDelete(ActionEvent event) {// Deletes the selected team
         if (selectedTeam != null) {
-            ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
-            fullTeamArrayList.remove(selectedTeam);
             File file = new File(selectedTeam.getTeamImageURL().toString().trim());
             file.deleteOnExit();
-            InfoManager.SetTeamList(fullTeamArrayList);
+
+            InfoManager.deleteTeam(selectedTeam.getID());
+
             updateTableView();
         }
         changeValues(null);
@@ -219,7 +219,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         return false;
     }
 
-    private void addNewTeam() throws IOException {
+    private void addNewTeam() {
         
         ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
 
@@ -312,25 +312,36 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void setupSearchListener() {
-        txfSearch.setText("");
         txfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
 
             filteredTeamsList.clear();
             String searchText = newValue.toLowerCase().trim();
 
-            if (searchText.isEmpty()) {
-                filteredTeamsList = FXCollections.observableArrayList(InfoManager.GetTeamList());
-            } else {
-                ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
-                for (TeamDto team : fullTeamArrayList) {
-                    if (team.getName().trim().toLowerCase().contains(searchText)) {
-                        filteredTeamsList.add(team);
+            filteredTeamsList.addAll(InfoManager.GetTeamList());
+            filteredTeamsList.removeIf(team -> team.getID() <= 0);
+            filteredTeamsList.removeIf(team -> !team.getName().toLowerCase().contains(searchText));
+
+            for (int i = 0; i < filteredTeamsList.size(); i++) {
+                for (int j = 0; j < filteredTeamsList.size() - 1; j++) {
+                    TeamDto current = filteredTeamsList.get(j);
+                    TeamDto next = filteredTeamsList.get(j + 1);
+
+                    if (current.getPoints() < next.getPoints()) {
+                        filteredTeamsList.set(j, next);
+                        filteredTeamsList.set(j + 1, current);
+                    } else if (current.getPoints() == next.getPoints()) {
+                        if (current.getName().compareToIgnoreCase(next.getName()) > 0) {
+                            filteredTeamsList.set(j, next);
+                            filteredTeamsList.set(j + 1, current);
+                        }
                     }
                 }
             }
+
             tableViewTeams.setItems(filteredTeamsList);
             tableViewTeams.refresh();
         });
+        txfSearch.setText("");
     }
 
     private void changeValues(TeamDto value) {

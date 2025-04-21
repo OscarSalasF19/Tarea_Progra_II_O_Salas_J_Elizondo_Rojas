@@ -2,6 +2,7 @@ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.Controller.MatchController;
 import cr.ac.una.tournamentmanager.Controller.TournamentController;
+import cr.ac.una.tournamentmanager.Controller.TournamentFormController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import javafx.application.Platform;
 
@@ -14,7 +15,7 @@ import java.util.TimerTask;
 
 public class TourneyDto {
 
-    private final ArrayList<ArrayList<Integer>> tournamentRoundsID = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> tournamentRoundsID = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
     private int matchTimeSeconds = 10000;
@@ -74,8 +75,12 @@ public class TourneyDto {
 
     }
 
-    public int getsportID() {
+    public int getSportID() {
         return sportID;
+    }
+
+    public void setSportID(int sportID) {
+        this.sportID = sportID;
     }
 
     public int getTotalOfTeams() {
@@ -104,6 +109,10 @@ public class TourneyDto {
 
     public String getCreationTime() {
     return creationTime;
+    }
+
+    public ArrayList<ArrayList<Integer>> getTournamentRoundsID() {
+        return tournamentRoundsID;
     }
 
     public void nextMatch() {
@@ -135,6 +144,8 @@ public class TourneyDto {
                 @Override
                 public void run() {
                     Platform.runLater(() -> { //waits for a correct tread
+                        TournamentFormController tournamentFormController = (TournamentFormController) FlowController.getInstance().getController("TournamentFormView");
+                        tournamentFormController.updateTableView();
                         FlowController.getInstance().goView("TournamentFormView");
                         FlowController.getInstance().limpiarLoader("TournamentView");
                     });
