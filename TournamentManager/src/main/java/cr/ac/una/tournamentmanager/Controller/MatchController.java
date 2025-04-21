@@ -68,35 +68,32 @@ public class MatchController extends Controller implements Initializable {
     @FXML
     void onActionFinishMatch(ActionEvent event) {
         seconds = 0;
-    if (winner != null) {
-        TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
+        if (winner != null) {
+            TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
 
-        TeamDto loser = (winner.equals(match.getFstTeam())) ? match.getSndTeam() : match.getFstTeam();
-        int fstScore = getScore(txfFstTeamScore);
-        int sndScore = getScore(txfSndTeamScore);
+            TeamDto loser = (winner.equals(match.getFstTeam())) ? match.getSndTeam() : match.getFstTeam();
+            int fstScore = getScore(txfFstTeamScore);
+            int sndScore = getScore(txfSndTeamScore);
 
-        // Scores individuales
-        match.getFstTeam().setScores(match.getFstTeam().getScores() + fstScore);
-        match.getSndTeam().setScores(match.getSndTeam().getScores() + sndScore);
+            match.getFstTeam().setScores(match.getFstTeam().getScores() + fstScore);
+            match.getSndTeam().setScores(match.getSndTeam().getScores() + sndScore);
 
-        if (isTieBreaker) {
-            // Empate → 2 puntos para cada uno, +1 tie
-            match.getFstTeam().setTies(match.getFstTeam().getTies() + 1);
-            match.getSndTeam().setTies(match.getSndTeam().getTies() + 1);
+            if (isTieBreaker) {
+                match.getFstTeam().setTies(match.getFstTeam().getTies() + 1);
+                match.getSndTeam().setTies(match.getSndTeam().getTies() + 1);
 
-            match.getFstTeam().sumPoints(2);
-            match.getSndTeam().sumPoints(2);
-        } else {
-            // Victoria/derrota clásica
-            winner.setWins(winner.getWins() + 1);
-            winner.sumPoints(3);
+                match.getFstTeam().sumPoints(2);
+                match.getSndTeam().sumPoints(2);
+            } else {
+                winner.setWins(winner.getWins() + 1);
+                winner.sumPoints(3);
 
-            loser.setLosses(loser.getLosses() + 1);
+                loser.setLosses(loser.getLosses() + 1);
+            }
+
+            tournamentController.weHaveAWinner(winner);
+            closeMatch();
         }
-
-        tournamentController.weHaveAWinner(winner);
-        closeMatch();
-    }
     }
 
     @FXML
@@ -164,7 +161,7 @@ public class MatchController extends Controller implements Initializable {
         this.match = match;
         this.seconds = seconds;
 
-        imageViewBall.setImage(new Image(InfoManager.GetSportImage(sportID)));
+        imageViewBall.setImage(new Image(InfoManager.GetSport(sportID).getBallImageURL()));
 
         // Load team images, fallback to default if loading fails
         try {
@@ -203,7 +200,6 @@ public class MatchController extends Controller implements Initializable {
             timer.cancel(); // Cancel any existing timer
         }
 
-        // Initialize the timer display
         Platform.runLater(() -> {
             txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
         });
@@ -217,7 +213,6 @@ public class MatchController extends Controller implements Initializable {
                         txfTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                         seconds--;
                     } else {
-                        // End the match when the timer reaches zero
                         endMatch();
                         timer.cancel();
                     }

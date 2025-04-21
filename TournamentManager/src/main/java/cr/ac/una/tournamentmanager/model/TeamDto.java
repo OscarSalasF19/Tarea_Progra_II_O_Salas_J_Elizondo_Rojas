@@ -1,28 +1,29 @@
 package cr.ac.una.tournamentmanager.model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 
 public class TeamDto {
 
+    private int id = 0; //id del equipo
     private String name = "";
     private String teamImageURL = "";
     private int sportID = 0; // sustituye por el id del deporte
     private int globalPoins = 0; //de la clasificacion general
     private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     private int scores = 0; //de la clasificacion general
-    private int wins =0; //de la clasificacion general
-    private int losses =0; //de la clasificacion general
-    private int ties =0; //de la clasificacion general
+    private int wins = 0; //de la clasificacion general
+    private int losses = 0; //de la clasificacion general
+    private int ties = 0; //de la clasificacion general
 
     public TeamDto() {
         this.performance = (int) (Math.random() * 100) + 1;
+        newId();
     }
 
-    public TeamDto(String nombre) {
-        this.name = nombre;
-        this.sportID = 1;
-        this.performance = (int) (Math.random() * 100) + 1;
+    public int getID() {
+        return id;
     }
 
     public String getName() {
@@ -61,11 +62,7 @@ public class TeamDto {
         return this.performance;
     }
 
-    public void setPerformance(int performance) {
-        this.performance = performance;
-    }
-    
-     public int getScores() {
+    public int getScores() {
         return this.scores;
     }
 
@@ -115,6 +112,21 @@ public class TeamDto {
         }
         final TeamDto other = (TeamDto) obj;
         return Objects.equals(this.getName(), other.getName());
+    }
+
+    private void newId() {
+        ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
+        if (fullTeamArrayList.isEmpty()) {
+            this.id = 1;
+        } else {
+            int maxId = 0;
+            for (TeamDto team : fullTeamArrayList) {
+                if (team.getID() > maxId) {
+                    maxId = team.getID();
+                }
+            }
+            this.id = maxId + 1;
+        }
     }
 
 }

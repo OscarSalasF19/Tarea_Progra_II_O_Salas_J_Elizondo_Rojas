@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static java.lang.Integer.parseInt;import javafx.scene.control.TextFormatter;
+import static java.lang.Integer.parseInt;
 
 
 public class TournamentFormController extends Controller implements Initializable {
@@ -58,6 +58,7 @@ public class TournamentFormController extends Controller implements Initializabl
 
     @FXML
     void onActionStartTourney(ActionEvent event) {
+
         int seconds = 0;
 
         if (txfMinutes.getText().trim().isEmpty()) txfMinutes.setText("0");
@@ -66,7 +67,7 @@ public class TournamentFormController extends Controller implements Initializabl
         try {
             seconds = parseInt(txfMinutes.getText()) * 60;
             seconds += parseInt(txfSeconds.getText());
-            System.out.println(txfMinutes.getText() + " : " + txfSeconds.getText());
+            System.out.println("\nTime: " + txfMinutes.getText() + " : " + txfSeconds.getText());
         } catch (NumberFormatException e) {
             System.out.println("\nError al cargar los segundos.\n");
         }
@@ -75,7 +76,9 @@ public class TournamentFormController extends Controller implements Initializabl
 
         if (seconds < 5) seconds = 15;
 
-        int sportID = InfoManager.GetSportID(txfSearch.getText());
+        int sportID = 0;
+
+        if (InfoManager.GetSport(txfSearch.getText()) != null) sportID = InfoManager.GetSport(txfSearch.getText()).getID();
         if (sportID == 0) {
             try {
                 sportID = observableSeletedTeams.get(0).getSportID();
@@ -179,7 +182,7 @@ public class TournamentFormController extends Controller implements Initializabl
             if (!searchText.isEmpty()) {
                 ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
                 for (TeamDto team : fullTeamArrayList) {
-                    if ((InfoManager.GetSportName(team.getSportID())).toLowerCase().trim().equals(searchText)) {
+                    if ((InfoManager.GetSport(team.getSportID()).getName()).toLowerCase().trim().equals(searchText)) {
                         filteredTeamsList.add(team);
                     }
                 }
@@ -212,18 +215,11 @@ public class TournamentFormController extends Controller implements Initializabl
     }
 
     private void setupNumericFilter(MFXTextField textField, int maxLength) {
-        textField.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getText().matches("[0-9]*")) {
-                return change;
-            }
-            return null;
-        }));
 
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String cleaned = newValue; //.replaceAll("\\D", ""); // Esto ahora es más bien redundante por el formatter, pero sirve
+            String cleaned = newValue.replaceAll("\\D", "");
 
             if (cleaned.length() > maxLength) cleaned = cleaned.substring(0, maxLength);
-
 
             if (!cleaned.isEmpty()) {
                 try {

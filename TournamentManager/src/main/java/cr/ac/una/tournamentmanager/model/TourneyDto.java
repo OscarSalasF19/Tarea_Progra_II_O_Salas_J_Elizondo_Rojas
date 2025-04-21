@@ -24,17 +24,20 @@ public class TourneyDto {
         this.totalOfTeams = totalOfTeams;
         this.matchTimeSeconds = matchTimeSeconds;
         tournamentRounds.add(teams);
+        currentRound = 0;
+        currentMatch = 0;
 
         Iterator<TeamDto> iterator = tournamentRounds.get(0).iterator(); //if the first team needs to be remove pops exceptio
         while (iterator.hasNext()) {// a solution for that
             TeamDto team = iterator.next();
             if (team.getSportID() != sportID) {
-                System.out.println("El equipo " + team.getName() + " no es del deporte " + InfoManager.GetSportName(sportID));
+                System.out.println("El equipo " + team.getName() + " no es del deporte " + InfoManager.GetSport(sportID).getName());
                 iterator.remove();
             }
         }
 
         if (tournamentRounds.get(0).size() < totalOfTeams) {
+            System.out.println("Se van a anadir equipos aptos para el torneo");
             searchForNewTeams(totalOfTeams - tournamentRounds.get(0).size());
         }
 
@@ -83,16 +86,17 @@ public class TourneyDto {
                 System.out.println("El torneo ya fue guardado previamente.");
                 return;  // makes you wait for te animation to go away
             }
+            //de aqui para abajo se ejecuta solo una vez por torneo cuando termina
+
             tournaments.add(this);
             InfoManager.SetTournamentList(tournaments);
-            System.out.println("Torneo guardado con exito");
+            System.out.println("\nTorneo guardado con exito");
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
-                    Platform.runLater(() -> {
+                    Platform.runLater(() -> { //waits for a correct tread
                         FlowController.getInstance().goView("TournamentFormView");
                         FlowController.getInstance().limpiarLoader("TournamentView");
                     });
@@ -100,7 +104,7 @@ public class TourneyDto {
             }, 10 * 1000);// 10,000 = 10 segundos, 1000 = 1 segundo // tiempo antes de quitar la animacion
 
             TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
-            tournamentController.winnerAnimation(tournamentRounds.get(currentRound).get(0));
+            tournamentController.winnerAnimation(tournamentRounds.get(currentRound).get(0));//llama a la animacion y le manda el equipo ganador
 
             return;
         }

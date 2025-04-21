@@ -95,35 +95,45 @@ public class InfoManager {
         AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
     }
 
-    public static String GetSportName(int sportID) {
+    public static SportDto GetSport(int sportID) {
+        if (sportID == 0) {
+            return null;
+        }
         ArrayList<SportDto> sports = GetSportList();
         for (SportDto sport : sports) {
             if (sport.getID() == sportID) {
-                return sport.getName();
+                return sport;
             }
         }
-        return "";
+        return null;
     }
 
-    public static int GetSportID(String sportName) {
+    public static SportDto GetSport(String sportName) {
+        if (sportName == null || sportName.isEmpty()) {
+            return null;
+        }
         ArrayList<SportDto> sports = GetSportList();
         for (SportDto sport : sports) {
-            if (sport.getName().equalsIgnoreCase(sportName)) {
-                return sport.getID();
+            if (sport.getName().trim().equalsIgnoreCase(sportName)) {
+                return sport;
             }
         }
-        return 0;
+        return null;
     }
 
-    public static String GetSportImage(int sportID) {
-        ArrayList<SportDto> sports = GetSportList();
-        for (SportDto sport : sports) {
-            if (sport.getID() == sportID) {
-                return sport.getBallImageURL();
+    public static TeamDto GetTeam(int teamID) {
+        if (teamID == 0) {
+            return null;
+        }
+        ArrayList<TeamDto> teams = GetTeamList();
+        for (TeamDto team : teams) {
+            if (team.getID() == teamID) {
+                return team;
             }
         }
-        return "";
+        return null;
     }
+
 
     private void saveSports() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

@@ -27,9 +27,9 @@ public class MatchDto {
     }
 
     public TeamDto tieBreaker() {
-        if (fstTeam.getPoints() > sndTeam.getPoints()) {
+        if (fstTeam.getPerformance() > sndTeam.getPerformance()) {
             return fstTeam;
-        } else if (sndTeam.getPoints() > fstTeam.getPoints()) {
+        } else if (sndTeam.getPerformance() > fstTeam.getPerformance()) {
             return sndTeam;
         } else {
             return fstTeam;

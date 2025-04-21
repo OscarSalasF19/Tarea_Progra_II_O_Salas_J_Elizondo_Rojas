@@ -5,12 +5,12 @@ import java.util.Objects;
 
 public class SportDto {
 
-    private final int sportID;
+    private int sportID;
     private String name;
     private String ballImageURL;
 
     public SportDto() {
-        this.sportID = newID();
+        newID();
         this.name = "";
         this.ballImageURL = "";
     }
@@ -55,10 +55,10 @@ public class SportDto {
         return "SportDto{" + "name=" + name + ", ballImageURL=" + ballImageURL + '}';
     }
 
-    private int newID() {
+    private void newID() {
         ArrayList<SportDto> fullSportArrayList = InfoManager.GetSportList();
-        if (fullSportArrayList == null) {
-            return 1;
+        if (fullSportArrayList.isEmpty()) {
+            this.sportID = 1;
         }
         int maxId = 0;
         for (SportDto sport : fullSportArrayList) {
@@ -66,7 +66,7 @@ public class SportDto {
                 maxId = sport.getID();
             }
         }
-        return maxId + 1;
+        this.sportID = maxId + 1;
     }
 
 }

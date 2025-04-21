@@ -222,21 +222,19 @@ public class TeamsManagerController extends Controller implements Initializable 
     private void addNewTeam() throws IOException {
         
         ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
-        System.out.println("recibi la lista");
+
         TeamDto newTeam = new TeamDto();
         newTeam.setName(txfTeamName.getText().trim());
-        newTeam.setSportID(InfoManager.GetSportID(txfTeamSport.getText().trim()));
+        newTeam.setSportID(InfoManager.GetSport(txfTeamSport.getText().trim()).getID());
         newTeam.setTeamImageURL(showTeamPhotoURL.getValue());
         fullTeamArrayList.add(newTeam);
-        for(TeamDto team: fullTeamArrayList){
-        System.out.println("name:" + team.getName());
-        }
+
         InfoManager.SetTeamList(fullTeamArrayList);
     }
 
     private void updateExistingTeam() {
         selectedTeam.setName(txfTeamName.getText().trim());
-        selectedTeam.setSportID(InfoManager.GetSportID(txfTeamSport.getText().trim()));
+        selectedTeam.setSportID(InfoManager.GetSport(txfTeamSport.getText().trim()).getID());
         selectedTeam.setTeamImageURL(showTeamPhotoURL.get());
     }
 
@@ -250,7 +248,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         }
     }
 
-    private void updateTableView() {
+    public void updateTableView() {
         System.out.println("Actualizando tabla de equipos.");
         String searchValue = txfSearch.getText();
         txfSearch.setText(searchValue + " ");
@@ -265,11 +263,6 @@ public class TeamsManagerController extends Controller implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         changeValues(null);
-
-        //si te llego en un commit borra esto
-        ArrayList<TeamDto> fullTeamArray = new ArrayList<>();
-        
-        //InfoManager.SetTeamList(fullTeamArray);
 
         ObservableList<TeamDto> fullTeamArrayList = FXCollections.observableArrayList(InfoManager.GetTeamList());
 
@@ -344,29 +337,30 @@ public class TeamsManagerController extends Controller implements Initializable 
         if (value != null) {
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             txfTeamName.setText(value.getName());
-            txfTeamSport.setText(InfoManager.GetSportName(value.getSportID()));
-            labelTeamScores.setText(String.valueOf(value.getScores()));
-            labelTeamTies.setText(String.valueOf(value.getTies()));
-            labelTeamWins.setText(String.valueOf(value.getWins()));
-            labelTeamLosses.setText(String.valueOf(value.getLosses()));
-            labelTeamPoints.setText(String.valueOf(value.getPoints()));
+            txfTeamSport.setText(InfoManager.GetSport(value.getSportID()).getName());
+            labelTeamPoints.setText("# " + String.valueOf(value.getPoints()));
+            labelTeamScores.setText("# " + String.valueOf(value.getScores()));
+            labelTeamWins.setText("# " + String.valueOf(value.getWins()));
+            labelTeamTies.setText("# " + String.valueOf(value.getTies()));
+            labelTeamLosses.setText("# " + String.valueOf(value.getLosses()));
             showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");
             txfTeamName.setText("");
             txfTeamSport.setText("");
-            labelTeamScores.setText("_");
-            labelTeamTies.setText("_");
-            labelTeamWins.setText("_");
-            labelTeamLosses.setText("_");
-            showTeamPhotoURL.set("");
+            labelTeamPoints.setText("#_");
+            labelTeamScores.setText("#_");
+            labelTeamWins.setText("#_");
+            labelTeamTies.setText("#_");
+            labelTeamLosses.setText("#_");
+            setDefaultImage();
         }
         selectedTeam = value;
     }
 
     private void setDefaultImage() {
         String imagePath = "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png";
-        showTeamPhotoURL.set(imagePath); // Imagen predeterminada
+        showTeamPhotoURL.set(imagePath);
     }
     @FXML
     private void onActionTakeShot(ActionEvent event) throws IOException {
