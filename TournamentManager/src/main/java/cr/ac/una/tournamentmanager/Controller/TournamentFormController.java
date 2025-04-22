@@ -65,17 +65,16 @@ public class TournamentFormController extends Controller implements Initializabl
         if (txfMinutes.getText().trim().isEmpty()) txfMinutes.setText("0");
         if (txfSeconds.getText().trim().isEmpty()) txfSeconds.setText("0");
 
-        try {
-            seconds = parseInt(txfMinutes.getText()) * 60;
-            seconds += parseInt(txfSeconds.getText());
-            System.out.println("\nTime: " + txfMinutes.getText() + " : " + txfSeconds.getText());
-        } catch (NumberFormatException e) {
-            System.out.println("\nError al cargar los segundos.\n");
-        }
+
+        seconds = parseInt(txfMinutes.getText()) * 60;
+        seconds += parseInt(txfSeconds.getText());
+        if (seconds < 5) seconds = 15;
+
+        System.out.println("\nTime: " + seconds/60 + " : " + seconds%60);
+
         txfMinutes.setText("");
         txfSeconds.setText("");
 
-        if (seconds < 5) seconds = 15;
 
         int sportID = 0;
 

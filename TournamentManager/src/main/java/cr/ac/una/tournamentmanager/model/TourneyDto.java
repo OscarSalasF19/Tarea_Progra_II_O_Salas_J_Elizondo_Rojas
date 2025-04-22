@@ -18,7 +18,7 @@ public class TourneyDto {
     private ArrayList<ArrayList<Integer>> tournamentRoundsID = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
-    private int matchTimeSeconds = 10000;
+    private int matchTimeSeconds = 10;
     private int currentRound = 0;
     private int currentMatch = 0;
 
@@ -51,14 +51,21 @@ public class TourneyDto {
             }
         }
 
-        for (TeamDto team : teams) {
-            tournamentRoundsID.get(0).add(team.getID());
-            System.out.println("El equipo " + team.getName() + " tiene el ID: " + team.getID());
+        if (teams.size() > totalOfTeams) {
+            System.out.println("Se van a eliminar equipos para el torneo");
+            while (teams.size() > totalOfTeams) {
+                teams.remove((int) (Math.random() * teams.size()));
+            }
         }
 
         if (teams.size() < totalOfTeams) {
             System.out.println("Se van a anadir equipos aptos para el torneo");
             searchForNewTeams(totalOfTeams - teams.size());
+        }
+
+        for (TeamDto team : teams) {
+            tournamentRoundsID.get(0).add(team.getID());
+            System.out.println("El equipo " + team.getName() + " tiene el ID: " + team.getID());
         }
 
         if (totalOfTeams == 1) {
@@ -130,7 +137,6 @@ public class TourneyDto {
                 System.out.println("El torneo ya fue guardado previamente.");
                 return;
             }
-
             tournaments.add(this);
             InfoManager.SetTournamentList(tournaments);
             System.out.println("\nTorneo guardado con exito");
@@ -221,7 +227,7 @@ public class TourneyDto {
         TournamentController controller = (TournamentController) FlowController.getInstance().getController("TournamentView");
         int updateTheRound = currentRound + 1;
 
-        if (currentMatch % 2 == 0 && nextRoundSize(currentRound) > 1 && nextRoundSize(currentRound) % 2 != 0) { // Check if the first team MAY be single
+        if (currentMatch == 0 && nextRoundSize(currentRound) > 1 && nextRoundSize(currentRound) % 2 != 0) { // Check if the first team MAY be single
             tournamentRoundsID.get(currentRound + 1).add(null);
             System.out.println("\nSe añade equipo nulo\n");
         }

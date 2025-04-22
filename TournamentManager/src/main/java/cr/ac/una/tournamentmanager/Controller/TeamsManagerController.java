@@ -355,6 +355,7 @@ public class TeamsManagerController extends Controller implements Initializable 
             labelTeamWins.setText("# " + String.valueOf(value.getWins()));
             labelTeamTies.setText("# " + String.valueOf(value.getTies()));
             labelTeamLosses.setText("# " + String.valueOf(value.getLosses()));
+            textAreaTournamentSummary.setText(InfoManager.getFullTorneysData(value.getID()));
             showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
             System.out.println("Volviendo a valores por defecto.");
@@ -403,6 +404,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         pictureBtn.setManaged(false);
 
     }
+
 }
 
 

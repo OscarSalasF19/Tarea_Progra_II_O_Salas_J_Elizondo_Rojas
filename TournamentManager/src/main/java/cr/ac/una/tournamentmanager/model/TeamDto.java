@@ -3,7 +3,6 @@ package cr.ac.una.tournamentmanager.model;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
 public class TeamDto {
 
     private int id = 0; //id del equipo

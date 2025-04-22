@@ -336,4 +336,76 @@ public class InfoManager {
         SetTeamList(teams);
     }
 
+    public static String getFullTorneysData(int teamID) {
+        StringBuilder data = new StringBuilder();
+        ArrayList<TourneyDto> tournaments = GetTournamentList();
+        int torneoNro = 1;
+
+        for (TourneyDto tourney : tournaments) {
+            ArrayList<ArrayList<Integer>> rondas = tourney.getTournamentRoundsID();
+            if (rondas == null || rondas.isEmpty()) continue;
+
+            if (!rondas.get(0).contains(teamID)) {
+                torneoNro++;
+                continue;
+            }
+
+            int victorias = 0;
+            int pasesGratis = 0;
+            int rondaFinal = 0;
+
+            for (int r = 0; r < rondas.size() - 1; r++) {
+                ArrayList<Integer> rondaActual = rondas.get(r);
+
+                if (rondas.get(r + 1).contains(teamID)) { // Check if the team is in the next round
+
+                    boolean paseGratis = false;
+                    if (rondas.get(r).size() % 2 != 0 && rondaActual.get(rondaActual.size() - 1) == teamID) paseGratis = true;
+                    if (rondaActual.get(0) == null && rondaActual.get(1) == teamID) paseGratis = true;
+
+                    if (paseGratis) pasesGratis++;
+                    else victorias++;
+                } else {
+                    rondaFinal = r;
+                    break;
+                }
+            }
+
+            if (rondas.get(rondas.size() - 1).contains(teamID)) {
+                rondaFinal = rondas.size() - 1;
+            }
+
+            int posicion = calcularPosicion(teamID, rondas, rondaFinal);
+            String avance = getAvancePorRonda(rondaFinal, rondas.size());
+
+            data.append(String.format("Torneo #%d | %d° | Victorias: %d | Pases Gratis: %d | Avance: %s\n",
+                    torneoNro++, posicion, victorias, pasesGratis, avance));
+        }
+        System.out.println(data.toString());
+        return data.toString();
+    }
+
+    private static String getAvancePorRonda(int ronda, int totalRondas) {
+        int faltan = totalRondas - ronda;
+        switch (faltan) {
+            case 1: return "Campeón";
+            case 2: return "Final";
+            case 3: return "Semifinal";
+            case 4: return "Cuartos de final";
+            default: return "Ronda " + (ronda + 1);
+        }
+    }
+
+    private static int calcularPosicion(int teamID, ArrayList<ArrayList<Integer>> rondas, int rondaFinal) {
+        int eliminadosAntes = 0;
+
+        for (int r = 0; r < rondaFinal; r++) {
+            eliminadosAntes +=rondas.get(r).size() / 2;
+            if (rondas.get(r).get(0) == null) eliminadosAntes--; // If the first team is null, it means that one team Free Pass
+        }
+        eliminadosAntes += rondas.get(rondaFinal).indexOf(teamID) / 2;
+
+        return rondas.get(0).size() - eliminadosAntes;
+    }
+
 }
