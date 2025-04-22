@@ -1,35 +1,38 @@
 [
   {
+    "id": 1,
     "name": "juan",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 15,
+    "globalPoins": 25,
     "performance": 43,
-    "scores": 3,
-    "wins": 0,
-    "losses": 2,
-    "ties": 6
+    "scores": 25,
+    "wins": 2,
+    "losses": 3,
+    "ties": 8
   },
   {
+    "id": 2,
     "name": "oscar",
     "teamImageURL": "file:/C:/Users/oscar/Documents/GitHub/Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/oscar.png",
     "sportID": 5,
-    "globalPoins": 39,
+    "globalPoins": 46,
     "performance": 5,
-    "scores": 5,
-    "wins": 2,
-    "losses": 0,
-    "ties": 14
+    "scores": 60,
+    "wins": 3,
+    "losses": 1,
+    "ties": 16
   },
   {
+    "id": 3,
     "name": "josua",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 16,
+    "globalPoins": 19,
     "performance": 97,
-    "scores": 0,
-    "wins": 0,
-    "losses": 0,
+    "scores": 28,
+    "wins": 1,
+    "losses": 2,
     "ties": 8
   }
 ]
