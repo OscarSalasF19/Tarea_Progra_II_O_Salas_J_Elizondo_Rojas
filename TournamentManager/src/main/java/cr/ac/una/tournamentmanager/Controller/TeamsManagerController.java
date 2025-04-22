@@ -365,6 +365,7 @@ public class TeamsManagerController extends Controller implements Initializable 
             labelTeamWins.setText("#_");
             labelTeamTies.setText("#_");
             labelTeamLosses.setText("#_");
+            textAreaTournamentSummary.setText("");
             setDefaultImage();
         }
         selectedTeam = value;
@@ -374,6 +375,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         String imagePath = "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png";
         showTeamPhotoURL.set(imagePath);
     }
+
     @FXML
     private void onActionTakeShot(ActionEvent event) throws IOException {
         capturing = false;

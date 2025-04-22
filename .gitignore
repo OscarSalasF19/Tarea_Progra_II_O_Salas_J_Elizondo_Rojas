@@ -1,3 +1,4 @@
+/TournamentManager/target
 # ======================================
 # IntelliJ IDEA
 # ======================================
@@ -63,5 +64,4 @@ build/
 /Sports.json
 /Teams.json
 /Tournament.json
-.idea/
 target/
