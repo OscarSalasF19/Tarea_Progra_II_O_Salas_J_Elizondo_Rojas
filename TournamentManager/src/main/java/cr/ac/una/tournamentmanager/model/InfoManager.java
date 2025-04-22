@@ -145,7 +145,7 @@ public class InfoManager {
     private void SaveTournaments() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("Tournament.json")) {
-            gson.toJson(AppContext.getInstance().get("FullTournamentsArrayList"), writer);
+            gson.toJson(AppContext.getInstance().get("fullTournamentsArrayList"), writer);
             writer.flush();
             System.out.println("All tournaments were saved successfully.");
         } catch (IOException s) {
