@@ -58,15 +58,16 @@ public class TourneyDto {
             }
         }
 
-        if (teams.size() < totalOfTeams) {
-            System.out.println("Se van a anadir equipos aptos para el torneo");
-            searchForNewTeams(totalOfTeams - teams.size());
-        }
-
         for (TeamDto team : teams) {
             tournamentRoundsID.get(0).add(team.getID());
-            System.out.println("El equipo " + team.getName() + " tiene el ID: " + team.getID());
         }
+
+
+        if (teams.size() < totalOfTeams) {
+            System.out.println("Se van a anadir equipos aptos para el torneo");
+            searchForNewTeams();
+        }
+
 
         if (totalOfTeams == 1) {
             System.out.println("El torneo no se puede realizar, solo hay un equipo.");
@@ -210,13 +211,12 @@ public class TourneyDto {
         return tournamentRoundsTeams;
     }
 
-    public void searchForNewTeams(int cuantity) {
+    public void searchForNewTeams() {
         ArrayList<TeamDto> teams = InfoManager.GetTeamList();
         for (TeamDto team : teams) {
+            if(totalOfTeams == tournamentRoundsID.get(0).size()) return;
             if (team.getSportID() == sportID && !tournamentRoundsID.get(0).contains(team.getID())) {
                 tournamentRoundsID.get(0).add(team.getID());
-                cuantity--;
-                if (cuantity == 0) return;
             }
         }
         totalOfTeams = tournamentRoundsID.get(0).size();

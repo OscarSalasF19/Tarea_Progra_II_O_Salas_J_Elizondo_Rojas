@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import java.util.logging.Logger;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import java.net.URL;
-import java.net.URISyntaxException;
 import java.awt.Color;
 
 public class InfoManager {
@@ -339,14 +337,14 @@ public class InfoManager {
     public static String getFullTorneysData(int teamID) {
         StringBuilder data = new StringBuilder();
         ArrayList<TourneyDto> tournaments = GetTournamentList();
-        int torneoNro = 1;
+        int tourneyN = 1;
 
         for (TourneyDto tourney : tournaments) {
-            ArrayList<ArrayList<Integer>> rondas = tourney.getTournamentRoundsID();
-            if (rondas == null || rondas.isEmpty()) continue;
+            ArrayList<ArrayList<Integer>> rounds = tourney.getTournamentRoundsID();
+            if (rounds == null || rounds.isEmpty()) continue;
 
-            if (!rondas.get(0).contains(teamID)) {
-                torneoNro++;
+            if (!rounds.get(0).contains(teamID)) {
+                tourneyN++;
                 continue;
             }
 
@@ -354,13 +352,13 @@ public class InfoManager {
             int pasesGratis = 0;
             int rondaFinal = 0;
 
-            for (int r = 0; r < rondas.size() - 1; r++) {
-                ArrayList<Integer> rondaActual = rondas.get(r);
+            for (int r = 0; r < rounds.size() - 1; r++) {
+                ArrayList<Integer> rondaActual = rounds.get(r);
 
-                if (rondas.get(r + 1).contains(teamID)) { // Check if the team is in the next round
+                if (rounds.get(r + 1).contains(teamID)) { // Check if the team is in the next round
 
                     boolean paseGratis = false;
-                    if (rondas.get(r).size() % 2 != 0 && rondaActual.get(rondaActual.size() - 1) == teamID) paseGratis = true;
+                    if (rounds.get(r).size() % 2 != 0 && rondaActual.get(rondaActual.size() - 1) == teamID) paseGratis = true;
                     if (rondaActual.get(0) == null && rondaActual.get(1) == teamID) paseGratis = true;
 
                     if (paseGratis) pasesGratis++;
@@ -371,41 +369,39 @@ public class InfoManager {
                 }
             }
 
-            if (rondas.get(rondas.size() - 1).contains(teamID)) {
-                rondaFinal = rondas.size() - 1;
+            if (rounds.get(rounds.size() - 1).contains(teamID)) {
+                rondaFinal = rounds.size() - 1;
             }
 
-            int posicion = calcularPosicion(teamID, rondas, rondaFinal);
-            String avance = getAvancePorRonda(rondaFinal, rondas.size());
+            int posicion = calcTeamPosition(teamID, rounds, rondaFinal);
+            String avance = whitchRoundTeamHadLose(rondaFinal, rounds.size());
 
             data.append(String.format("Torneo #%d | %d° | Victorias: %d | Pases Gratis: %d | Avance: %s\n",
-                    torneoNro++, posicion, victorias, pasesGratis, avance));
+                    tourneyN++, posicion, victorias, pasesGratis, avance));
         }
         System.out.println(data.toString());
         return data.toString();
     }
 
-    private static String getAvancePorRonda(int ronda, int totalRondas) {
-        int faltan = totalRondas - ronda;
-        switch (faltan) {
+    private static String whitchRoundTeamHadLose(int roundN, int totalRounds) {
+        int roundsLeft = totalRounds - roundN;
+        switch (roundsLeft) {
             case 1: return "Campeón";
             case 2: return "Final";
             case 3: return "Semifinal";
             case 4: return "Cuartos de final";
-            default: return "Ronda " + (ronda + 1);
+            default: return "Ronda " + (roundN + 1);
         }
     }
 
-    private static int calcularPosicion(int teamID, ArrayList<ArrayList<Integer>> rondas, int rondaFinal) {
-        int eliminadosAntes = 0;
+    private static int calcTeamPosition(int teamID, ArrayList<ArrayList<Integer>> rounds, int finalRound) {
+        int howManyLosersBefore = 0;
 
-        for (int r = 0; r < rondaFinal; r++) {
-            eliminadosAntes +=rondas.get(r).size() / 2;
-            if (rondas.get(r).get(0) == null) eliminadosAntes--; // If the first team is null, it means that one team Free Pass
-        }
-        eliminadosAntes += rondas.get(rondaFinal).indexOf(teamID) / 2;
+        howManyLosersBefore = rounds.get(0).size() - rounds.get(finalRound).size();
+        howManyLosersBefore += rounds.get(finalRound).indexOf(teamID) / 2;
+        //if (rounds.get(finalRound).get(0) == null) howManyLosersBefore--;
 
-        return rondas.get(0).size() - eliminadosAntes;
+        return rounds.get(0).size() - howManyLosersBefore;
     }
 
 }
