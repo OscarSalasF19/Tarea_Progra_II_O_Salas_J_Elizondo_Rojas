@@ -22,7 +22,6 @@ public class TourneyDto {
     private int currentRound = 0;
     private int currentMatch = 0;
 
-    private final int numberOfRounds;
     private final String creationDate;     // solo la fecha: "20-04-2025"
     private final String creationTime;     // solo la hora: "14:45:30"
 
@@ -51,19 +50,19 @@ public class TourneyDto {
             }
         }
 
-        if (teams.size() > totalOfTeams) {
-            System.out.println("Se van a eliminar equipos para el torneo");
-            while (teams.size() > totalOfTeams) {
-                teams.remove((int) (Math.random() * teams.size()));
-            }
-        }
-
         for (TeamDto team : teams) {
             tournamentRoundsID.get(0).add(team.getID());
         }
 
+        if (tournamentRoundsID.get(0).size() > totalOfTeams) {
+            System.out.println("Se van a eliminar equipos para el torneo");
+            while (tournamentRoundsID.get(0).size() > totalOfTeams) {
+                tournamentRoundsID.get(0).remove((int) (Math.random() * tournamentRoundsID.get(0).size()));
+            }
+        }
 
-        if (teams.size() < totalOfTeams) {
+
+        if (tournamentRoundsID.get(0).size() < totalOfTeams) {
             System.out.println("Se van a anadir equipos aptos para el torneo");
             searchForNewTeams();
         }
@@ -71,13 +70,10 @@ public class TourneyDto {
 
         if (totalOfTeams == 1) {
             System.out.println("El torneo no se puede realizar, solo hay un equipo.");
-            numberOfRounds = 0;
             return;
         }
 
-        this.numberOfRounds = findHowManyRounds();
-
-        for (int i = 0; i < numberOfRounds; i++) {
+        for (int i = 0; i < findHowManyRounds(); i++) {
             tournamentRoundsID.add(new ArrayList<>());
         }
 
@@ -105,10 +101,6 @@ public class TourneyDto {
 
     public int getCurrentMatch() {
         return currentMatch;
-    }
-
-    public int getNumberOfRounds() {
-        return numberOfRounds;
     }
 
     public String getCreationDate() {
