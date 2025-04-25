@@ -132,7 +132,6 @@ public class TeamsManagerController extends Controller implements Initializable 
         capturing = true;
 
         cameraWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
 
         new Thread(() -> {
             while (capturing) {
@@ -146,8 +145,23 @@ public class TeamsManagerController extends Controller implements Initializable 
 
                     }
                 }
+                
+                if(!cameraWindow.isActive()){
+                    stopCamera();
+                    pictureBtn.setVisible(false);
+                    pictureBtn.setDisable(true);
+                    pictureBtn.setManaged(false);
+                    
+                }
             }
         }).start();
+    }
+    
+    public void stopCamera() {
+        capturing = false;
+        if (webcam != null && webcam.isOpen()) {
+            webcam.close();
+        }
     }
 
     @FXML

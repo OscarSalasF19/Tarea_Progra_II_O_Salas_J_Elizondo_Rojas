@@ -19,6 +19,17 @@ import javafx.scene.shape.Line;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class TournamentController extends Controller implements Initializable {
     @FXML
@@ -259,13 +270,58 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     public void winnerAnimation(TeamDto team) {
+        int boxes = 6;
+        VBox box = getVBoxForRound(boxes);
+        
+        
+        while(box.getChildren().isEmpty()){
+            boxes--;
+            box = getVBoxForRound(boxes);
+        }
+         for (ArrayList<Line> line : roundLines){
+            for(Line line1 : line){
+                line1.setVisible(false);
+            }
+        }
+        
+        
 
-
-        // Implement winner animation logic here
-        // This method can be used to animate the winning team
+            VBox championBox = (VBox) box.getChildren().get(0);
+            championBox.setStyle("-fx-background-color: #ebea0f");
+            TranslateTransition translate = new TranslateTransition();
+            translate.setNode(championBox);
+            translate.setByX(150);
+            translate.setDuration(Duration.millis(100));
+            translate.play();
+            
+        
+        ScaleTransition scale = new ScaleTransition();
+        
+        scale.setNode(championBox);
+        scale.setDuration(Duration.millis(1000));
+        scale.setCycleCount(5);
+        scale.setInterpolator(Interpolator.LINEAR);
+        scale.setByX(3);
+        scale.setByY(3);
+        scale.setAutoReverse(true);
+        championBox.toFront();
+        
+        FadeTransition ft = new FadeTransition(Duration.seconds(3), championBox);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        SequentialTransition secuency = new SequentialTransition();
+        secuency.getChildren().addAll(scale, ft);
+        secuency.play();
+        
+        
+        
+        
+        
+    }
+        
 
 
     }
 
 
-}
+

@@ -25,8 +25,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.scene.layout.StackPane;
 
 public class MatchController extends Controller implements Initializable {
+     @FXML
+    private StackPane MatchBox;
+     
     @FXML
     private ImageView imageViewBall;
 
@@ -126,6 +130,9 @@ public class MatchController extends Controller implements Initializable {
             if (isTieBreaker) seconds = 0;
         }
         imageViewBall.toFront();
+        imageViewBall.setLayoutX((MatchBox.getWidth() / 2) - 85);
+        imageViewBall.setLayoutY(MatchBox.getHeight() / 2 - 60);
+        
     }
 
     @FXML

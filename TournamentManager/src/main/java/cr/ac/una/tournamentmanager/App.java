@@ -1,5 +1,7 @@
 package cr.ac.una.tournamentmanager;
 
+import com.github.sarxos.webcam.Webcam;
+import cr.ac.una.tournamentmanager.Controller.TeamsManagerController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
@@ -22,8 +24,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("PrincipalView"), 800, 610);
         MFXThemeManager.addOn(scene,Themes.DEFAULT,Themes.LEGACY);
         stage.setScene(scene);
-        stage.setMinWidth(800.0);
-        stage.setMinHeight(610.0);
+        stage.setMinWidth(1100);
+        stage.setMinHeight(630.0);
         stage.show();
     }
 
@@ -41,6 +43,10 @@ public class App extends Application {
         manager.LoadInfo();
         launch();
         manager.saveInfo();
+        Webcam camera = Webcam.getDefault();
+        if(camera.isOpen() && camera != null){
+            camera.close();
+        }
     }
 
 }

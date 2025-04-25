@@ -21,7 +21,7 @@
                   <Label styleClass="jfx-text-field-match-score" text="MARCADOR" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-border-pane-tie-breaker" VBox.vgrow="ALWAYS">
+            <StackPane fx:id="MatchBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="jfx-border-pane-tie-breaker" VBox.vgrow="ALWAYS">
                <children>
                   <BorderPane fx:id="tieBreakerMenu" prefHeight="200.0" prefWidth="200.0" styleClass="jfx-match-display">
                      <top>

@@ -76,11 +76,6 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     @FXML
-    void onActionCamera(ActionEvent event) {
-        // Camera functionality not implemented
-    }
-
-    @FXML
     void onActionDelete(ActionEvent event) {
         if (selectedSport != null) {
             InfoManager.deleteSport(selectedSport.getID());
