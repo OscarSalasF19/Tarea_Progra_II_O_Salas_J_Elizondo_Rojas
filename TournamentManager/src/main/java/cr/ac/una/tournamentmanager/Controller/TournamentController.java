@@ -270,33 +270,40 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     public void winnerAnimation(TeamDto team) {
+
+        //experimento
+        ArrayList<HBox> winnerBoxes = findAllWinnerBoxes(team);
+        for (HBox winnerBox : winnerBoxes) {
+            winnerBox.setStyle("-fx-border-color: black; -fx-border-width: 2;");
+        }
+
         int boxes = 6;
         VBox box = getVBoxForRound(boxes);
-        
-        
+
+
         while(box.getChildren().isEmpty()){
             boxes--;
             box = getVBoxForRound(boxes);
         }
-         for (ArrayList<Line> line : roundLines){
+        for (ArrayList<Line> line : roundLines){
             for(Line line1 : line){
                 line1.setVisible(false);
             }
         }
-        
-        
 
-            VBox championBox = (VBox) box.getChildren().get(0);
-            championBox.setStyle("-fx-background-color: #ebea0f");
-            TranslateTransition translate = new TranslateTransition();
-            translate.setNode(championBox);
-            translate.setByX(150);
-            translate.setDuration(Duration.millis(100));
-            translate.play();
-            
-        
+
+
+        VBox championBox = (VBox) box.getChildren().get(0);
+        championBox.setStyle("-fx-background-color: #ebea0f");
+        TranslateTransition translate = new TranslateTransition();
+        translate.setNode(championBox);
+        translate.setByX(150);
+        translate.setDuration(Duration.millis(100));
+        translate.play();
+
+
         ScaleTransition scale = new ScaleTransition();
-        
+
         scale.setNode(championBox);
         scale.setDuration(Duration.millis(1000));
         scale.setCycleCount(5);
@@ -305,23 +312,42 @@ public class TournamentController extends Controller implements Initializable {
         scale.setByY(3);
         scale.setAutoReverse(true);
         championBox.toFront();
-        
+
         FadeTransition ft = new FadeTransition(Duration.seconds(3), championBox);
         ft.setFromValue(1.0);
         ft.setToValue(0.0);
         SequentialTransition secuency = new SequentialTransition();
         secuency.getChildren().addAll(scale, ft);
         secuency.play();
-        
-        
-        
-        
-        
     }
-        
 
-
+    private ArrayList<HBox> findAllWinnerBoxes(TeamDto team) {
+        ArrayList<HBox> winnerBoxes = new ArrayList<>();
+        for (int i = 0; getVBoxForRound(i) != null; i++) {
+            VBox roundBox = getVBoxForRound(i);
+            for (Node matchBox : roundBox.getChildren()) {
+                if (matchBox instanceof VBox) {
+                    VBox matchVBox = (VBox) matchBox;
+                    for (Node teamBox : matchVBox.getChildren()) {
+                        if (teamBox instanceof HBox) {
+                            HBox teamHBox = (HBox) teamBox;
+                            for (Node teamNode : teamHBox.getChildren()) {
+                                if (teamNode instanceof Label) {
+                                    Label teamLabel = (Label) teamNode;
+                                    if (teamLabel.getText().equals(team.getName())) {
+                                        winnerBoxes.add(teamHBox);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return winnerBoxes;
     }
+
+}
 
 
 
