@@ -1,5 +1,17 @@
 [
   {
+    "id": 0,
+    "name": "NoName",
+    "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
+    "sportID": 0,
+    "globalPoins": 69,
+    "performance": 43,
+    "scores": 46,
+    "wins": 16,
+    "losses": 87,
+    "ties": 9
+  },
+  {
     "id": 1,
     "name": "juan",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
