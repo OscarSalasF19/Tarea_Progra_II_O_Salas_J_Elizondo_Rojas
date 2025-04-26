@@ -62,13 +62,13 @@ public class SportsManagerController extends Controller implements Initializable
         File chosenImage = fileChooser.showOpenDialog(imageViewSportPhoto.getScene().getWindow());
         if (chosenImage != null) {
             try {
-                String resourcesPath = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
+                String resourcesPath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
                 File destinationPath = new File(resourcesPath + chosenImage.getName());
 
                 // Copy the selected file to the Resources folder
                 Files.copy(chosenImage.toPath(), destinationPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-                showSportPhotoURL.set(destinationPath.toURI().toString());
+                showSportPhotoURL.set("Sports-Photos/" + chosenImage.getName());
             } catch (IOException e) {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Error al copiar la imagen", getStage(), "No se pudo copiar la imagen seleccionada: " + e.getMessage());
             }
@@ -181,11 +181,11 @@ public class SportsManagerController extends Controller implements Initializable
                     } else {
                         SportDto sport = getTableView().getItems().get(getIndex());
                         try {
-                            imageView.setImage(new Image(sport.getBallImageURL()));
+                            imageView.setImage(InfoManager.loadImage(sport.getBallImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + sport.getName() + " | " + sport.getBallImageURL());
-                            sport.setBallImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
-                            imageView.setImage(new Image(sport.getBallImageURL()));
+                            sport.setBallImageURL("/Default-Image.png");
+                            imageView.setImage(InfoManager.loadImage(sport.getBallImageURL()));
                         }
                         imageView.setFitHeight(30);
                         imageView.setFitWidth(30);
@@ -203,7 +203,7 @@ public class SportsManagerController extends Controller implements Initializable
 
         showSportPhotoURL.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isBlank()) {
-                imageViewSportPhoto.setImage(new Image(newValue));
+                imageViewSportPhoto.setImage(InfoManager.loadImage(newValue));
             } else {
                 setDefaultImage();
             }
@@ -242,7 +242,7 @@ public class SportsManagerController extends Controller implements Initializable
     }
 
     private void setDefaultImage() {
-        String imagePath = "/cr/ac/una/tournamentmanager/Resources/Bola-300.png";
+        String imagePath = "Bola-300.png";
         showSportPhotoURL.set(imagePath);
     }
 }

@@ -92,12 +92,12 @@ public class TeamsManagerController extends Controller implements Initializable 
         File chossedImage = fileChooser.showOpenDialog(imageViewTeamPhoto.getScene().getWindow());
         if (chossedImage != null) {
             try {
-                String URLtoResources = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
-                File destinationURL = new File(URLtoResources + chossedImage.getName());
+                String resourcesPath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
+                File destinationURL = new File(resourcesPath + chossedImage.getName());
 
                 Files.copy(chossedImage.toPath(), destinationURL.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-                showTeamPhotoURL.set(destinationURL.toURI().toString());
+                showTeamPhotoURL.set("Team-Photos/" + chossedImage.getName());
             } catch (IOException e) {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Error al copiar la imagen", getStage(), "No se pudo copiar la imagen seleccionada: " + e.getMessage());
             }
@@ -296,11 +296,11 @@ public class TeamsManagerController extends Controller implements Initializable 
                     } else {
                         TeamDto team = getTableView().getItems().get(getIndex());
                         try {
-                            imageView.setImage(new Image(team.getTeamImageURL()));
+                            imageView.setImage(InfoManager.loadImage(team.getTeamImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + team.getName() + " | " + team.getTeamImageURL());
-                            team.setTeamImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
-                            imageView.setImage(new Image(team.getTeamImageURL()));
+                            team.setTeamImageURL("/Default-Image.png");
+                            imageView.setImage(InfoManager.loadImage(team.getTeamImageURL()));
                         }
                         imageView.setFitHeight(30);
                         imageView.setFitWidth(30);
@@ -318,7 +318,7 @@ public class TeamsManagerController extends Controller implements Initializable 
 
         showTeamPhotoURL.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isBlank()) {
-                imageViewTeamPhoto.setImage(new Image(newValue));
+                imageViewTeamPhoto.setImage(InfoManager.loadImage(newValue));
             } else {
                 setDefaultImage();
             }
@@ -387,7 +387,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void setDefaultImage() {
-        String imagePath = "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png";
+        String imagePath = "Grupo-300.png";
         showTeamPhotoURL.set(imagePath);
     }
 

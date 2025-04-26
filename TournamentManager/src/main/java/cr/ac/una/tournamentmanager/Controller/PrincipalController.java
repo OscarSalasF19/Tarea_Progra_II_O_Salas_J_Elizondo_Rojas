@@ -18,13 +18,14 @@ public class PrincipalController extends Controller implements Initializable {
     void onActionBtnInfoSport(ActionEvent event) {
         SportsManagerController sportsManagerController = (SportsManagerController) FlowController.getInstance().getController("SportsManagerView");
         sportsManagerController.updateTableView();
+        sportsManagerController.changeValues(null);
         FlowController.getInstance().goView("SportsManagerView");
     }
 
     @FXML
     void onActionBtnInfoTeam(ActionEvent event) {
         TeamsManagerController teamsManagerController = (TeamsManagerController) FlowController.getInstance().getController("TeamsManagerView");
-
+        teamsManagerController.updateTableView();
         teamsManagerController.changeValues(null);
         FlowController.getInstance().goView("TeamsManagerView");
     }

@@ -153,11 +153,11 @@ public class TournamentFormController extends Controller implements Initializabl
                     } else {
                         TeamDto team = getTableView().getItems().get(getIndex());
                         try {
-                            imageView.setImage(new Image(team.getTeamImageURL()));
+                            imageView.setImage(InfoManager.loadImage(team.getTeamImageURL()));
                         } catch (Exception e) {
                             System.out.println("Error al cargar la imagen: " + team.getName() + " | " + team.getTeamImageURL());
-                            team.setTeamImageURL("/cr/ac/una/tournamentmanager/Resources/Default-Image.png");
-                            imageView.setImage(new Image(team.getTeamImageURL()));
+                            team.setTeamImageURL("/Default-Image.png");
+                            imageView.setImage(InfoManager.loadImage(team.getTeamImageURL()));
                         }
                         imageView.setFitHeight(30);
                         imageView.setFitWidth(30);

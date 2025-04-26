@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.tournamentmanager.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.lowagie.text.*;
 import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.util.AppContext;
@@ -19,7 +16,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import java.net.URL;
 import java.awt.Color;
@@ -395,10 +391,34 @@ public class InfoManager {
     }
 
     private static int calcTeamPosition(int teamID, ArrayList<ArrayList<Integer>> rounds, int finalRound) {
-        int howManyLosersBefore = rounds.get(0).size() - rounds.get(finalRound).size();// Previous rounds lossers
-        howManyLosersBefore += rounds.get(finalRound).indexOf(teamID) / 2;// Current round previous lossers
+        int howManyLosersBefore = rounds.get(0).size() - rounds.get(finalRound).size();// Lossers of previous rounds
+        howManyLosersBefore += rounds.get(finalRound).indexOf(teamID) / 2;// Lossers in the same round
 
         return rounds.get(0).size() - howManyLosersBefore;
     }
+
+    public static javafx.scene.image.Image loadImage(String path) {
+
+        String basePath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/";
+        String imagePath = basePath + path;
+
+        File imageFile = new File(imagePath);
+        if (imageFile.exists()) {
+            try {
+                return new javafx.scene.image.Image(imageFile.toURI().toString());
+            } catch (Exception e) {
+                System.out.println("Error al cargar la imagen: " + imagePath);
+            }
+        }
+
+        try {
+            String defaultImagePath = basePath + "Default-Image.png";
+            return new javafx.scene.image.Image(new File(defaultImagePath).toURI().toString());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error al cargar la imagen predeterminada.", e);
+            return null;
+        }
+    }
+
 
 }

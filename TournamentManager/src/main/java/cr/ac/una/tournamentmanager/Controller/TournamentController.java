@@ -1,5 +1,6 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
 import javafx.event.ActionEvent;
@@ -255,7 +256,7 @@ public class TournamentController extends Controller implements Initializable {
         teamBox.setMaxHeight(30);
         teamBox.setMaxWidth(Double.MAX_VALUE);
 
-        ImageView teamImageView = new ImageView(new Image(team.getTeamImageURL()));
+        ImageView teamImageView = new ImageView(InfoManager.loadImage(team.getTeamImageURL()));
         teamImageView.setFitHeight(30);
         teamImageView.setFitWidth(30);
 
@@ -290,8 +291,6 @@ public class TournamentController extends Controller implements Initializable {
                 line1.setVisible(false);
             }
         }
-
-
 
         VBox championBox = (VBox) box.getChildren().get(0);
         championBox.setStyle("-fx-background-color: #ebea0f");
