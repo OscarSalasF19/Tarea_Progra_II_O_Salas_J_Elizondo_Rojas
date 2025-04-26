@@ -20,7 +20,6 @@ public class TourneyDto {
     private int currentRound = 0;
     private int currentMatch = 0;
 
-
     public TourneyDto(int sportID, int totalOfTeams, int matchTimeSeconds, ArrayList<TeamDto> teams) {
         this.sportID = sportID;
         this.totalOfTeams = totalOfTeams;
@@ -56,12 +55,10 @@ public class TourneyDto {
             }
         }
 
-
         if (tournamentRoundsID.get(0).size() < totalOfTeams) {
             System.out.println("Se van a anadir equipos aptos para el torneo");
             searchForNewTeams();
         }
-
 
         if (totalOfTeams == 1) {
             System.out.println("El torneo no se puede realizar, solo hay un equipo.");
@@ -71,7 +68,6 @@ public class TourneyDto {
         for (int i = 0; i < findHowManyRounds(); i++) {
             tournamentRoundsID.add(new ArrayList<>());
         }
-
     }
 
     public int getSportID() {
@@ -112,12 +108,12 @@ public class TourneyDto {
 
     public void nextMatch() {
 
-        if (currentMatch >= tournamentRoundsID.get(currentRound).size()) {// Check if there are more matches in the current round
+        if (currentMatch >= tournamentRoundsID.get(currentRound).size()) { // Check if there are more matches in the current round
             currentMatch = 0;
             currentRound++;
         }
 
-        if (tournamentRoundsID.get(currentRound).size() == 1) {// Check if there is a winner
+        if (tournamentRoundsID.get(currentRound).size() == 1) { // Check if there is a winner
             System.out.println("El torneo ha terminado");
 
             ArrayList<TourneyDto> tournaments = InfoManager.GetTournamentList();
@@ -134,12 +130,12 @@ public class TourneyDto {
             InfoManager.createWinnerCertificate(winner, this);
 
             TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
-            tournamentController.winnerAnimation(winner);//llama a la animacion y le manda el equipo ganador
+            tournamentController.winnerAnimation(winner); // Call the animation and send the winning team
 
             return;
         }
 
-        if (tournamentRoundsID.get(currentRound).get(currentMatch) == null && currentMatch == 0) {//check if the first team is single
+        if (tournamentRoundsID.get(currentRound).get(currentMatch) == null && currentMatch == 0) { // Check if the first team is single
             luckyTeam(tournamentRoundsID.get(currentRound).get(currentMatch + 1));
             currentMatch += 2;
         }
@@ -148,7 +144,6 @@ public class TourneyDto {
 
         TeamDto fstTeam = InfoManager.GetTeam(tournamentRoundsID.get(currentRound).get(currentMatch));
         TeamDto sndTeam = InfoManager.GetTeam(tournamentRoundsID.get(currentRound).get(currentMatch + 1));
-
 
         MatchDto match = new MatchDto(fstTeam, sndTeam);
         System.out.println("\nEl partido es entre los equipos: |" + currentMatch + "| y |" + (currentMatch + 1) + "|\n");
@@ -167,7 +162,6 @@ public class TourneyDto {
         tournamentRoundsTeams.add(firstRoundTeams);
 
         for (int i = 1; i < tournamentRoundsID.size(); i++) {
-            //if (tournamentRoundsID.get(i).isEmpty()) break;
             ArrayList<TeamDto> currentRoundTeams = new ArrayList<>();
             ArrayList<Integer> currentRoundIDs = tournamentRoundsID.get(i);
 
@@ -211,7 +205,7 @@ public class TourneyDto {
 
         currentMatch += 2; // Next match
 
-        if (currentMatch + 1 == tournamentRoundsID.get(currentRound).size()) {// Check if there is a singleteam
+        if (currentMatch + 1 == tournamentRoundsID.get(currentRound).size()) { // Check if there is a singleteam
             luckyTeam(tournamentRoundsID.get(currentRound).get(currentMatch));
             currentMatch = 0;
             currentRound++;

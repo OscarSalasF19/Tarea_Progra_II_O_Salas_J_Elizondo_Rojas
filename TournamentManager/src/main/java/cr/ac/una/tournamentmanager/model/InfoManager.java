@@ -112,31 +112,31 @@ public class InfoManager {
     public static void createWinnerCertificate(TeamDto winner, TourneyDto tournament) {
         String folderPath = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Certificados";
         File folder = new File(folderPath);
-        if (!folder.exists()) folder.mkdirs();
+        if (!folder.exists()) folder.mkdirs(); // Create the folder if it doesn't exist
 
-        String sanitizedName = winner.getName().replaceAll("\\s+", "_");
+        String sanitizedName = winner.getName().replaceAll("\\s+", "_"); // Replace spaces with underscores for the file name
         String fileName = folderPath + File.separator + "Certificado_" + sanitizedName + ".pdf";
 
         try {
-            Document document = new Document(PageSize.A4, 36, 36, 36, 36);
+            Document document = new Document(PageSize.A4, 36, 36, 36, 36); // Create a PDF document with margins
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
             document.open();
 
             Font titleFont = new Font(Font.HELVETICA, 24, Font.BOLD, Color.BLACK);
             Paragraph title = new Paragraph("🏆 CERTIFICADO DE CAMPEÓN 🏆\n\n", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
+            title.setAlignment(Element.ALIGN_CENTER); // Center-align the title
             document.add(title);
 
             try {
                 String uriPath = winner.getTeamImageURL();
                 String imagePath = new File(new URL(uriPath).toURI()).getAbsolutePath();
                 Image image = Image.getInstance(imagePath);
-                image.scaleToFit(180, 180);
-                image.setAlignment(Image.ALIGN_CENTER);
+                image.scaleToFit(180, 180); // Scale the image to fit within 180x180
+                image.setAlignment(Image.ALIGN_CENTER); // Center-align the image
                 document.add(image);
             } catch (Exception e) {
                 Paragraph error = new Paragraph("\n⚠ No se pudo cargar la imagen del equipo.\n");
-                error.setAlignment(Element.ALIGN_CENTER);
+                error.setAlignment(Element.ALIGN_CENTER); // Center-align the error message
                 document.add(error);
             }
 
@@ -144,7 +144,7 @@ public class InfoManager {
             Font normalFont = new Font(Font.HELVETICA, 14, Font.NORMAL, Color.BLACK);
 
             Paragraph teamInfo = new Paragraph();
-            teamInfo.setAlignment(Element.ALIGN_CENTER);
+            teamInfo.setAlignment(Element.ALIGN_CENTER); // Center-align the team information
             teamInfo.add(new Chunk("\nEquipo ganador: ", boldFont));
             teamInfo.add(new Chunk(winner.getName() + "\n", normalFont));
             teamInfo.add(new Chunk("Deporte: ", boldFont));
@@ -152,7 +152,7 @@ public class InfoManager {
             document.add(teamInfo);
 
             Paragraph tournamentInfo = new Paragraph();
-            tournamentInfo.setAlignment(Element.ALIGN_CENTER);
+            tournamentInfo.setAlignment(Element.ALIGN_CENTER); // Center-align the tournament information
             tournamentInfo.add(new Chunk("\n📋 Información del Torneo:\n", boldFont));
             tournamentInfo.add(new Chunk("- Número de equipos: " + tournament.getTotalOfTeams() + "\n", normalFont));
             tournamentInfo.add(new Chunk("- Rondas jugadas: " + tournament.findHowManyRounds() + "\n", normalFont));
@@ -161,12 +161,12 @@ public class InfoManager {
             document.add(tournamentInfo);
 
             Paragraph congratulations = new Paragraph("\n¡Felicidades por su excelente desempeño!\n", normalFont);
-            congratulations.setAlignment(Element.ALIGN_CENTER);
+            congratulations.setAlignment(Element.ALIGN_CENTER); // Center-align the congratulations message
             document.add(congratulations);
 
             Font footerFont = new Font(Font.HELVETICA, 10, Font.ITALIC, new Color(102, 102, 102));
             Paragraph footer = new Paragraph("\nEste certificado está avalado por la Asociación de Torneos y Deportes O.S.J.E.J.R\n", footerFont);
-            footer.setAlignment(Element.ALIGN_CENTER);
+            footer.setAlignment(Element.ALIGN_CENTER); // Center-align the footer
             document.add(footer);
 
             document.close();
