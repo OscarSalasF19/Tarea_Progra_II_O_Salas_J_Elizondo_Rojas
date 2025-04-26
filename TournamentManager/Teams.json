@@ -72,18 +72,6 @@
     "ties": 1
   },
   {
-    "id": 6,
-    "name": "perez",
-    "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
-    "sportID": 5,
-    "globalPoins": 33,
-    "performance": 72,
-    "scores": 13,
-    "wins": 11,
-    "losses": 8,
-    "ties": 0
-  },
-  {
     "id": 7,
     "name": "nikole",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
@@ -210,6 +198,18 @@
     "sportID": 7,
     "globalPoins": 0,
     "performance": 51,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 18,
+    "name": "eldiablaso4",
+    "teamImageURL": "Team-Photos/eldiablaso4.png",
+    "sportID": 5,
+    "globalPoins": 0,
+    "performance": 7,
     "scores": 0,
     "wins": 0,
     "losses": 0,

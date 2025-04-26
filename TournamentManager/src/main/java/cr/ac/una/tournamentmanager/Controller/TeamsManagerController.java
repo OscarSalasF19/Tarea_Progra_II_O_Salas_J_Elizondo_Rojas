@@ -319,8 +319,11 @@ public class TeamsManagerController extends Controller implements Initializable 
         showTeamPhotoURL.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isBlank()) {
                 imageViewTeamPhoto.setImage(InfoManager.loadImage(newValue));
+                System.out.println("cargue la imagen");
             } else {
                 setDefaultImage();
+                System.out.println("cargue la imagen default");
+
             }
         });
     }
@@ -396,11 +399,11 @@ public class TeamsManagerController extends Controller implements Initializable 
         capturing = false;
 
         if (lastCapturedShot != null) {
-            Image image = SwingFXUtils.toFXImage(lastCapturedShot, null);
-            imageViewTeamPhoto.setImage(image);
-            File file = new File("src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/" + txfTeamName.getText().trim() + ".png");
+            String resourcesPath = System.getProperty("user.dir") + "/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
+            Image image1 = SwingFXUtils.toFXImage(lastCapturedShot, null);
+            File file = new File(resourcesPath + txfTeamName.getText().trim() + ".png");
          ImageIO.write(lastCapturedShot, "PNG", file);
-         showTeamPhotoURL.set(file.toURI().toString());
+         showTeamPhotoURL.set("Team-Photos/" + txfTeamName.getText().trim() + ".png");
             
         }
 
