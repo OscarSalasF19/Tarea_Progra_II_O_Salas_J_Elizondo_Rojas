@@ -26,5 +26,23 @@
     "matchTimeSeconds": 0,
     "currentRound": 0,
     "currentMatch": 0
+  },
+  {
+    "creationDate": "26-04-2025",
+    "creationTime": "07:07:44",
+    "tournamentRoundsID": [
+      [
+        19,
+        20
+      ],
+      [
+        20
+      ]
+    ],
+    "sportID": 8,
+    "totalOfTeams": 2,
+    "matchTimeSeconds": 15,
+    "currentRound": 1,
+    "currentMatch": 0
   }
 ]

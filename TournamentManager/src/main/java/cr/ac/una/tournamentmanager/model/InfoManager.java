@@ -393,19 +393,6 @@ public class InfoManager {
             System.out.println(team.getName());
         }
         AppContext.getInstance().set("fullTeamArrayList", teams);
-
-
-//       Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        Type sportList = new TypeToken<ArrayList<SportDto>>() {
-//        }.getType();
-//        ArrayList<SportDto> sports = new ArrayList<>();
-//
-//        try (FileReader reader = new FileReader("Sports.json")) {
-//            sports = gson.fromJson(reader, sportList);
-//        } catch (IOException e) {
-//            LOGGER.log(Level.WARNING, "Error loading sports", e);
-//        }
-//        AppContext.getInstance().set("fullSportArrayList", sports);
     }
 
     public void LoadInfo() {

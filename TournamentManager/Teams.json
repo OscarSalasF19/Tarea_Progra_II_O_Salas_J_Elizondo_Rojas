@@ -204,14 +204,26 @@
     "ties": 0
   },
   {
-    "id": 18,
-    "name": "eldiablaso4",
-    "teamImageURL": "Team-Photos/eldiablaso4.png",
-    "sportID": 5,
+    "id": 19,
+    "name": "matias",
+    "teamImageURL": "Team-Photos/images.jpg",
+    "sportID": 8,
     "globalPoins": 0,
-    "performance": 7,
-    "scores": 0,
+    "performance": 14,
+    "scores": 1,
     "wins": 0,
+    "losses": 1,
+    "ties": 0
+  },
+  {
+    "id": 20,
+    "name": "paz",
+    "teamImageURL": "Team-Photos/paz.png",
+    "sportID": 8,
+    "globalPoins": 3,
+    "performance": 97,
+    "scores": 2,
+    "wins": 1,
     "losses": 0,
     "ties": 0
   }
