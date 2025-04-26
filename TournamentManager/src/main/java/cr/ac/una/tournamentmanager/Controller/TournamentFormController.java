@@ -19,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -70,7 +69,7 @@ public class TournamentFormController extends Controller implements Initializabl
         seconds += parseInt(txfSeconds.getText());
         if (seconds < 5) seconds = 15;
 
-        System.out.println("\nTime: " + seconds/60 + " : " + seconds%60);
+        System.out.println("\nTime: " + seconds / 60 + " : " + seconds % 60);
 
         txfMinutes.setText("");
         txfSeconds.setText("");
@@ -78,7 +77,8 @@ public class TournamentFormController extends Controller implements Initializabl
 
         int sportID = 0;
 
-        if (InfoManager.GetSport(txfSearch.getText()) != null) sportID = InfoManager.GetSport(txfSearch.getText()).getID();
+        if (InfoManager.GetSport(txfSearch.getText()) != null)
+            sportID = InfoManager.GetSport(txfSearch.getText()).getID();
         if (sportID == 0) {
             if (observableSeletedTeams.size() == 0) {
                 System.out.println("No se ha seleccionado un deporte.");

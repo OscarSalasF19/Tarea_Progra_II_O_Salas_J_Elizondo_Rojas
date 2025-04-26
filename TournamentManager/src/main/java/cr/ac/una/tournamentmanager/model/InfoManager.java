@@ -4,21 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.pdf.PdfWriter;
 import cr.ac.una.tournamentmanager.Controller.TournamentController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.util.AppContext;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.awt.*;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.lowagie.text.pdf.PdfWriter;
-import java.net.URL;
-import java.awt.Color;
 
 public class InfoManager {
 
@@ -110,117 +109,6 @@ public class InfoManager {
         return null;
     }
 
-    private void saveSports() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("Sports.json")) {
-            gson.toJson(AppContext.getInstance().get("fullSportArrayList"), writer);
-            
-            writer.flush();
-            System.out.println("All sports were saved successfully.");
-        } catch (IOException s) {
-            LOGGER.log(Level.SEVERE, "Error saving sports", s);
-        }
-    }
-
-    private void LoadSports() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Type sportList = new TypeToken<ArrayList<SportDto>>() {
-        }.getType();
-        ArrayList<SportDto> sports = new ArrayList<>();
-
-        try (FileReader reader = new FileReader("Sports.json")) {
-            sports = gson.fromJson(reader, sportList);
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error loading sports", e);
-        }
-        AppContext.getInstance().set("fullSportArrayList", sports);
-    }
-
-    private void SaveTournaments() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("Tournament.json")) {
-            gson.toJson(AppContext.getInstance().get("fullTournamentsArrayList"), writer);
-            writer.flush();
-            System.out.println("All tournaments were saved successfully.");
-        } catch (IOException s) {
-            LOGGER.log(Level.SEVERE, "Error saving tournaments", s);
-        }
-    }
-
-    private void loadTournaments() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Type tournamentList = new TypeToken<ArrayList<TourneyDto>>() {
-        }.getType();
-        ArrayList<TourneyDto> tournaments = new ArrayList<>();
-
-        try (FileReader reader = new FileReader("Sports.json")) {
-            tournaments = gson.fromJson(reader, tournamentList);
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error loading tournaments", e);
-        }
-        AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
-    }
-
-    private void SaveTeams() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println("gson created");
-
-        try (FileWriter writer = new FileWriter("Teams.json")) {
-            System.out.println("enter try");
-            gson.toJson(AppContext.getInstance().get("fullTeamArrayList"), writer);
-            writer.flush();
-            System.out.println("All teams were saved successfully.");
-        } catch (IOException s) {
-            LOGGER.log(Level.SEVERE, "Error saving teams", s);
-        }
-    }
-
-    private void LoadTeams() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Type teamsList = new TypeToken<ArrayList<TeamDto>>() {
-        }.getType();
-        ArrayList<TeamDto> teams = new ArrayList<TeamDto>();
-
-        try (FileReader reader = new FileReader("Teams.json")) {
-            teams = gson.fromJson(reader, teamsList);
-        } catch (IOException s) {
-            LOGGER.log(Level.WARNING, "Error loading teams", s);
-        }
-        System.out.println("size loading: " + teams.size());
-        for(TeamDto team : teams){
-            System.out.println(team.getName());
-        }
-        AppContext.getInstance().set("fullTeamArrayList", teams);
-        
-       
-//       Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        Type sportList = new TypeToken<ArrayList<SportDto>>() {
-//        }.getType();
-//        ArrayList<SportDto> sports = new ArrayList<>();
-//
-//        try (FileReader reader = new FileReader("Sports.json")) {
-//            sports = gson.fromJson(reader, sportList);
-//        } catch (IOException e) {
-//            LOGGER.log(Level.WARNING, "Error loading sports", e);
-//        }
-//        AppContext.getInstance().set("fullSportArrayList", sports);
-    }
-
-    public void LoadInfo() {
-        LoadSports();
-       System.out.println("sports loaded");
-        LoadTeams();
-        System.out.println("teams loaded");
-        loadTournaments();
-        System.out.println("tournaments loaded");
-    }
-
-    public void saveInfo() {
-        SaveTeams();
-        SaveTournaments();
-        saveSports();
-    }
-    
     public static void createWinnerCertificate(TeamDto winner, TourneyDto tournament) {
         String folderPath = "src/main/resources/cr/ac/una/tournamentmanager/Resources/Certificados";
         File folder = new File(folderPath);
@@ -312,7 +200,7 @@ public class InfoManager {
         TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
         TourneyDto currentTourney = tournamentController.getTourney();
         if (currentTourney != null && currentTourney.getTournamentRoundsID().get(0).contains(teamID)) {
-            System.out.println("\nEl equipo " + GetTeam(teamID).getName() +" no se puede eliminar porque está en participando en el torneo actual.");
+            System.out.println("\nEl equipo " + GetTeam(teamID).getName() + " no se puede eliminar porque está en participando en el torneo actual.");
             return;
         }
 
@@ -320,7 +208,7 @@ public class InfoManager {
             if (tourney.getTournamentRoundsID() == null) continue;
             for (ArrayList<Integer> round : tourney.getTournamentRoundsID()) {
                 int index = round.indexOf(teamID);// Look for the team you want to delete
-                if (index != -1)  round.set(index, -teamID);// Replace the team Id
+                if (index != -1) round.set(index, -teamID);// Replace the team Id
                 else break; // Go to next tourney
             }
         }
@@ -353,8 +241,7 @@ public class InfoManager {
 
                 if (rounds.get(r + 1).contains(teamID)) { // Check if the team is in the next round
 
-                    boolean wasFreePass = false;
-                    if (rounds.get(r).size() % 2 != 0 && rondaActual.get(rondaActual.size() - 1) == teamID) wasFreePass = true;
+                    boolean wasFreePass = rounds.get(r).size() % 2 != 0 && rondaActual.get(rondaActual.size() - 1) == teamID;
                     if (rondaActual.get(0) == null && rondaActual.get(1) == teamID) wasFreePass = true;
 
                     if (wasFreePass) freePass++;
@@ -375,18 +262,23 @@ public class InfoManager {
             data.append(String.format("Torneo #%d | Posicion: %d° | Victorias: %d | Pases Gratis: %d | Avance: %s\n",
                     tourneyN++, position, victories, freePass, teamFinishInRound));
         }
-        System.out.println(data.toString());
+        System.out.println(data);
         return data.toString();
     }
 
     private static String whitchRoundTeamFinish(int roundN, int totalRounds) {
         int roundsLeft = totalRounds - roundN;
         switch (roundsLeft) {
-            case 1: return "Campeón";
-            case 2: return "Final";
-            case 3: return "Semifinal";
-            case 4: return "Cuartos de final";
-            default: return "Ronda " + (roundN + 1);
+            case 1:
+                return "Campeón";
+            case 2:
+                return "Final";
+            case 3:
+                return "Semifinal";
+            case 4:
+                return "Cuartos de final";
+            default:
+                return "Ronda " + (roundN + 1);
         }
     }
 
@@ -418,6 +310,117 @@ public class InfoManager {
             LOGGER.log(Level.SEVERE, "Error al cargar la imagen predeterminada.", e);
             return null;
         }
+    }
+
+    private void saveSports() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter("Sports.json")) {
+            gson.toJson(AppContext.getInstance().get("fullSportArrayList"), writer);
+
+            writer.flush();
+            System.out.println("All sports were saved successfully.");
+        } catch (IOException s) {
+            LOGGER.log(Level.SEVERE, "Error saving sports", s);
+        }
+    }
+
+    private void LoadSports() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Type sportList = new TypeToken<ArrayList<SportDto>>() {
+        }.getType();
+        ArrayList<SportDto> sports = new ArrayList<>();
+
+        try (FileReader reader = new FileReader("Sports.json")) {
+            sports = gson.fromJson(reader, sportList);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error loading sports", e);
+        }
+        AppContext.getInstance().set("fullSportArrayList", sports);
+    }
+
+    private void SaveTournaments() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter("Tournament.json")) {
+            gson.toJson(AppContext.getInstance().get("fullTournamentsArrayList"), writer);
+            writer.flush();
+            System.out.println("All tournaments were saved successfully.");
+        } catch (IOException s) {
+            LOGGER.log(Level.SEVERE, "Error saving tournaments", s);
+        }
+    }
+
+    private void loadTournaments() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Type tournamentList = new TypeToken<ArrayList<TourneyDto>>() {
+        }.getType();
+        ArrayList<TourneyDto> tournaments = new ArrayList<>();
+
+        try (FileReader reader = new FileReader("Sports.json")) {
+            tournaments = gson.fromJson(reader, tournamentList);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error loading tournaments", e);
+        }
+        AppContext.getInstance().set("fullTournamentsArrayList", tournaments);
+    }
+
+    private void SaveTeams() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println("gson created");
+
+        try (FileWriter writer = new FileWriter("Teams.json")) {
+            System.out.println("enter try");
+            gson.toJson(AppContext.getInstance().get("fullTeamArrayList"), writer);
+            writer.flush();
+            System.out.println("All teams were saved successfully.");
+        } catch (IOException s) {
+            LOGGER.log(Level.SEVERE, "Error saving teams", s);
+        }
+    }
+
+    private void LoadTeams() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Type teamsList = new TypeToken<ArrayList<TeamDto>>() {
+        }.getType();
+        ArrayList<TeamDto> teams = new ArrayList<TeamDto>();
+
+        try (FileReader reader = new FileReader("Teams.json")) {
+            teams = gson.fromJson(reader, teamsList);
+        } catch (IOException s) {
+            LOGGER.log(Level.WARNING, "Error loading teams", s);
+        }
+        System.out.println("size loading: " + teams.size());
+        for (TeamDto team : teams) {
+            System.out.println(team.getName());
+        }
+        AppContext.getInstance().set("fullTeamArrayList", teams);
+
+
+//       Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        Type sportList = new TypeToken<ArrayList<SportDto>>() {
+//        }.getType();
+//        ArrayList<SportDto> sports = new ArrayList<>();
+//
+//        try (FileReader reader = new FileReader("Sports.json")) {
+//            sports = gson.fromJson(reader, sportList);
+//        } catch (IOException e) {
+//            LOGGER.log(Level.WARNING, "Error loading sports", e);
+//        }
+//        AppContext.getInstance().set("fullSportArrayList", sports);
+    }
+
+    public void LoadInfo() {
+        LoadSports();
+        System.out.println("sports loaded");
+        LoadTeams();
+        System.out.println("teams loaded");
+        loadTournaments();
+        System.out.println("tournaments loaded");
+    }
+
+    public void saveInfo() {
+        SaveTeams();
+        SaveTournaments();
+        saveSports();
     }
 
 

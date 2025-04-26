@@ -44,7 +44,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     private Webcam webcam;
     private BufferedImage lastCapturedShot;
     private JFrame cameraWindow;
-    private ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
+    private final ObservableList<TeamDto> filteredTeamsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
     @FXML
@@ -59,7 +59,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     private MFXTextField txfTeamName;
     @FXML
     private MFXTextField txfTeamSport;
-    
+
     private TeamDto selectedTeam;
     @FXML
     private MFXButton pictureBtn;
@@ -105,12 +105,12 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     @FXML
-     void onActionCamera(ActionEvent event) {
+    void onActionCamera(ActionEvent event) {
         openCameraWindow();
     }
 
     private void openCameraWindow() {
-        
+
         pictureBtn.setVisible(true);
         pictureBtn.setDisable(false);
         pictureBtn.setManaged(true);
@@ -145,18 +145,18 @@ public class TeamsManagerController extends Controller implements Initializable 
 
                     }
                 }
-                
-                if(!cameraWindow.isActive()){
+
+                if (!cameraWindow.isActive()) {
                     stopCamera();
                     pictureBtn.setVisible(false);
                     pictureBtn.setDisable(true);
                     pictureBtn.setManaged(false);
-                    
+
                 }
             }
         }).start();
     }
-    
+
     public void stopCamera() {
         capturing = false;
         if (webcam != null && webcam.isOpen()) {
@@ -167,7 +167,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     @FXML
     void onActionDelete(ActionEvent event) {// Deletes the selected team
         if (selectedTeam != null) {
-            File file = new File(selectedTeam.getTeamImageURL().toString().trim());
+            File file = new File(selectedTeam.getTeamImageURL().trim());
             file.deleteOnExit();
 
             InfoManager.deleteTeam(selectedTeam.getID());
@@ -234,7 +234,7 @@ public class TeamsManagerController extends Controller implements Initializable 
     }
 
     private void addNewTeam() {
-        
+
         ArrayList<TeamDto> fullTeamArrayList = InfoManager.GetTeamList();
 
         TeamDto newTeam = new TeamDto();
@@ -367,11 +367,11 @@ public class TeamsManagerController extends Controller implements Initializable 
             System.out.println("Cambiando datos seleccionados a [" + value.getName() + "].");
             txfTeamName.setText(value.getName());
             txfTeamSport.setText(InfoManager.GetSport(value.getSportID()).getName());
-            labelTeamPoints.setText("# " + String.valueOf(value.getPoints()));
-            labelTeamScores.setText("# " + String.valueOf(value.getScores()));
-            labelTeamWins.setText("# " + String.valueOf(value.getWins()));
-            labelTeamTies.setText("# " + String.valueOf(value.getTies()));
-            labelTeamLosses.setText("# " + String.valueOf(value.getLosses()));
+            labelTeamPoints.setText("# " + value.getPoints());
+            labelTeamScores.setText("# " + value.getScores());
+            labelTeamWins.setText("# " + value.getWins());
+            labelTeamTies.setText("# " + value.getTies());
+            labelTeamLosses.setText("# " + value.getLosses());
             textAreaTournamentSummary.setText(InfoManager.getFullTorneysData(value.getID()));
             showTeamPhotoURL.set(value.getTeamImageURL());
         } else {
@@ -402,9 +402,9 @@ public class TeamsManagerController extends Controller implements Initializable 
             String resourcesPath = System.getProperty("user.dir") + "/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
             Image image1 = SwingFXUtils.toFXImage(lastCapturedShot, null);
             File file = new File(resourcesPath + txfTeamName.getText().trim() + ".png");
-         ImageIO.write(lastCapturedShot, "PNG", file);
-         showTeamPhotoURL.set("Team-Photos/" + txfTeamName.getText().trim() + ".png");
-            
+            ImageIO.write(lastCapturedShot, "PNG", file);
+            showTeamPhotoURL.set("Team-Photos/" + txfTeamName.getText().trim() + ".png");
+
         }
 
         if (webcam != null && webcam.isOpen()) {

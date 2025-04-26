@@ -1,36 +1,29 @@
 package cr.ac.una.tournamentmanager.Controller;
 
+import cr.ac.una.tournamentmanager.Util.FlowController;
 import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import cr.ac.una.tournamentmanager.model.TourneyDto;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.RotateTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 public class TournamentController extends Controller implements Initializable {
     @FXML
@@ -249,7 +242,6 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     private HBox setupHBox(TeamDto team) {
-        // Create an HBox to display a team's information
         HBox teamBox = new HBox();
         teamBox.setSpacing(5);
         teamBox.setAlignment(Pos.CENTER_LEFT);
@@ -271,53 +263,40 @@ public class TournamentController extends Controller implements Initializable {
     }
 
     public void winnerAnimation(TeamDto team) {
-
-        //experimento
         ArrayList<HBox> winnerBoxes = findAllWinnerBoxes(team);
-        for (HBox winnerBox : winnerBoxes) {
-            winnerBox.setStyle("-fx-border-color: black; -fx-border-width: 2;");
-        }
+        Timeline timeline = new Timeline();
+        int size = winnerBoxes.size();
+        int step = 0;
 
-        int boxes = 6;
-        VBox box = getVBoxForRound(boxes);
+        for (int end = size - 1; end >= 0; end--) {
+            for (int i = 0; i <= end; i++) {
+                final int current = i;
+                final int previous = i - 1;
+                final int fixed = end;
 
+                KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5 * step), e -> {
+                    if (previous >= 0 && previous != fixed) {
+                        winnerBoxes.get(previous).setStyle("");
+                    }
+                    winnerBoxes.get(current).setStyle("-fx-background-color: #FFAA00; -fx-background-radius: 5px;");
+                });
 
-        while(box.getChildren().isEmpty()){
-            boxes--;
-            box = getVBoxForRound(boxes);
-        }
-        for (ArrayList<Line> line : roundLines){
-            for(Line line1 : line){
-                line1.setVisible(false);
+                timeline.getKeyFrames().add(keyFrame);
+                step++;
             }
         }
+        KeyFrame pausaExtra = new KeyFrame(Duration.seconds(0.5 * step + 1));// An extra second
+        timeline.getKeyFrames().add(pausaExtra);
 
-        VBox championBox = (VBox) box.getChildren().get(0);
-        championBox.setStyle("-fx-background-color: #ebea0f");
-        TranslateTransition translate = new TranslateTransition();
-        translate.setNode(championBox);
-        translate.setByX(150);
-        translate.setDuration(Duration.millis(100));
-        translate.play();
+        timeline.setOnFinished(e -> {
+            TournamentFormController tournamentFormController =
+                    (TournamentFormController) FlowController.getInstance().getController("TournamentFormView");
+            tournamentFormController.updateTableView();
+            FlowController.getInstance().goView("TournamentFormView");
+            FlowController.getInstance().limpiarLoader("TournamentView");
+        });
 
-
-        ScaleTransition scale = new ScaleTransition();
-
-        scale.setNode(championBox);
-        scale.setDuration(Duration.millis(1000));
-        scale.setCycleCount(5);
-        scale.setInterpolator(Interpolator.LINEAR);
-        scale.setByX(3);
-        scale.setByY(3);
-        scale.setAutoReverse(true);
-        championBox.toFront();
-
-        FadeTransition ft = new FadeTransition(Duration.seconds(3), championBox);
-        ft.setFromValue(1.0);
-        ft.setToValue(0.0);
-        SequentialTransition secuency = new SequentialTransition();
-        secuency.getChildren().addAll(scale, ft);
-        secuency.play();
+        timeline.play();
     }
 
     private ArrayList<HBox> findAllWinnerBoxes(TeamDto team) {

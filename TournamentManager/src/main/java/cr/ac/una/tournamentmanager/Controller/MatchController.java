@@ -5,32 +5,29 @@ import cr.ac.una.tournamentmanager.model.InfoManager;
 import cr.ac.una.tournamentmanager.model.MatchDto;
 import cr.ac.una.tournamentmanager.model.TeamDto;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.scene.layout.StackPane;
 
 public class MatchController extends Controller implements Initializable {
-     @FXML
+    @FXML
     private StackPane MatchBox;
-     
+
     @FXML
     private ImageView imageViewBall;
 
@@ -57,7 +54,6 @@ public class MatchController extends Controller implements Initializable {
 
     @FXML
     private BorderPane tieBreakerMenu;
-
 
 
     private MatchDto match;
@@ -132,7 +128,7 @@ public class MatchController extends Controller implements Initializable {
         imageViewBall.toFront();
         imageViewBall.setLayoutX((MatchBox.getWidth() / 2) - 85);
         imageViewBall.setLayoutY(MatchBox.getHeight() / 2 - 60);
-        
+
     }
 
     @FXML
@@ -237,7 +233,7 @@ public class MatchController extends Controller implements Initializable {
         if (fstScore > sndScore) {
             winner = match.getFstTeam();
             onActionFinishMatch(null);
-            } else if (fstScore < sndScore) {
+        } else if (fstScore < sndScore) {
             winner = match.getSndTeam();
             onActionFinishMatch(null);
         } else {

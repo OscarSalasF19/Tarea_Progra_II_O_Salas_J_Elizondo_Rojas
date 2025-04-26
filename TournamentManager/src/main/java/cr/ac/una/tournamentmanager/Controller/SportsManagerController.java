@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,7 +30,7 @@ import java.util.ResourceBundle;
 public class SportsManagerController extends Controller implements Initializable {
 
     private final StringProperty showSportPhotoURL = new SimpleStringProperty();
-    private ObservableList<SportDto> filteredSportsList = FXCollections.observableArrayList();
+    private final ObservableList<SportDto> filteredSportsList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane root;
     @FXML

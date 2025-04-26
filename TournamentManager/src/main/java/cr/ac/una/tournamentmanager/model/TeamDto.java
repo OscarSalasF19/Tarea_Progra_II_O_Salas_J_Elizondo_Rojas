@@ -10,7 +10,7 @@ public class TeamDto {
     private String teamImageURL = "";
     private int sportID = 0; // sustituye por el id del deporte
     private int globalPoins = 0; //de la clasificacion general
-    private int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
+    private final int performance; //va de 1 a 100 entre mayor sea mayor posibilidad de ganar el desempate
     private int scores = 0; //de la clasificacion general
     private int wins = 0; //de la clasificacion general
     private int losses = 0; //de la clasificacion general
@@ -68,7 +68,7 @@ public class TeamDto {
     public void setScores(int scores) {
         this.scores = scores;
     }
-    
+
     public int getWins() {
         return this.wins;
     }
@@ -76,7 +76,7 @@ public class TeamDto {
     public void setWins(int wins) {
         this.wins = wins;
     }
-    
+
     public int getLosses() {
         return this.losses;
     }
@@ -84,8 +84,8 @@ public class TeamDto {
     public void setLosses(int losses) {
         this.losses = losses;
     }
-    
-     public int getTies() {
+
+    public int getTies() {
         return this.ties;
     }
 

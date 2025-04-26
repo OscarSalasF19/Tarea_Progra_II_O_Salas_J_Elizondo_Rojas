@@ -2,28 +2,23 @@ package cr.ac.una.tournamentmanager.model;
 
 import cr.ac.una.tournamentmanager.Controller.MatchController;
 import cr.ac.una.tournamentmanager.Controller.TournamentController;
-import cr.ac.una.tournamentmanager.Controller.TournamentFormController;
 import cr.ac.una.tournamentmanager.Util.FlowController;
-import javafx.application.Platform;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class TourneyDto {
 
-    private ArrayList<ArrayList<Integer>> tournamentRoundsID = new ArrayList<>();
+    private final String creationDate;     // solo la fecha: "20-04-2025"
+    private final String creationTime;     // solo la hora: "14:45:30"
+    private final ArrayList<ArrayList<Integer>> tournamentRoundsID = new ArrayList<>();
     private int sportID = 0;
     private int totalOfTeams = 0;
     private int matchTimeSeconds = 10;
     private int currentRound = 0;
     private int currentMatch = 0;
-
-    private final String creationDate;     // solo la fecha: "20-04-2025"
-    private final String creationTime;     // solo la hora: "14:45:30"
 
 
     public TourneyDto(int sportID, int totalOfTeams, int matchTimeSeconds, ArrayList<TeamDto> teams) {
@@ -104,11 +99,11 @@ public class TourneyDto {
     }
 
     public String getCreationDate() {
-    return creationDate;
+        return creationDate;
     }
 
     public String getCreationTime() {
-    return creationTime;
+        return creationTime;
     }
 
     public ArrayList<ArrayList<Integer>> getTournamentRoundsID() {
@@ -137,19 +132,6 @@ public class TourneyDto {
             System.out.println("Se va a crear el certificado del ganador...");
             TeamDto winner = InfoManager.GetTeam((tournamentRoundsID.get(currentRound).get(0)));
             InfoManager.createWinnerCertificate(winner, this);
-
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> { //waits for a correct tread
-                        TournamentFormController tournamentFormController = (TournamentFormController) FlowController.getInstance().getController("TournamentFormView");
-                        tournamentFormController.updateTableView();
-                        FlowController.getInstance().goView("TournamentFormView");
-                        FlowController.getInstance().limpiarLoader("TournamentView");
-                    });
-                }
-            }, 10 * 1000);// 10,000 = 10 segundos, 1000 = 1 segundo // tiempo antes de quitar la animacion
 
             TournamentController tournamentController = (TournamentController) FlowController.getInstance().getController("TournamentView");
             tournamentController.winnerAnimation(winner);//llama a la animacion y le manda el equipo ganador
@@ -206,7 +188,7 @@ public class TourneyDto {
     public void searchForNewTeams() {
         ArrayList<TeamDto> teams = InfoManager.GetTeamList();
         for (TeamDto team : teams) {
-            if(totalOfTeams == tournamentRoundsID.get(0).size()) return;
+            if (totalOfTeams == tournamentRoundsID.get(0).size()) return;
             if (team.getSportID() == sportID && !tournamentRoundsID.get(0).contains(team.getID())) {
                 tournamentRoundsID.get(0).add(team.getID());
             }
