@@ -3,5 +3,15 @@
     "sportID": 5,
     "name": "volley",
     "ballImageURL": "file:/C:/Users/oscar/Documents/GitHub/Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/volleyball-ball-png-70408169487874060mrdnzifk.png"
+  },
+  {
+    "sportID": 6,
+    "name": "xxxx",
+    "ballImageURL": "Sports-Photos/23 abr 2025, 14_59_43.png"
+  },
+  {
+    "sportID": 7,
+    "name": "Prueba0",
+    "ballImageURL": "Sports-Photos/WhatsApp Image 2025-04-10 at 22.47.22_262c4b0d.jpg"
   }
 ]

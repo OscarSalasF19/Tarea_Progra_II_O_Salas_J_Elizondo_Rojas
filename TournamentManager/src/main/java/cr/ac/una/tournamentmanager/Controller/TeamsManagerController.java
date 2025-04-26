@@ -92,7 +92,7 @@ public class TeamsManagerController extends Controller implements Initializable 
         File chossedImage = fileChooser.showOpenDialog(imageViewTeamPhoto.getScene().getWindow());
         if (chossedImage != null) {
             try {
-                String resourcesPath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
+                String resourcesPath = System.getProperty("user.dir") + "/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/";
                 File destinationURL = new File(resourcesPath + chossedImage.getName());
 
                 Files.copy(chossedImage.toPath(), destinationURL.toPath(), StandardCopyOption.REPLACE_EXISTING);

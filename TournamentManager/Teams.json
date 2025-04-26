@@ -4,60 +4,60 @@
     "name": "juan",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 69,
+    "globalPoins": 73,
     "performance": 43,
-    "scores": 46,
+    "scores": 47,
     "wins": 16,
     "losses": 87,
-    "ties": 9
+    "ties": 11
   },
   {
     "id": 2,
     "name": "oscar",
-    "teamImageURL": "file:/C:/Users/oscar/Documents/GitHub/Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/oscar.png",
+    "teamImageURL": "Team-Photos/WhatsApp Image 2025-04-10 at 22.47.22_262c4b0d.jpg",
     "sportID": 5,
-    "globalPoins": 398,
+    "globalPoins": 400,
     "performance": 5,
     "scores": 190,
     "wins": 119,
     "losses": 24,
-    "ties": 18
+    "ties": 19
   },
   {
     "id": 3,
     "name": "josua",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 90,
+    "globalPoins": 100,
     "performance": 97,
-    "scores": 54,
+    "scores": 55,
     "wins": 24,
     "losses": 47,
-    "ties": 9
+    "ties": 14
   },
   {
     "id": 4,
     "name": "pedro",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 18,
+    "globalPoins": 20,
     "performance": 31,
     "scores": 6,
     "wins": 6,
     "losses": 8,
-    "ties": 0
+    "ties": 1
   },
   {
     "id": 5,
     "name": "enrique",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 15,
+    "globalPoins": 20,
     "performance": 17,
-    "scores": 6,
-    "wins": 5,
+    "scores": 7,
+    "wins": 6,
     "losses": 10,
-    "ties": 0
+    "ties": 1
   },
   {
     "id": 6,
@@ -68,7 +68,7 @@
     "performance": 72,
     "scores": 13,
     "wins": 11,
-    "losses": 7,
+    "losses": 8,
     "ties": 0
   },
   {
@@ -76,35 +76,131 @@
     "name": "nikole",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 9,
+    "globalPoins": 11,
     "performance": 80,
     "scores": 9,
     "wins": 3,
     "losses": 1,
-    "ties": 0
+    "ties": 1
   },
   {
     "id": 8,
     "name": "pelusa",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 9,
+    "globalPoins": 17,
     "performance": 100,
-    "scores": 3,
+    "scores": 4,
     "wins": 3,
     "losses": 2,
-    "ties": 0
+    "ties": 4
   },
   {
     "id": 9,
     "name": "cartago",
     "teamImageURL": "/cr/ac/una/tournamentmanager/Resources/Grupo-300.png",
     "sportID": 5,
-    "globalPoins": 3,
+    "globalPoins": 5,
     "performance": 4,
     "scores": 1,
     "wins": 1,
     "losses": 2,
+    "ties": 1
+  },
+  {
+    "id": 10,
+    "name": "Ejemplo 1",
+    "teamImageURL": "Team-Photos/Lupa.png",
+    "sportID": 6,
+    "globalPoins": 0,
+    "performance": 7,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 11,
+    "name": "Prue1",
+    "teamImageURL": "file:/C:/Users/PC/OneDrive/Documentos/NetBeansProjects/Tarea_Progra_II_O_Salas_J_Elizondo_Rojas/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Team-Photos/Prue1.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 35,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 12,
+    "name": "Prub2",
+    "teamImageURL": "Grupo-300.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 99,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 13,
+    "name": "fdfd",
+    "teamImageURL": "Grupo-300.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 34,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 14,
+    "name": "efdwefwef",
+    "teamImageURL": "Team-Photos/23 abr 2025, 14_59_43.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 69,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 15,
+    "name": "ewdew",
+    "teamImageURL": "Grupo-300.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 68,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 16,
+    "name": "eafwef",
+    "teamImageURL": "Grupo-300.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 70,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0
+  },
+  {
+    "id": 17,
+    "name": "efewfew",
+    "teamImageURL": "Grupo-300.png",
+    "sportID": 7,
+    "globalPoins": 0,
+    "performance": 51,
+    "scores": 0,
+    "wins": 0,
+    "losses": 0,
     "ties": 0
   }
 ]

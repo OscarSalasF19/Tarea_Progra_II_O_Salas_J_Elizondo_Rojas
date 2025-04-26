@@ -399,7 +399,7 @@ public class InfoManager {
 
     public static javafx.scene.image.Image loadImage(String path) {
 
-        String basePath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/";
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/cr/ac/una/tournamentmanager/Resources/";
         String imagePath = basePath + path;
 
         File imageFile = new File(imagePath);

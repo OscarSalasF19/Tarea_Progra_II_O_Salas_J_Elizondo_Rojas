@@ -62,7 +62,7 @@ public class SportsManagerController extends Controller implements Initializable
         File chosenImage = fileChooser.showOpenDialog(imageViewSportPhoto.getScene().getWindow());
         if (chosenImage != null) {
             try {
-                String resourcesPath = System.getProperty("user.dir") + "/TournamentManager/src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
+                String resourcesPath = System.getProperty("user.dir") + "/src/main/resources/cr/ac/una/tournamentmanager/Resources/Sports-Photos/";
                 File destinationPath = new File(resourcesPath + chosenImage.getName());
 
                 // Copy the selected file to the Resources folder
